@@ -313,7 +313,9 @@ def plan_install(
     packages = _skill_packages(source)
     roots: list[str] = []
     for harness in selected:
-        roots.extend(_adapter_roots(manifest_reports[harness]["manifest"], scope))
+        candidates = _adapter_roots(manifest_reports[harness]["manifest"], scope)
+        preferred = ".agents/skills" if ".agents/skills" in candidates else candidates[0]
+        roots.append(preferred)
     roots = list(dict.fromkeys(roots))
 
     operations: list[dict[str, Any]] = []
@@ -375,6 +377,7 @@ def plan_install(
         "scope": scope,
         "mode": mode,
         "harnesses": selected,
+        "install_roots": roots,
         "detected_harnesses": detected,
         "operations": deduplicated,
         "approval_required": approval_required,

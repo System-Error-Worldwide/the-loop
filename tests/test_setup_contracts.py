@@ -72,6 +72,59 @@ class SetupContractTests(unittest.TestCase):
             self.assertEqual(destinations.count(".agents/skills/example"), 1)
             self.assertEqual(plan["approval_required"], [])
 
+    def test_each_harness_uses_one_preferred_project_install_root(self) -> None:
+        expected = {
+            "codex": ".agents/skills/example",
+            "claude_code": ".claude/skills/example",
+            "kimi_code": ".agents/skills/example",
+            "opencode": ".agents/skills/example",
+        }
+        executables = ("codex", "claude", "kimi", "opencode")
+        for harness, destination in expected.items():
+            with self.subTest(harness=harness), tempfile.TemporaryDirectory() as directory:
+                target = Path(directory) / "project"
+                target.mkdir()
+                plan = plan_install(
+                    FIXTURE_ROOT / "source",
+                    target,
+                    FIXTURE_ROOT,
+                    harnesses=[harness],
+                    executable_finder=_finder(*executables),
+                )
+                copies = [
+                    operation["destination"]
+                    for operation in plan["operations"]
+                    if operation["action"] == "copy"
+                ]
+                self.assertEqual([destination], copies)
+
+    def test_each_harness_uses_one_preferred_user_install_root(self) -> None:
+        expected = {
+            "codex": ".agents/skills/example",
+            "claude_code": ".claude/skills/example",
+            "kimi_code": ".agents/skills/example",
+            "opencode": ".agents/skills/example",
+        }
+        executables = ("codex", "claude", "kimi", "opencode")
+        for harness, destination in expected.items():
+            with self.subTest(harness=harness), tempfile.TemporaryDirectory() as directory:
+                target = Path(directory) / "home"
+                target.mkdir()
+                plan = plan_install(
+                    FIXTURE_ROOT / "source",
+                    target,
+                    FIXTURE_ROOT,
+                    harnesses=[harness],
+                    scope="user",
+                    executable_finder=_finder(*executables),
+                )
+                copies = [
+                    operation["destination"]
+                    for operation in plan["operations"]
+                    if operation["action"] == "copy"
+                ]
+                self.assertEqual([destination], copies)
+
     def test_collision_requires_exact_destination_approval(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory) / "project"

@@ -43,6 +43,8 @@ class ConformanceRunnerContracts(unittest.TestCase):
                 self.assertEqual({"contract_passed"}, {item["status"] for item in evidence["scenarios"]})
                 self.assertEqual("verified", evidence["discovery_status"])
                 self.assertEqual("unverified", evidence["behavior_status"])
+                self.assertEqual("behavior_unverified", evidence["doctor_outcome"])
+                self.assertEqual([], evidence["collisions"])
                 self.assertEqual("complete", evidence["install_result"])
         self.assertLess(elapsed, 10.0)
 

@@ -4,10 +4,10 @@ An autonomous agentic skill pack for Codex, Claude Code, Kimi Code, and OpenCode
 
 Created and maintained by Moses Mawila through System Error Worldwide.
 
-> **Pre-release development repository.** The provenance review, specification pack,
-> shared protocols, schemas, and bounded runtime kernel are present. Installable skill
-> packages, harness adapters, and four-harness release evidence are still in progress.
-> There is no supported installation command or tagged release yet.
+> **Installable pre-release candidate.** The 12 v0.1 skill packages, Setup, Doctor,
+> four thin adapters, shared protocols, schemas, bounded runtime kernel, examples and
+> deterministic conformance suite are present. There is no public support claim or
+> tagged release until the live four-harness matrix passes independent review.
 
 ## What THE LOOP is
 
@@ -30,20 +30,104 @@ lease, authority, evidence, budget, and kill-switch contracts.
   issues, install receipts, and audit events.
 - A Python standard-library runtime kernel for validated state, bounded missions,
   leases, authority, budgets, recovery, and append-only audit history.
-- Adversarial unit and contract tests for the current kernel.
+- Twelve portable `SKILL.md` packages with complete bundled fallbacks.
+- Safe Setup and read-only Doctor commands with receipts and rollback.
+- Four thin harness adapters that preserve host permission denial.
+- Synthetic code and non-code examples plus a 4-by-12 contract matrix.
+- Adversarial unit and contract tests for the current release candidate.
 
 The intended v0.1 skill packages are listed in the
-[shipping manifest](docs/provenance/v0.1-shipping-manifest.md). They are not yet
-present as installable `SKILL.md` packages.
+[shipping manifest](docs/provenance/v0.1-shipping-manifest.md).
+
+## Quickstart
+
+Prerequisites: Python 3.11 or newer and at least one target harness executable.
+The default installation is repository-local and uses copies, so the target project
+does not depend on the checkout after installation.
+
+```sh
+git clone https://github.com/System-Error-Worldwide/the-loop.git
+cd the-loop
+mkdir -p /path/to/project
+
+# 1. Read-only plan. Choose codex, claude_code, kimi_code, or opencode.
+python3 scripts/the_loop_setup.py \
+  --target-root /path/to/project \
+  --harness codex \
+  --json
+
+# 2. Apply exactly that collision-free plan and write a private receipt.
+python3 scripts/the_loop_setup.py \
+  --target-root /path/to/project \
+  --harness codex \
+  --apply \
+  --actor local-user \
+  --source-version 0.1.0 \
+  --json
+
+# 3. Read-only diagnosis.
+python3 scripts/the_loop_doctor.py \
+  --project-root /path/to/project \
+  --json
+```
+
+Setup refuses a differing pre-existing skill unless its exact destination is repeated
+with `--approve-destination`. Doctor can exit `1` while discovery is valid but live
+behavior is still unverified; its JSON report distinguishes that warning from a
+blocked installation. Setup and Doctor do not send telemetry or capture prompts.
+
+To remove only unchanged files owned by one receipt:
+
+```sh
+python3 scripts/the_loop_setup.py \
+  --rollback-receipt /path/to/project/.the-loop/installs/RECEIPT_ID.json \
+  --target-root /path/to/project \
+  --json
+```
+
+Changed installed files are preserved and reported as a partial rollback.
+
+For a user-level install, use the same dry-run and apply sequence with
+`--scope user --target-root "$HOME"`. Setup chooses one preferred documented root
+per harness: the shared `.agents/skills` root where supported, otherwise the
+harness-specific root. It does not copy the same package into every search root.
+
+### Invoke the installed skill
+
+| Harness | Explicit v0.1 invocation |
+| --- | --- |
+| Codex | Select or mention `$the-loop` |
+| Claude Code | Run `/the-loop` |
+| Kimi Code | Run `/skill:the-loop` |
+| OpenCode | Ask the agent to load `skill(the-loop)` |
+
+Start with attended `the-loop`. Use `the-loop-auto` only for one declared asset with
+an exact done gate, frozen budgets, visible authority and a working kill switch.
+Parallel, Cloud and Endless are not included in v0.1.
+
+### Contract conformance
+
+The deterministic runner installs and diagnoses the pack in four synthetic projects
+and checks 12 portable scenarios per harness. It never invokes a model and therefore
+does not claim live behavior:
+
+```sh
+mkdir -p /tmp/the-loop-contract-check
+python3 scripts/run_conformance.py \
+  --project-root /tmp/the-loop-contract-check
+```
+
+See the [synthetic code example](examples/code/README.md) and
+[synthetic non-code example](examples/noncode/README.md).
 
 ## Target compatibility
 
 | Harness | Target discovery | Release evidence |
 | --- | --- | --- |
-| Codex | `.agents/skills` | Not yet completed |
-| Claude Code | Thin adapter over the portable package | Not yet completed |
-| Kimi Code | `.agents/skills` or `.kimi-code/skills` | Not yet completed |
-| OpenCode | `.agents/skills` or `.opencode/skills` | Not yet completed |
+| Codex | `.agents/skills` | Contract-tested; live behavior pending |
+| Claude Code | `.claude/skills` thin adapter | Contract-tested; live behavior pending |
+| Kimi Code | `.kimi-code/skills` or `.agents/skills` | Contract-tested; live behavior pending |
+| OpenCode | `.opencode/skills` or `.agents/skills` | Contract-tested; live behavior pending |
 
 Compatibility is a release target, not a current support claim. A harness is marked
 supported only after installation, discovery, invocation, denial, fallback, and close
@@ -77,6 +161,7 @@ behavior pass the release matrix.
 python3 scripts/validate_repository.py
 python3 scripts/validate_protocols.py
 python3 -m unittest discover -s tests -p 'test_*.py'
+python3 scripts/run_conformance.py --project-root /tmp/the-loop-contract-check
 ```
 
 The repository validator scans the public tree, Git index, reachable history, commit

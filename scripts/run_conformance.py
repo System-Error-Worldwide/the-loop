@@ -15,6 +15,10 @@ sys.path.insert(0, str(ROOT / "src"))
 from the_loop.conformance import run_contract_conformance  # noqa: E402
 
 
+def _synthetic_executable(name: str) -> str:
+    return f"/synthetic/bin/{name}"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repository-root", type=Path, default=ROOT)
@@ -24,6 +28,7 @@ def main() -> int:
     report = run_contract_conformance(
         args.repository_root,
         args.project_root,
+        executable_finder=_synthetic_executable,
         checked_at=args.checked_at,
     )
     print(json.dumps(report, indent=2, sort_keys=True))

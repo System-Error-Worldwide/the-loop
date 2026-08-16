@@ -50,6 +50,29 @@ Current official documentation confirms that all four target harnesses discover 
 
 Exact-phrase searches for several weak-history Vault B artifacts returned no clear public source match. This lowers the chance of a direct public copy but does not prove System Error authorship, so the licence gate remains failed.
 
-## Required update before release
+## Final public shipping files
 
-Each included skill must record the full checksum and authoring commit for its final public file, state its repository licence and attach four-harness test evidence plus reviewer approval.
+These hashes cover the clean public files authored in this repository. `pending` means
+the file has passed repository contract tests but does not yet have the independent
+live four-harness evidence required for a support claim or tagged release.
+
+| Skill | Public file | SHA-256 | Licence | Authoring commit | Live evidence |
+| --- | --- | --- | --- | --- | --- |
+| `the-loop-setup` | `.agents/skills/the-loop-setup/SKILL.md` | `f8cd5c3268c030af944e90d33d8f4f5a5c0f5aedee9c9068a4df5cb8f6edf252` | MIT | `7e31448` | pending |
+| `the-loop-doctor` | `.agents/skills/the-loop-doctor/SKILL.md` | `41beae44d5125f479b1df84f1903f915744b624c96577cb0f98d1167b152f71f` | MIT | `7e31448` | pending |
+| `the-loop` | `.agents/skills/the-loop/SKILL.md` | `4ff795a26344ed87d3f898dde03e368cef4b6d647f51748c178ee78821a34c63` | MIT | `cdd7618` | pending |
+| `the-loop-auto` | `.agents/skills/the-loop-auto/SKILL.md` | `61dfbe23d159cba3ffe24296d4d2c052f06aebafc0867c2aeffcc432cc966b7c` | MIT | `cdd7618` | pending |
+| `strategize` | `.agents/skills/strategize/SKILL.md` | `e5149b34bbac58225e6b66b1505c437289b3ecef46bbdb8c130fc88b50e02956` | MIT | `cdd7618` | pending |
+| `spec-pack` | `.agents/skills/spec-pack/SKILL.md` | `a1dd759812d4d1d7280d6868c4de409a5615b8a05710c1e91caefa2913f229a4` | MIT | `cdd7618` | pending |
+| `build` | `.agents/skills/build/SKILL.md` | `82f00e41b70abbb4b3ab286dd08574eac0d3fac8c2b06b5822e25d810f50d8bd` | MIT | `cdd7618` | pending |
+| `test` | `.agents/skills/test/SKILL.md` | `fc1525473a9d0a950842177244d9cdfad54d7a8b464dbf91928dc3ea7a01c32c` | MIT | `cdd7618` | pending |
+| `resolve` | `.agents/skills/resolve/SKILL.md` | `8bd9d8e0ce8c1b80ba87b3b9a03b9b316f118e5d1f5bed39c15e8223dd2e1a3b` | MIT | `cdd7618` | pending |
+| `health-check` | `.agents/skills/health-check/SKILL.md` | `e5b047147102c5cfbd9880aa43393c1f0c260e3990c92d04f3c09404fa0acf66` | MIT | `cdd7618` | pending |
+| `audit` | `.agents/skills/audit/SKILL.md` | `acfa739d7b5dabc28bfe2a808656fe7759f232bdc830712889cb5a5fca1b6b66` | MIT | `cdd7618` | pending |
+| `close` | `.agents/skills/close/SKILL.md` | `a4ab055d42a65bc7c89a02f145b2bc96a735391fdc1e6f2865c75aa255732ec9` | MIT | `cdd7618` | pending |
+
+## Remaining release update
+
+Replace each `pending` cell only with the reviewed evidence reference for the exact
+harness, version, installation scope and behavior matrix. Any skill edit changes its
+hash and reopens this gate.

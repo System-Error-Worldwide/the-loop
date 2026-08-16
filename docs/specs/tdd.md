@@ -26,8 +26,8 @@ the-loop/
   .agents/skills/              canonical portable skill packages
   adapters/
     codex/
-    claude-code/
-    kimi-code/
+    claude_code/
+    kimi_code/
     opencode/
   protocols/                   normative Markdown contracts
   schemas/                     JSON Schema files
@@ -45,6 +45,11 @@ the-loop/
 ```
 
 `.agents/skills` is the canonical portable source because Codex, Kimi Code and OpenCode document project-level discovery there. Claude Code uses a thin adapter that exposes the same packages through `.claude/skills` or an optional Claude plugin layout. The installer must not maintain divergent copies.
+
+For each selected harness and scope, Setup installs to one preferred root rather than
+every root the harness can search. It prefers `.agents/skills` when supported and uses
+the first harness-specific root otherwise. Doctor still inspects every documented root
+so pre-existing shadows and cross-harness collisions remain visible.
 
 ## Technology choices
 

@@ -178,6 +178,8 @@ def run_contract_conformance(
         install_result = "not_run"
         discovery_status = "failed"
         behavior_status = "unverified"
+        doctor_outcome = "not_run"
+        collisions: list[dict[str, Any]] = []
         receipt_id: str | None = None
         if not errors:
             target = projects / harness
@@ -205,12 +207,16 @@ def run_contract_conformance(
                 )
                 discovery_status = doctor["harnesses"][harness]["discovery"]
                 behavior_status = doctor["harnesses"][harness]["behavior"]
+                doctor_outcome = doctor["harnesses"][harness]["outcome"]
+                collisions = doctor["harnesses"][harness]["collisions"]
                 if install_result != "complete":
                     errors.append("Setup did not produce a complete receipt")
                 if discovery_status != "verified":
                     errors.append("Doctor did not verify package discovery")
                 if behavior_status != "unverified":
                     errors.append("synthetic discovery must not claim live behavior")
+                if doctor_outcome != "behavior_unverified" or collisions:
+                    errors.append("Setup produced a colliding or otherwise unready discovery result")
             except Exception as exc:  # the report must stay truthful on any contract failure
                 errors.append(f"Setup or Doctor failed: {exc.__class__.__name__}: {exc}")
 
@@ -231,6 +237,8 @@ def run_contract_conformance(
             "receipt_id": receipt_id,
             "discovery_status": discovery_status,
             "behavior_status": behavior_status,
+            "doctor_outcome": doctor_outcome,
+            "collisions": collisions,
             "scenarios": scenario_results,
         }
 
