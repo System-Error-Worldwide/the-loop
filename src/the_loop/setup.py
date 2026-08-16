@@ -5,6 +5,7 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import re
 import shutil
 import stat
 import tempfile
@@ -38,6 +39,10 @@ REQUIRED_ADAPTER_KEYS = frozenset(
         "delegation",
         "fallback",
     }
+)
+CANONICAL_DOCUMENTATION_ROOT = "https://github.com/System-Error-Worldwide/the-loop/blob/main/"
+_CANONICAL_DOCUMENTATION_LINK = re.compile(
+    r"(\]\()" + re.escape(CANONICAL_DOCUMENTATION_ROOT) + r"((?:protocols|schemas|scripts)/[^)]+)(\))"
 )
 
 
@@ -115,6 +120,37 @@ def _digest_path(path: Path) -> str | None:
             with child.open("rb") as handle:
                 for chunk in iter(lambda: handle.read(1024 * 1024), b""):
                     digest.update(chunk)
+        else:
+            raise SetupError(f"skill package contains an unsupported object: {child}")
+    return digest.hexdigest()
+
+
+def _rewrite_documentation_links(content: str, local_root: str) -> str:
+    return _CANONICAL_DOCUMENTATION_LINK.sub(
+        lambda match: match.group(1) + local_root + match.group(2) + match.group(3),
+        content,
+    )
+
+
+def _installed_package_digest(package: Path, local_root: str) -> str:
+    digest = hashlib.sha256()
+    digest.update(b"directory\0")
+    for child in sorted(package.rglob("*"), key=lambda item: item.relative_to(package).as_posix()):
+        relative_value = child.relative_to(package).as_posix()
+        relative = relative_value.encode("utf-8", "surrogateescape")
+        if child.is_symlink():
+            raise SetupError(f"skill package contains a symlink: {child}")
+        if child.is_dir():
+            digest.update(b"d\0" + relative + b"\0")
+        elif child.is_file():
+            digest.update(b"f\0" + relative + b"\0")
+            if relative_value == "SKILL.md":
+                transformed = _rewrite_documentation_links(child.read_text(encoding="utf-8"), local_root)
+                digest.update(transformed.encode("utf-8"))
+            else:
+                with child.open("rb") as handle:
+                    for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                        digest.update(chunk)
         else:
             raise SetupError(f"skill package contains an unsupported object: {child}")
     return digest.hexdigest()
@@ -279,7 +315,7 @@ def _toolkit_files(repository_root: Path) -> list[str]:
     return sorted(files)
 
 
-def _toolkit_digest(repository_root: Path, files: Iterable[str]) -> str:
+def _toolkit_digest(repository_root: Path, files: Iterable[str], *, skill_link_root: str | None = None) -> str:
     digest = hashlib.sha256()
     digest.update(b"directory\0")
     normalized = sorted(files)
@@ -294,9 +330,14 @@ def _toolkit_digest(repository_root: Path, files: Iterable[str]) -> str:
         encoded = relative.encode("utf-8", "surrogateescape")
         digest.update(kind.encode("ascii") + b"\0" + encoded + b"\0")
         if kind == "f":
-            with (repository_root / relative).open("rb") as handle:
-                for chunk in iter(lambda: handle.read(1024 * 1024), b""):
-                    digest.update(chunk)
+            path = repository_root / relative
+            if skill_link_root is not None and relative.startswith(".agents/skills/") and relative.endswith("/SKILL.md"):
+                transformed = _rewrite_documentation_links(path.read_text(encoding="utf-8"), skill_link_root)
+                digest.update(transformed.encode("utf-8"))
+            else:
+                with path.open("rb") as handle:
+                    for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                        digest.update(chunk)
     return digest.hexdigest()
 
 
@@ -406,22 +447,26 @@ def plan_install(
             relative = f"{skill_root}/{package.name}"
             destination = _safe_destination(target, relative)
             source_digest = _digest_path(package)
+            installed_link_root = "../../../.the-loop/toolkit/"
+            installed_digest = _installed_package_digest(package, installed_link_root)
             existing_digest = _digest_path(destination)
-            if existing_digest == source_digest:
+            if existing_digest == installed_digest:
                 action = "skip"
                 rollback_action = "none"
             else:
-                action = mode
+                action = "copy" if mode == "link" and installed_digest != source_digest else mode
                 rollback_action = "restore_if_unchanged" if existing_digest is not None else "remove_if_unchanged"
             operations.append(
                 {
                     "action": action,
                     "source": str(package),
                     "source_digest": source_digest,
+                    "installed_digest": installed_digest,
+                    "installed_link_root": installed_link_root,
                     "destination": relative,
                     "pre_existing_digest": existing_digest,
-                    "collision": existing_digest is not None and existing_digest != source_digest,
-                    "approval_required": existing_digest is not None and existing_digest != source_digest,
+                    "collision": existing_digest is not None and existing_digest != installed_digest,
+                    "approval_required": existing_digest is not None and existing_digest != installed_digest,
                     "rollback_action": rollback_action,
                 }
             )
@@ -445,19 +490,27 @@ def plan_install(
             )
     toolkit_destination = _safe_destination(target, toolkit_relative)
     toolkit_source_digest = _toolkit_digest(repository, toolkit_files)
+    toolkit_installed_link_root = "../../../"
+    toolkit_installed_digest = _toolkit_digest(
+        repository,
+        toolkit_files,
+        skill_link_root=toolkit_installed_link_root,
+    )
     toolkit_existing_digest = _digest_path(toolkit_destination)
     operations.append(
         {
-            "action": "skip" if toolkit_existing_digest == toolkit_source_digest else "copy",
+            "action": "skip" if toolkit_existing_digest == toolkit_installed_digest else "copy",
             "source": str(repository),
             "source_digest": toolkit_source_digest,
+            "installed_digest": toolkit_installed_digest,
+            "installed_link_root": toolkit_installed_link_root,
             "destination": toolkit_relative,
             "pre_existing_digest": toolkit_existing_digest,
-            "collision": toolkit_existing_digest is not None and toolkit_existing_digest != toolkit_source_digest,
-            "approval_required": toolkit_existing_digest is not None and toolkit_existing_digest != toolkit_source_digest,
+            "collision": toolkit_existing_digest is not None and toolkit_existing_digest != toolkit_installed_digest,
+            "approval_required": toolkit_existing_digest is not None and toolkit_existing_digest != toolkit_installed_digest,
             "rollback_action": (
                 "none"
-                if toolkit_existing_digest == toolkit_source_digest
+                if toolkit_existing_digest == toolkit_installed_digest
                 else "restore_if_unchanged"
                 if toolkit_existing_digest is not None
                 else "remove_if_unchanged"
@@ -663,13 +716,16 @@ def _digest_entry_at(parent_fd: int, name: str) -> str | None:
     return digest.hexdigest()
 
 
-def _copy_toolkit(repository: Path, destination: Path, files: Iterable[str]) -> None:
+def _copy_toolkit(repository: Path, destination: Path, files: Iterable[str], *, skill_link_root: str) -> None:
     destination.mkdir(mode=0o700)
     for relative in files:
         source = repository / relative
         output = destination / relative
         output.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(source, output, follow_symlinks=False)
+        if relative.startswith(".agents/skills/") and relative.endswith("/SKILL.md"):
+            transformed = _rewrite_documentation_links(output.read_text(encoding="utf-8"), skill_link_root)
+            output.write_text(transformed, encoding="utf-8")
 
 
 def _stage_copy(operation: Mapping[str, Any], transaction: Path, index: int) -> str:
@@ -677,15 +733,29 @@ def _stage_copy(operation: Mapping[str, Any], transaction: Path, index: int) -> 
     destination = transaction / name
     source = Path(operation["source"])
     if operation.get("toolkit_files") is not None:
+        if list(operation["toolkit_files"]) != _toolkit_files(source):
+            raise SetupError("toolkit inventory changed after planning")
         if _toolkit_digest(source, operation["toolkit_files"]) != operation["source_digest"]:
             raise SetupError("toolkit source changed after planning")
-        _copy_toolkit(source, destination, operation["toolkit_files"])
+        _copy_toolkit(
+            source,
+            destination,
+            operation["toolkit_files"],
+            skill_link_root=operation["installed_link_root"],
+        )
     else:
         if _digest_path(source) != operation["source_digest"]:
             raise SetupError(f"source changed after planning: {operation['destination']}")
         shutil.copytree(source, destination, symlinks=False)
-    if _digest_path(destination) != operation["source_digest"]:
-        raise SetupError(f"staged output does not match its planned source: {operation['destination']}")
+        skill_file = destination / "SKILL.md"
+        if skill_file.is_file():
+            transformed = _rewrite_documentation_links(
+                skill_file.read_text(encoding="utf-8"),
+                operation["installed_link_root"],
+            )
+            skill_file.write_text(transformed, encoding="utf-8")
+    if _digest_path(destination) != operation["installed_digest"]:
+        raise SetupError(f"staged output does not match its planned installed digest: {operation['destination']}")
     return name
 
 
@@ -843,8 +913,8 @@ def apply_install(
                     raise SetupError(f"unsupported planned action: {action}")
             binding.assert_current()
             result_digest = _digest_entry_at(binding.parent_fd, binding.name)
-            if action == "copy" and result_digest != operation["source_digest"]:
-                raise SetupError(f"copied output does not match its planned source: {operation['destination']}")
+            if action == "copy" and result_digest != operation["installed_digest"]:
+                raise SetupError(f"copied output does not match its planned installed digest: {operation['destination']}")
             if action == "link" and (result_digest is None or os.readlink(binding.name, dir_fd=binding.parent_fd) != str(source)):
                 raise SetupError(f"linked output does not match its planned source: {operation['destination']}")
             if action != "skip":
