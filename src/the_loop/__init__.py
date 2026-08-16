@@ -26,6 +26,7 @@ from .validation import (
     validate_relative_path,
     validate_transition,
 )
+from .parallel import ParallelLaneResult, ParallelMerge, merge_parallel_lanes, normalize_parallel_lanes
 
 __all__ = [
     "ContractError",
@@ -52,6 +53,10 @@ __all__ = [
     "validate_record",
     "validate_relative_path",
     "validate_transition",
+    "ParallelLaneResult",
+    "ParallelMerge",
+    "merge_parallel_lanes",
+    "normalize_parallel_lanes",
     "state_lock",
     "verify_event_chain",
 ]
