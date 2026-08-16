@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0",
+  "harness": "opencode",
+  "display_name": "OpenCode",
+  "executables": [
+    "opencode"
+  ],
+  "project_skill_roots": [
+    ".opencode/skills",
+    ".agents/skills",
+    ".claude/skills"
+  ],
+  "user_skill_roots": [
+    "$HOME/.config/opencode/skills",
+    "$HOME/.agents/skills",
+    "$HOME/.claude/skills"
+  ],
+  "explicit_invocation": {
+    "kind": "tool",
+    "template": "skill(<skill-name>)",
+    "behavior_status": "unverified"
+  },
+  "implicit_invocation": {
+    "basis": "description",
+    "behavior_status": "unverified",
+    "requires_harness_probe": true
+  },
+  "permission_model": {
+    "surface": "pattern-based skill and tool permissions",
+    "preserve_denial": true,
+    "allow_bypass": false,
+    "forbidden_flags": []
+  },
+  "delegation": {
+    "availability": "optional",
+    "on_unavailable": "sequential",
+    "behavior_status": "unverified"
+  },
+  "fallback": {
+    "provider": "bundled",
+    "mode": "sequential",
+    "preserve_authority": true,
+    "preserve_denial": true
+  }
+}
