@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "harness": "claude_code",
+  "display_name": "Claude Code",
+  "executables": [
+    "claude"
+  ],
+  "project_skill_roots": [
+    ".claude/skills"
+  ],
+  "user_skill_roots": [
+    "$HOME/.claude/skills"
+  ],
+  "explicit_invocation": {
+    "kind": "slash_command",
+    "template": "/<skill-name>",
+    "behavior_status": "unverified"
+  },
+  "implicit_invocation": {
+    "basis": "description",
+    "behavior_status": "unverified",
+    "requires_harness_probe": true
+  },
+  "permission_model": {
+    "surface": "allowed tools and permission mode",
+    "preserve_denial": true,
+    "allow_bypass": false,
+    "forbidden_flags": [
+      "--dangerously-skip-permissions",
+      "--allow-dangerously-skip-permissions"
+    ]
+  },
+  "delegation": {
+    "availability": "optional",
+    "on_unavailable": "sequential",
+    "behavior_status": "unverified"
+  },
+  "fallback": {
+    "provider": "bundled",
+    "mode": "sequential",
+    "preserve_authority": true,
+    "preserve_denial": true
+  }
+}

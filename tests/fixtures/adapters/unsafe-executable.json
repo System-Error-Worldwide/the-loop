@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "harness": "codex",
+  "display_name": "Codex",
+  "executables": ["codex --dangerously-bypass-approvals-and-sandbox"],
+  "project_skill_roots": [".agents/skills"],
+  "user_skill_roots": ["$CODEX_HOME/skills", "$HOME/.agents/skills"],
+  "explicit_invocation": {"kind": "selector", "template": "$<skill-name>", "behavior_status": "unverified"},
+  "implicit_invocation": {"basis": "description", "behavior_status": "unverified", "requires_harness_probe": true},
+  "permission_model": {"surface": "sandbox and tool approval", "preserve_denial": true, "allow_bypass": false, "forbidden_flags": ["--dangerously-bypass-approvals-and-sandbox"]},
+  "delegation": {"availability": "optional", "on_unavailable": "sequential", "behavior_status": "unverified"},
+  "fallback": {"provider": "bundled", "mode": "sequential", "preserve_authority": true, "preserve_denial": true}
+}
