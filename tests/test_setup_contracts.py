@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import shutil
 import stat
 import subprocess
@@ -30,6 +31,42 @@ FIXTURE_ROOT = Path(__file__).parent / "fixtures" / "installation"
 def _finder(*installed: str):
     paths = {name: f"/synthetic/bin/{name}" for name in installed}
     return paths.get
+
+
+CANONICAL_DOCS = "https://github.com/System-Error-Worldwide/the-loop/blob/main/"
+SOURCE_DOC_LINK = re.compile(r"(\]\()\.\./\.\./\.\./((?:protocols|schemas|scripts)/[^)]+)(\))")
+MARKDOWN_LINK = re.compile(r"\[[^]]+\]\(([^)]+)\)")
+
+
+def _canonicalize_skill_links(repository: Path) -> int:
+    replacements = 0
+    for skill_file in sorted((repository / ".agents" / "skills").glob("*/SKILL.md")):
+        original = skill_file.read_text(encoding="utf-8")
+
+        def replace(match):
+            nonlocal replacements
+            replacements += 1
+            return match.group(1) + CANONICAL_DOCS + match.group(2) + match.group(3)
+
+        skill_file.write_text(SOURCE_DOC_LINK.sub(replace, original), encoding="utf-8")
+    return replacements
+
+
+def _resolved_documentation_links(skills_root: Path) -> tuple[int, list[str]]:
+    resolved = 0
+    failures: list[str] = []
+    for skill_file in sorted(skills_root.glob("*/SKILL.md")):
+        for target in MARKDOWN_LINK.findall(skill_file.read_text(encoding="utf-8")):
+            if target.startswith(CANONICAL_DOCS):
+                failures.append(f"remote:{skill_file.parent.name}:{target}")
+                continue
+            if target.startswith(("http://", "https://", "mailto:")):
+                continue
+            path = (skill_file.parent / target.split("#", 1)[0]).resolve()
+            resolved += 1
+            if not path.exists():
+                failures.append(f"missing:{skill_file.parent.name}:{target}")
+    return resolved, failures
 
 
 class SetupContractTests(unittest.TestCase):
@@ -598,6 +635,129 @@ class SetupContractTests(unittest.TestCase):
             second_plan = json.loads(dry_run.stdout)
             self.assertEqual(Path(second_plan["target_root"]), second_target.resolve())
             self.assertIn(".the-loop/toolkit", [operation["destination"] for operation in second_plan["operations"]])
+
+    def test_canonical_documentation_links_resolve_offline_in_root_and_toolkit_packages(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            temporary = Path(directory)
+            source = temporary / "canonical-source"
+            shutil.copytree(ROOT, source, ignore=shutil.ignore_patterns(".git", "__pycache__", ".the-loop"))
+            self.assertEqual(_canonicalize_skill_links(source), 80)
+            target = temporary / "project"
+            target.mkdir()
+            plan = plan_install(
+                source,
+                target,
+                source,
+                harnesses=["codex"],
+                executable_finder=_finder("codex"),
+            )
+            apply_install(plan, actor="tester", source_version="0.1")
+            source.rename(temporary / "source-unavailable")
+
+            root_count, root_failures = _resolved_documentation_links(target / ".agents" / "skills")
+            toolkit_count, toolkit_failures = _resolved_documentation_links(
+                target / ".the-loop" / "toolkit" / ".agents" / "skills"
+            )
+            self.assertEqual(root_count, 80)
+            self.assertEqual(toolkit_count, 80)
+            self.assertEqual(root_failures, [])
+            self.assertEqual(toolkit_failures, [])
+
+    def test_transformed_digests_skip_identical_install_and_restore_approved_upgrade(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            temporary = Path(directory)
+            source = temporary / "canonical-source"
+            shutil.copytree(ROOT, source, ignore=shutil.ignore_patterns(".git", "__pycache__", ".the-loop"))
+            self.assertEqual(_canonicalize_skill_links(source), 80)
+            target = temporary / "project"
+            target.mkdir()
+            first = plan_install(
+                source,
+                target,
+                source,
+                harnesses=["codex"],
+                executable_finder=_finder("codex"),
+            )
+            audit_plan = next(operation for operation in first["operations"] if operation["destination"] == ".agents/skills/audit")
+            toolkit_plan = next(operation for operation in first["operations"] if operation["destination"] == ".the-loop/toolkit")
+            self.assertNotEqual(audit_plan["installed_digest"], audit_plan["source_digest"])
+            self.assertNotEqual(toolkit_plan["installed_digest"], toolkit_plan["source_digest"])
+            first_receipt = apply_install(first, actor="tester", source_version="0.1")
+            audit_receipt = next(
+                operation for operation in first_receipt["operations"] if operation["destination"] == ".agents/skills/audit"
+            )
+            self.assertEqual(audit_receipt["resulting_digest"], audit_plan["installed_digest"])
+            installed_skill = target / ".agents" / "skills" / "audit" / "SKILL.md"
+            toolkit_skill = target / ".the-loop" / "toolkit" / ".agents" / "skills" / "audit" / "SKILL.md"
+            original_installed = installed_skill.read_bytes()
+            original_toolkit = toolkit_skill.read_bytes()
+
+            identical = plan_install(
+                source,
+                target,
+                source,
+                harnesses=["codex"],
+                executable_finder=_finder("codex"),
+            )
+            self.assertEqual(identical["approval_required"], [])
+            self.assertEqual(
+                [operation["action"] for operation in identical["operations"] if operation["destination"] == ".agents/skills/audit"],
+                ["skip"],
+            )
+            self.assertEqual(
+                [operation["action"] for operation in identical["operations"] if operation["destination"] == ".the-loop/toolkit"],
+                ["skip"],
+            )
+
+            source_skill = source / ".agents" / "skills" / "audit" / "SKILL.md"
+            source_skill.write_text(source_skill.read_text(encoding="utf-8") + "\nUpgrade proof.\n", encoding="utf-8")
+            upgrade = plan_install(
+                source,
+                target,
+                source,
+                harnesses=["codex"],
+                executable_finder=_finder("codex"),
+            )
+            self.assertEqual(upgrade["approval_required"], [".agents/skills/audit", ".the-loop/toolkit"])
+            with self.assertRaisesRegex(SetupError, "exact approval"):
+                apply_install(upgrade, actor="tester", source_version="0.2")
+            upgraded = apply_install(
+                upgrade,
+                actor="tester",
+                source_version="0.2",
+                approved_destinations=upgrade["approval_required"],
+            )
+            self.assertNotEqual(installed_skill.read_bytes(), original_installed)
+            self.assertNotEqual(toolkit_skill.read_bytes(), original_toolkit)
+            result = rollback_install(upgraded, target_root=target)
+            self.assertEqual(result["result"], "rolled_back")
+            self.assertEqual(installed_skill.read_bytes(), original_installed)
+            self.assertEqual(toolkit_skill.read_bytes(), original_toolkit)
+
+    def test_transformed_install_still_revalidates_raw_source_digest(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            temporary = Path(directory)
+            source = temporary / "canonical-source"
+            shutil.copytree(ROOT, source, ignore=shutil.ignore_patterns(".git", "__pycache__", ".the-loop"))
+            self.assertEqual(_canonicalize_skill_links(source), 80)
+            target = temporary / "project"
+            target.mkdir()
+            plan = plan_install(
+                source,
+                target,
+                source,
+                harnesses=["codex"],
+                executable_finder=_finder("codex"),
+            )
+            source_skill = source / ".agents" / "skills" / "audit" / "SKILL.md"
+            content = source_skill.read_text(encoding="utf-8")
+            source_skill.write_text(
+                content.replace(CANONICAL_DOCS, "../../../.the-loop/toolkit/", 1),
+                encoding="utf-8",
+            )
+            with self.assertRaisesRegex(SetupError, "source changed after planning"):
+                apply_install(plan, actor="tester", source_version="0.1")
+            self.assertFalse((target / ".agents" / "skills" / "audit").exists())
 
 
 if __name__ == "__main__":
