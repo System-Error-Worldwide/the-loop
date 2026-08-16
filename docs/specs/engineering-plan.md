@@ -187,8 +187,10 @@ Estimate: 90 to 150 minutes.
 Deliver:
 
 - Dry-run installation plan.
-- Copy and proven-safe link modes.
+- Supported copy mode; fail-closed rejection when requested link mode would require
+  transformed shipping content, plus bounded synthetic coverage of unchanged links.
 - Install receipts and rollback.
+- Receipt-owned offline toolkit with skills, adapters, protocols, schemas, CLIs and runtime.
 - Read-only harness discovery and collision report.
 - Optional isolated behavior probes.
 
@@ -196,7 +198,11 @@ Done gate:
 
 - Setup never overwrites an unknown destination without exact approval.
 - Rollback removes only unchanged files owned by its receipt.
+- Namespace replacement and symlink races fail closed without deleting concurrent user changes.
 - Doctor distinguishes discovery, behavior, denial and unverified states.
+- Doctor cannot report ready without an unchanged receipt-bound 12-package/toolkit
+  digest set, a harness version, and typed behavior evidence matching the exact
+  portable invocation capability and Doctor-derived environment fingerprint.
 - All four harness paths match current official documentation.
 
 ### Slice 2.7: four thin adapters

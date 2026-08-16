@@ -6,6 +6,7 @@ This audit covers the 31 product candidates, shared protocol material, installer
 
 - [Candidate inventory](candidate-inventory.md)
 - [Per-skill records](skill-records.md)
+- [Exact release integrity manifest](release-integrity.json)
 - [Public and private boundary](public-private-boundary.md)
 - [Risks and human gates](risks-and-gates.md)
 - [Recommended v0.1 shipping manifest](v0.1-shipping-manifest.md)

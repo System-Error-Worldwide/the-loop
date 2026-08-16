@@ -1,6 +1,6 @@
 ---
 name: strategize
-description: Turn a stated intent into the smallest bounded problem, outcome, scope and testable success gate before implementation begins.
+description: Turn a stated intent into the smallest bounded problem, outcome, scope and testable success gate before implementation begins. Use when an idea, request or detected issue needs a strategy packet before specifications or implementation.
 license: MIT
 compatibility: Codex, Claude Code, Kimi Code and OpenCode
 metadata:
@@ -71,12 +71,14 @@ Ask: does this solve the stated problem with the smallest sufficient scope, and 
 
 Halt on a strategic fork that changes the asset, authority, cost, legal exposure, privacy exposure or success definition; missing required source state; conflicting constraints; exhausted budget; detected stop; lost ownership; or an unavailable verification method. Include the last completed action, evidence gap and exact decision needed to continue.
 
+Core execution does not require network access or the source checkout. The links below are optional public documentation.
+
 ## References
 
-- [Stage contracts](../../../protocols/stage-contracts.md)
-- [Skill routing](../../../protocols/skill-routing.md)
-- [Code and non-code tracks](../../../protocols/code-non-code-tracks.md)
-- [Autonomy policy](../../../protocols/autonomy-policy.md)
-- [Run state and leases](../../../protocols/run-state-leases.md)
-- [Issue ledger](../../../protocols/issue-ledger.md)
-- [Evidence contract](../../../protocols/evidence-contract.md)
+- [Stage contracts](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/stage-contracts.md)
+- [Skill routing](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/skill-routing.md)
+- [Code and non-code tracks](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/code-non-code-tracks.md)
+- [Autonomy policy](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/autonomy-policy.md)
+- [Run state and leases](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/run-state-leases.md)
+- [Issue ledger](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/issue-ledger.md)
+- [Evidence contract](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/evidence-contract.md)

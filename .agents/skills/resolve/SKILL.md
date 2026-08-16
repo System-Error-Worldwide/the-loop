@@ -1,6 +1,6 @@
 ---
 name: resolve
-description: Apply the minimum repair for owned reproducible issues and return them to independent verification without closing them yourself.
+description: Apply the minimum repair for owned reproducible issues and return them to independent verification without closing them yourself. Use when Test has recorded a reproducible owned defect with a bounded repair gate.
 license: MIT
 compatibility: Codex, Claude Code, Kimi Code and OpenCode
 metadata:
@@ -71,12 +71,14 @@ Rerun the original reproduction, ask whether the cause is narrower than the prop
 
 Halt when the issue lacks evidence or ownership, the reproduction is no longer valid and cannot be explained, scope expands, unrelated changes overlap, authority or lease is invalid, a stop is detected, an unknown outcome exists, the issue reopens, or Test remains red after three passes.
 
+Core execution does not require network access or the source checkout. The links below are optional public documentation.
+
 ## References
 
-- [Stage contracts](../../../protocols/stage-contracts.md)
-- [Skill routing](../../../protocols/skill-routing.md)
-- [Code and non-code tracks](../../../protocols/code-non-code-tracks.md)
-- [Autonomy policy](../../../protocols/autonomy-policy.md)
-- [Run state and leases](../../../protocols/run-state-leases.md)
-- [Issue ledger](../../../protocols/issue-ledger.md)
-- [Evidence contract](../../../protocols/evidence-contract.md)
+- [Stage contracts](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/stage-contracts.md)
+- [Skill routing](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/skill-routing.md)
+- [Code and non-code tracks](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/code-non-code-tracks.md)
+- [Autonomy policy](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/autonomy-policy.md)
+- [Run state and leases](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/run-state-leases.md)
+- [Issue ledger](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/issue-ledger.md)
+- [Evidence contract](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/evidence-contract.md)

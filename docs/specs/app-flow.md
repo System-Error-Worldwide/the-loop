@@ -24,7 +24,7 @@ THE LOOP has no custom application UI in v0.1. Users interact through their agen
 5. User approves an exact target and install mode.
 6. Setup applies operations atomically and writes an install receipt.
 7. Doctor validates file discovery and reports collisions.
-8. If permitted, Doctor launches isolated behavior probes for selected harnesses.
+8. If a library caller explicitly permits an isolated behavior probe, Doctor validates its typed evidence; the public CLI remains read-only discovery and does not invent a host command.
 9. User starts Loop or Auto with an asset and outcome.
 
 ### First-run failure and recovery

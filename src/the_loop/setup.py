@@ -41,8 +41,11 @@ REQUIRED_ADAPTER_KEYS = frozenset(
     }
 )
 CANONICAL_DOCUMENTATION_ROOT = "https://github.com/System-Error-Worldwide/the-loop/blob/main/"
-_CANONICAL_DOCUMENTATION_LINK = re.compile(
-    r"(\]\()" + re.escape(CANONICAL_DOCUMENTATION_ROOT) + r"((?:protocols|schemas|scripts)/[^)]+)(\))"
+_DOCUMENTATION_LINK = re.compile(
+    r"(\]\()(?:"
+    + re.escape(CANONICAL_DOCUMENTATION_ROOT)
+    + r"|(?:\.\./){3}(?:\.the-loop/toolkit/)?)"
+    + r"((?:protocols|schemas|scripts)/[^)]+)(\))"
 )
 
 
@@ -126,7 +129,7 @@ def _digest_path(path: Path) -> str | None:
 
 
 def _rewrite_documentation_links(content: str, local_root: str) -> str:
-    return _CANONICAL_DOCUMENTATION_LINK.sub(
+    return _DOCUMENTATION_LINK.sub(
         lambda match: match.group(1) + local_root + match.group(2) + match.group(3),
         content,
     )
@@ -276,10 +279,13 @@ def _toolkit_files(repository_root: Path) -> list[str]:
     patterns = (
         (".agents/skills", {".md"}),
         ("adapters", {".json"}),
+        ("docs", {".json", ".md"}),
+        ("examples", {".json", ".md"}),
         ("protocols", {".md"}),
         ("schemas", {".json", ".md"}),
         ("scripts", {".py"}),
         ("src/the_loop", {".py"}),
+        ("tests/fixtures/conformance", {".json"}),
     )
     files: list[str] = []
     for directory, suffixes in patterns:
@@ -291,20 +297,26 @@ def _toolkit_files(repository_root: Path) -> list[str]:
                 raise SetupError(f"toolkit source contains a symlink: {path.relative_to(repository_root)}")
             if path.is_file() and path.suffix in suffixes:
                 files.append(path.relative_to(repository_root).as_posix())
-    license_path = repository_root / "LICENSE"
-    if license_path.is_file() and not license_path.is_symlink():
-        files.append("LICENSE")
+    for filename in ("CONTRIBUTING.md", "LICENSE", "PROVENANCE.md", "README.md", "SECURITY.md"):
+        root_file = repository_root / filename
+        if not root_file.is_file() or root_file.is_symlink():
+            raise SetupError(f"repository toolkit is missing a safe root document: {filename}")
+        files.append(filename)
     required = {
         "adapters/codex/adapter.json",
         "adapters/claude_code/adapter.json",
         "adapters/kimi_code/adapter.json",
         "adapters/opencode/adapter.json",
+        "docs/provenance/release-integrity.json",
+        "docs/specs/prd.md",
+        "examples/code/README.md",
         ".agents/skills/the-loop-setup/SKILL.md",
         ".agents/skills/the-loop-doctor/SKILL.md",
         "protocols/stage-contracts.md",
         "schemas/config.schema.json",
         "scripts/the_loop_setup.py",
         "scripts/the_loop_doctor.py",
+        "tests/fixtures/conformance/scenarios.json",
         "src/the_loop/setup.py",
         "src/the_loop/doctor.py",
         "src/the_loop/validation.py",
@@ -496,6 +508,20 @@ def plan_install(
         toolkit_files,
         skill_link_root=toolkit_installed_link_root,
     )
+    if mode == "link":
+        transformed_destinations = [
+            operation["destination"]
+            for operation in operations
+            if operation.get("installed_digest") != operation.get("source_digest")
+        ]
+        if toolkit_installed_digest != toolkit_source_digest:
+            transformed_destinations.append(toolkit_relative)
+        if transformed_destinations:
+            raise SetupError(
+                "link mode unavailable because documentation-link transformation requires copies for: "
+                + ", ".join(transformed_destinations)
+                + "; use copy mode"
+            )
     toolkit_existing_digest = _digest_path(toolkit_destination)
     operations.append(
         {
@@ -991,6 +1017,7 @@ def apply_install(
             retained_binding.assert_current()
         return receipt
     except BaseException as exc:
+        incomplete: list[str] = []
         if backups_promoted and installs_fd is not None:
             try:
                 os.rename(f"{receipt_id}.backup", "backup-tree", src_dir_fd=installs_fd, dst_dir_fd=transaction_fd)
@@ -1001,13 +1028,14 @@ def apply_install(
                     if source.exists() or source.is_symlink():
                         os.rename(source, transaction / entry["backup_name"])
             except OSError:
-                pass
-        incomplete = _conditional_rollback(applied, transaction, transaction_fd)
+                incomplete.append(f".the-loop/installs/{receipt_id}.backup")
         if installs_fd is not None:
             try:
                 os.unlink(f"{receipt_id}.json", dir_fd=installs_fd)
             except FileNotFoundError:
                 pass
+            except OSError:
+                incomplete.append(f".the-loop/installs/{receipt_id}.json")
             if installs_created:
                 os.close(installs_fd)
                 installs_fd = None
@@ -1015,6 +1043,7 @@ def apply_install(
                     os.rmdir(installs_binding.name, dir_fd=installs_binding.parent_fd)  # type: ignore[union-attr]
                 except OSError:
                     incomplete.append(".the-loop/installs")
+        incomplete.extend(_conditional_rollback(applied, transaction, transaction_fd))
         if incomplete:
             cleanup_transaction = False
             names = ", ".join(dict.fromkeys(incomplete))
@@ -1046,6 +1075,8 @@ def rollback_install(receipt: Mapping[str, Any], *, target_root: Path | str | No
     transaction_fd = os.open(transaction, _DIRECTORY_FLAGS)
     bindings: list[_DestinationBinding] = []
     skipped = False
+    recovery_artifacts: list[Path] = []
+    cleanup_transaction = True
     try:
         root.assert_current()
         for index, operation in reversed(list(enumerate(receipt["operations"]))):
@@ -1075,13 +1106,24 @@ def rollback_install(receipt: Mapping[str, Any], *, target_root: Path | str | No
             os.rename(binding.name, quarantine, src_dir_fd=binding.parent_fd, dst_dir_fd=transaction_fd)
             try:
                 binding.assert_current()
-            except SetupError:
+            except SetupError as exc:
                 if _entry_stat(binding.parent_fd, binding.name) is None:
                     os.rename(quarantine, binding.name, src_dir_fd=transaction_fd, dst_dir_fd=binding.parent_fd)
+                else:
+                    artifact = transaction / quarantine
+                    recovery_artifacts.append(artifact)
+                    cleanup_transaction = False
+                    raise SetupError(
+                        f"rollback_incomplete: namespace changed while concurrent content occupied the destination; "
+                        f"recovery artifact retained at {artifact}; original failure: {exc}"
+                    ) from exc
                 raise
             if _digest_entry_at(transaction_fd, quarantine) != operation["resulting_digest"]:
                 if _entry_stat(binding.parent_fd, binding.name) is None:
                     os.rename(quarantine, binding.name, src_dir_fd=transaction_fd, dst_dir_fd=binding.parent_fd)
+                else:
+                    recovery_artifacts.append(transaction / quarantine)
+                    cleanup_transaction = False
                 skipped = True
                 continue
             _remove_private(transaction / quarantine)
@@ -1121,10 +1163,19 @@ def rollback_install(receipt: Mapping[str, Any], *, target_root: Path | str | No
                 root.assert_current()
                 _remove_private(transaction / "spent-backup")
         root.assert_current()
+        if recovery_artifacts:
+            label = "recovery artifact" if len(recovery_artifacts) == 1 else "recovery artifacts"
+            raise SetupError(
+                "rollback_incomplete: concurrent changes preserved; "
+                + label
+                + " retained at "
+                + ", ".join(str(path) for path in recovery_artifacts)
+            )
         return result
     finally:
         for binding in bindings:
             binding.close()
         os.close(transaction_fd)
         root.close()
-        shutil.rmtree(transaction, ignore_errors=True)
+        if cleanup_transaction:
+            shutil.rmtree(transaction, ignore_errors=True)

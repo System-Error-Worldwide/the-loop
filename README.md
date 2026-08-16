@@ -41,9 +41,10 @@ The intended v0.1 skill packages are listed in the
 
 ## Quickstart
 
-Prerequisites: Python 3.11 or newer and at least one target harness executable.
-The default installation is repository-local and uses copies, so the target project
-does not depend on the checkout after installation.
+Prerequisites: Python 3.9 or newer and at least one target harness executable.
+The default installation is repository-local and uses copies. It installs the 12
+skills plus a namespaced offline toolkit at `.the-loop/toolkit`, so the target does
+not depend on the checkout or a network connection after installation.
 
 ```sh
 git clone https://github.com/System-Error-Worldwide/the-loop.git
@@ -65,8 +66,8 @@ python3 scripts/the_loop_setup.py \
   --source-version 0.1.0 \
   --json
 
-# 3. Read-only diagnosis.
-python3 scripts/the_loop_doctor.py \
+# 3. Read-only diagnosis from the installed offline toolkit.
+python3 /path/to/project/.the-loop/toolkit/scripts/the_loop_doctor.py \
   --project-root /path/to/project \
   --json
 ```
@@ -79,7 +80,7 @@ blocked installation. Setup and Doctor do not send telemetry or capture prompts.
 To remove only unchanged files owned by one receipt:
 
 ```sh
-python3 scripts/the_loop_setup.py \
+python3 /path/to/project/.the-loop/toolkit/scripts/the_loop_setup.py \
   --rollback-receipt /path/to/project/.the-loop/installs/RECEIPT_ID.json \
   --target-root /path/to/project \
   --json
@@ -107,9 +108,11 @@ Parallel, Cloud and Endless are not included in v0.1.
 
 ### Contract conformance
 
-The deterministic runner installs and diagnoses the pack in four synthetic projects
-and checks 12 portable scenarios per harness. It never invokes a model and therefore
-does not claim live behavior:
+The deterministic runner installs and diagnoses the pack in four synthetic projects,
+validates the 12 locked scenario contracts per harness, and fails on any altered
+artifact, fallback body, support component, or safety assertion. Its report names
+expected artifacts separately from the checks it actually performed. It never invokes
+a model and therefore does not claim that those scenarios passed live behavior:
 
 ```sh
 mkdir -p /tmp/the-loop-contract-check

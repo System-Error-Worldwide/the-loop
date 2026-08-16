@@ -1,6 +1,6 @@
 ---
 name: test
-description: Independently attempt to falsify the done gate, persist reproducible evidence and open every defect that survives refutation.
+description: Independently attempt to falsify the done gate, persist reproducible evidence and open every defect that survives refutation. Use when an approved implementation or non-code asset must be verified independently before it can be called green.
 license: MIT
 compatibility: Codex, Claude Code, Kimi Code and OpenCode
 metadata:
@@ -70,12 +70,14 @@ Attempt to reproduce each claimed defect and break each claimed pass. Check that
 
 Halt green promotion when a required check cannot run, evidence is stale or invalid, a blocking issue remains, authority is denied, the lease is lost, a stop is detected, the namespace changes, or the retry gate is exhausted. A reopened issue or three red Test/Resolve passes requires a human gate.
 
+Core execution does not require network access or the source checkout. The links below are optional public documentation.
+
 ## References
 
-- [Stage contracts](../../../protocols/stage-contracts.md)
-- [Skill routing](../../../protocols/skill-routing.md)
-- [Code and non-code tracks](../../../protocols/code-non-code-tracks.md)
-- [Autonomy policy](../../../protocols/autonomy-policy.md)
-- [Run state and leases](../../../protocols/run-state-leases.md)
-- [Issue ledger](../../../protocols/issue-ledger.md)
-- [Evidence contract](../../../protocols/evidence-contract.md)
+- [Stage contracts](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/stage-contracts.md)
+- [Skill routing](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/skill-routing.md)
+- [Code and non-code tracks](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/code-non-code-tracks.md)
+- [Autonomy policy](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/autonomy-policy.md)
+- [Run state and leases](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/run-state-leases.md)
+- [Issue ledger](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/issue-ledger.md)
+- [Evidence contract](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/evidence-contract.md)

@@ -1,6 +1,6 @@
 ---
 name: spec-pack
-description: Produce mutually consistent implementation-ready specifications and map every requirement to a build slice and verification gate.
+description: Produce mutually consistent implementation-ready specifications and map every requirement to a build slice and verification gate. Use for a new app, website or major feature that needs PRD, technical design, flow, design brief, backend schema and engineering plan before code.
 license: MIT
 compatibility: Codex, Claude Code, Kimi Code and OpenCode
 metadata:
@@ -72,12 +72,14 @@ Ask whether two competent implementers could build materially different but spec
 
 Halt for a material unresolved decision, missing source of truth, conflicting requirement, unbounded scope, absent verification method, lost ownership, namespace change, expired authority, exhausted budget or detected stop. Name incomplete documents and the exact input needed.
 
+Core execution does not require network access or the source checkout. The links below are optional public documentation.
+
 ## References
 
-- [Stage contracts](../../../protocols/stage-contracts.md)
-- [Skill routing](../../../protocols/skill-routing.md)
-- [Code and non-code tracks](../../../protocols/code-non-code-tracks.md)
-- [Autonomy policy](../../../protocols/autonomy-policy.md)
-- [Run state and leases](../../../protocols/run-state-leases.md)
-- [Issue ledger](../../../protocols/issue-ledger.md)
-- [Evidence contract](../../../protocols/evidence-contract.md)
+- [Stage contracts](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/stage-contracts.md)
+- [Skill routing](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/skill-routing.md)
+- [Code and non-code tracks](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/code-non-code-tracks.md)
+- [Autonomy policy](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/autonomy-policy.md)
+- [Run state and leases](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/run-state-leases.md)
+- [Issue ledger](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/issue-ledger.md)
+- [Evidence contract](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/evidence-contract.md)

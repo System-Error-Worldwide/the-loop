@@ -1,6 +1,6 @@
 ---
 name: the-loop
-description: Run one attended evidence-led lifecycle with visible stage gates, qualified routing, bundled fallbacks and truthful close.
+description: Run one attended evidence-led lifecycle with visible stage gates, qualified routing, bundled fallbacks and truthful close. Use when a user asks to take one code or non-code asset through strategy, specification, build, independent test, resolution and close with confirmation at meaningful gates.
 license: MIT
 compatibility: Codex, Claude Code, Kimi Code and OpenCode
 metadata:
@@ -71,15 +71,17 @@ At every stage ask whether the claimed gate is supported by authoritative eviden
 
 Halt for missing specifications, unresolved strategic forks, absent or expired authority, lost lease, changed namespace, stop signal, exhausted budget, unknown external state, reopened issue, three red Test/Resolve passes or any security, legal, privacy, money or destructive judgment outside scope. Return the exact reason and continuation condition.
 
+Core execution does not require network access or the source checkout. The links below are optional public documentation.
+
 ## References
 
-- [Stage contracts](../../../protocols/stage-contracts.md)
-- [Skill routing](../../../protocols/skill-routing.md)
-- [Code and non-code tracks](../../../protocols/code-non-code-tracks.md)
-- [Autonomy policy](../../../protocols/autonomy-policy.md)
-- [Run state and leases](../../../protocols/run-state-leases.md)
-- [Issue ledger](../../../protocols/issue-ledger.md)
-- [Evidence contract](../../../protocols/evidence-contract.md)
-- [Workflow dispatch](../../../protocols/workflow-dispatch.md)
-- [Watcher contract](../../../protocols/watcher-contract.md)
-- [Harness capability map](../../../protocols/harness-capability-map.md)
+- [Stage contracts](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/stage-contracts.md)
+- [Skill routing](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/skill-routing.md)
+- [Code and non-code tracks](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/code-non-code-tracks.md)
+- [Autonomy policy](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/autonomy-policy.md)
+- [Run state and leases](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/run-state-leases.md)
+- [Issue ledger](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/issue-ledger.md)
+- [Evidence contract](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/evidence-contract.md)
+- [Workflow dispatch](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/workflow-dispatch.md)
+- [Watcher contract](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/watcher-contract.md)
+- [Harness capability map](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/harness-capability-map.md)

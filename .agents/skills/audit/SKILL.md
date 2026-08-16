@@ -1,6 +1,6 @@
 ---
 name: audit
-description: Compare declared contracts with observed artifacts or behavior, preserve coverage limits and feed evidence-backed drift into the lifecycle.
+description: Compare declared contracts with observed artifacts or behavior, preserve coverage limits and feed evidence-backed drift into the lifecycle. Use for proactive drift, compliance, provenance, release-readiness or contract audits where findings must survive refutation.
 license: MIT
 compatibility: Codex, Claude Code, Kimi Code and OpenCode
 metadata:
@@ -70,12 +70,14 @@ Try to reproduce every discrepancy, reread the exact contract and search for leg
 
 Halt on an unbounded population, missing contract, inaccessible required evidence, authority denial, namespace change, stop signal, privacy or security gate, or a conclusion that cannot be distinguished from sampling uncertainty. Report members skipped and why.
 
+Core execution does not require network access or the source checkout. The links below are optional public documentation.
+
 ## References
 
-- [Stage contracts](../../../protocols/stage-contracts.md)
-- [Skill routing](../../../protocols/skill-routing.md)
-- [Code and non-code tracks](../../../protocols/code-non-code-tracks.md)
-- [Autonomy policy](../../../protocols/autonomy-policy.md)
-- [Run state and leases](../../../protocols/run-state-leases.md)
-- [Issue ledger](../../../protocols/issue-ledger.md)
-- [Evidence contract](../../../protocols/evidence-contract.md)
+- [Stage contracts](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/stage-contracts.md)
+- [Skill routing](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/skill-routing.md)
+- [Code and non-code tracks](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/code-non-code-tracks.md)
+- [Autonomy policy](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/autonomy-policy.md)
+- [Run state and leases](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/run-state-leases.md)
+- [Issue ledger](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/issue-ledger.md)
+- [Evidence contract](https://github.com/System-Error-Worldwide/the-loop/blob/main/protocols/evidence-contract.md)

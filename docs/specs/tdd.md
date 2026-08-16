@@ -58,7 +58,7 @@ so pre-existing shadows and cross-harness collisions remain visible.
 - Markdown for skill instructions and protocol contracts.
 - JSON for user configuration and runtime state.
 - JSON Schema draft 2020-12 for machine validation.
-- Python 3.11 or newer, standard library only, for setup, doctor, atomic state handling and conformance utilities.
+- Python 3.9 or newer, standard library only, for setup, doctor, atomic state handling and conformance utilities.
 - POSIX shell only for small entry shims where unavoidable.
 
 ### Why Python standard library
@@ -79,13 +79,22 @@ It provides atomic file operations, process management, JSON parsing and cross-p
 
 Setup performs a read-only discovery pass, constructs an install plan, asks for approval where files would change, applies only the accepted operations and emits a receipt.
 
+Copy mode also installs one receipt-owned `.the-loop/toolkit` containing the canonical
+skill source, adapters, protocols, schemas, CLIs and standard-library runtime. This
+keeps the installed target operable without the original checkout or network access.
+Toolkit replacement and rollback use the same collision, digest and unchanged-output
+rules as skill packages.
+
 It must support:
 
 - Repository-local installation into a target repository.
 - User-level installation into a selected harness's documented directory.
 - Dry-run and non-interactive modes.
 - Copy mode as the universal fallback.
-- Link mode only after filesystem and harness support is proven.
+- Copy mode is the supported v0.1 shipping mode. Link planning fails closed whenever
+  the portable package needs documentation-link transformation, which the shipping
+  pack does; the lower-level link path remains covered only for unchanged synthetic
+  packages with explicit same-filesystem proof.
 - Uninstall from the recorded receipt without deleting files it did not create.
 
 ### Doctor
@@ -101,7 +110,11 @@ Doctor is read-only. It checks:
 - Runtime version.
 - Repository state directory safety.
 - Kill-switch visibility.
-- Optional behavior probes when the user permits harness execution.
+- Complete 12-package identity bound to an unchanged Setup receipt, every installed
+  package digest, and the full offline-toolkit digest.
+- Optional typed behavior evidence when a library caller permits harness execution;
+  verified evidence must match the exact portable invocation capability and the
+  Doctor-derived environment fingerprint.
 
 A discovery check is not a behavior check. Doctor reports these separately.
 
@@ -238,7 +251,7 @@ Metadata values remain strings for cross-harness compatibility. Harness-only fie
 - Paths stored in public examples are relative and synthetic.
 - External commands use argument arrays, not interpolated shell strings.
 - Config paths are canonicalised and checked against the declared project root before writes.
-- Symlinks are resolved before overwrite or uninstall decisions.
+- Setup pins target and destination-component namespace identities, uses descriptor-relative mutations, and rejects symlink or replacement races before reporting success.
 - Runtime state is ignored by Git by default.
 - Release scanning covers tracked content and reachable Git history.
 - An elevated authority grant is data, not a bypass around the harness's own permission model.

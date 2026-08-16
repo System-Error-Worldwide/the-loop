@@ -10,6 +10,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
@@ -23,6 +24,7 @@ from the_loop.setup import (  # noqa: E402
     rollback_install,
 )
 from the_loop.validation import validate_record  # noqa: E402
+import the_loop.setup as setup_module  # noqa: E402
 
 
 FIXTURE_ROOT = Path(__file__).parent / "fixtures" / "installation"
@@ -39,17 +41,18 @@ MARKDOWN_LINK = re.compile(r"\[[^]]+\]\(([^)]+)\)")
 
 
 def _canonicalize_skill_links(repository: Path) -> int:
-    replacements = 0
+    canonical_links = 0
     for skill_file in sorted((repository / ".agents" / "skills").glob("*/SKILL.md")):
         original = skill_file.read_text(encoding="utf-8")
+        canonical_links += original.count(CANONICAL_DOCS)
 
         def replace(match):
-            nonlocal replacements
-            replacements += 1
+            nonlocal canonical_links
+            canonical_links += 1
             return match.group(1) + CANONICAL_DOCS + match.group(2) + match.group(3)
 
         skill_file.write_text(SOURCE_DOC_LINK.sub(replace, original), encoding="utf-8")
-    return replacements
+    return canonical_links
 
 
 def _resolved_documentation_links(skills_root: Path) -> tuple[int, list[str]]:
@@ -67,6 +70,18 @@ def _resolved_documentation_links(skills_root: Path) -> tuple[int, list[str]]:
             if not path.exists():
                 failures.append(f"missing:{skill_file.parent.name}:{target}")
     return resolved, failures
+
+
+def _broken_local_markdown_links(root: Path) -> list[str]:
+    failures: list[str] = []
+    for markdown in sorted(root.rglob("*.md")):
+        for target in MARKDOWN_LINK.findall(markdown.read_text(encoding="utf-8")):
+            path_value = target.split("#", 1)[0]
+            if not path_value or path_value.startswith(("http://", "https://", "mailto:")):
+                continue
+            if not (markdown.parent / path_value).resolve().exists():
+                failures.append(f"{markdown.relative_to(root)}:{target}")
+    return failures
 
 
 class SetupContractTests(unittest.TestCase):
@@ -205,12 +220,18 @@ class SetupContractTests(unittest.TestCase):
 
     def test_proven_link_mode_applies_and_rolls_back_the_link_only(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
-            target = Path(directory) / "project"
+            temporary = Path(directory)
+            repository = temporary / "relative-link-repository"
+            shutil.copytree(ROOT, repository, ignore=shutil.ignore_patterns(".git", "__pycache__", ".the-loop"))
+            for skill_file in sorted((repository / ".agents" / "skills").glob("*/SKILL.md")):
+                content = skill_file.read_text(encoding="utf-8")
+                skill_file.write_text(content.replace(CANONICAL_DOCS, "../../../"), encoding="utf-8")
+            target = temporary / "project"
             target.mkdir()
             plan = plan_install(
                 FIXTURE_ROOT / "source",
                 target,
-                ROOT,
+                repository,
                 harnesses=["codex"],
                 mode="link",
                 prove_link_support=True,
@@ -222,6 +243,21 @@ class SetupContractTests(unittest.TestCase):
             rollback_install(receipt, target_root=target)
             self.assertFalse(installed.exists())
             self.assertTrue((FIXTURE_ROOT / "source" / ".agents" / "skills" / "example" / "SKILL.md").is_file())
+
+    def test_shipping_pack_rejects_link_mode_when_localization_requires_copies(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "project"
+            target.mkdir()
+            with self.assertRaisesRegex(SetupError, "link mode unavailable.*documentation-link transformation"):
+                plan_install(
+                    ROOT,
+                    target,
+                    ROOT,
+                    harnesses=["codex"],
+                    mode="link",
+                    prove_link_support=True,
+                    executable_finder=_finder("codex"),
+                )
 
     def test_apply_emits_schema_valid_receipt_and_rollback_removes_unchanged_output(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -276,6 +312,58 @@ class SetupContractTests(unittest.TestCase):
             self.assertEqual(result["result"], "partial")
             self.assertEqual(installed.read_text(encoding="utf-8"), "user change\n")
 
+    def test_rollback_race_preserves_quarantined_and_canonical_concurrent_changes(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory)
+            target = parent / "project"
+            target.mkdir()
+            plan = plan_install(
+                FIXTURE_ROOT / "source",
+                target,
+                ROOT,
+                harnesses=["codex"],
+                executable_finder=_finder("codex"),
+            )
+            receipt = apply_install(plan, actor="tester", source_version="0.1")
+            installed = target / ".agents" / "skills" / "example"
+            installed_skill = installed / "SKILL.md"
+            real_rename = os.rename
+            raced = False
+
+            def replace_after_quarantine(source, destination, *args, **kwargs):
+                nonlocal raced
+                if (
+                    source == "example"
+                    and isinstance(destination, str)
+                    and destination.startswith("rollback-")
+                    and not raced
+                ):
+                    raced = True
+                    installed_skill.write_text("concurrent-A\n", encoding="utf-8")
+                    result = real_rename(source, destination, *args, **kwargs)
+                    installed.mkdir()
+                    installed_skill.write_text("concurrent-B\n", encoding="utf-8")
+                    return result
+                return real_rename(source, destination, *args, **kwargs)
+
+            with patch.object(setup_module.os, "rename", side_effect=replace_after_quarantine):
+                with self.assertRaisesRegex(
+                    SetupError,
+                    "rollback_incomplete.*recovery artifact retained at",
+                ) as raised:
+                    rollback_install(receipt, target_root=target)
+            self.assertTrue(raced)
+            self.assertEqual(installed_skill.read_text(encoding="utf-8"), "concurrent-B\n")
+            match = re.search(r"recovery artifact retained at ([^;]+)", str(raised.exception))
+            self.assertIsNotNone(match)
+            recovery = Path(match.group(1))
+            self.assertEqual((recovery / "SKILL.md").read_text(encoding="utf-8"), "concurrent-A\n")
+            stored = json.loads(
+                (target / ".the-loop" / "installs" / f"{receipt['receipt_id']}.json").read_text(encoding="utf-8")
+            )
+            self.assertEqual(stored["result"], "partial")
+            shutil.rmtree(recovery.parent)
+
     def test_interrupted_apply_restores_pre_existing_destination(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             target = Path(directory) / "project"
@@ -325,7 +413,7 @@ class SetupContractTests(unittest.TestCase):
                 if stage == "before_receipt_write":
                     raise RuntimeError("synthetic receipt failure")
 
-            with self.assertRaisesRegex(RuntimeError, "synthetic receipt failure"):
+            with self.assertRaisesRegex(RuntimeError, "synthetic receipt failure") as raised:
                 apply_install(
                     plan,
                     actor="tester",
@@ -333,8 +421,40 @@ class SetupContractTests(unittest.TestCase):
                     approved_destinations=[".agents/skills/example"],
                     fault_injector=fail,
                 )
+            self.assertNotIsInstance(raised.exception, SetupError)
             self.assertEqual(original.read_text(encoding="utf-8"), "original\n")
             self.assertFalse((target / ".the-loop" / "installs").exists())
+            self.assertFalse((target / ".the-loop").exists())
+
+    def test_post_rename_receipt_sync_failure_fully_unwinds_without_artifact_leak(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory)
+            target = parent / "project"
+            target.mkdir()
+            plan = plan_install(
+                FIXTURE_ROOT / "source",
+                target,
+                ROOT,
+                harnesses=["codex"],
+                executable_finder=_finder("codex"),
+            )
+            real_fsync = os.fsync
+            calls = 0
+
+            def fail_directory_sync(descriptor):
+                nonlocal calls
+                calls += 1
+                if calls == 2:
+                    raise OSError("synthetic directory fsync failure")
+                return real_fsync(descriptor)
+
+            with patch.object(setup_module.os, "fsync", side_effect=fail_directory_sync):
+                with self.assertRaisesRegex(OSError, "synthetic directory fsync failure") as raised:
+                    apply_install(plan, actor="tester", source_version="0.1")
+            self.assertNotIsInstance(raised.exception, SetupError)
+            self.assertFalse((target / ".agents").exists())
+            self.assertFalse((target / ".the-loop").exists())
+            self.assertEqual(list(parent.glob("the-loop-install-*")), [])
 
     def test_receipt_rollback_restores_approved_replacement(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -397,6 +517,25 @@ class SetupContractTests(unittest.TestCase):
             self.assertIn("missing keys", manifests["codex"]["error"])
             self.assertEqual(manifests["opencode"]["status"], "failed")
             self.assertIn("missing", manifests["opencode"]["error"])
+
+    def test_plan_requires_release_integrity_manifest_for_toolkit(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            temporary = Path(directory)
+            repository = temporary / "repository"
+            shutil.copytree(ROOT, repository, ignore=shutil.ignore_patterns(".git", "__pycache__", ".the-loop"))
+            manifest = repository / "docs" / "provenance" / "release-integrity.json"
+            if manifest.exists():
+                manifest.unlink()
+            target = temporary / "project"
+            target.mkdir()
+            with self.assertRaisesRegex(SetupError, "toolkit is incomplete.*release-integrity.json"):
+                plan_install(
+                    repository,
+                    target,
+                    repository,
+                    harnesses=["codex"],
+                    executable_finder=_finder("codex"),
+                )
 
     def test_plan_and_receipt_capture_no_prompts_or_environment(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -586,6 +725,8 @@ class SetupContractTests(unittest.TestCase):
             )
             self.assertEqual(toolkit_operation["rollback_action"], "remove_if_unchanged")
             source.rename(temporary / "source-unavailable")
+            synthetic_home = temporary / "synthetic-home"
+            synthetic_home.mkdir()
             completed = subprocess.run(
                 [
                     sys.executable,
@@ -594,6 +735,8 @@ class SetupContractTests(unittest.TestCase):
                     str(toolkit),
                     "--project-root",
                     str(target),
+                    "--user-home",
+                    str(synthetic_home),
                     "--json",
                 ],
                 stdin=subprocess.DEVNULL,
@@ -662,6 +805,30 @@ class SetupContractTests(unittest.TestCase):
             self.assertEqual(toolkit_count, 80)
             self.assertEqual(root_failures, [])
             self.assertEqual(toolkit_failures, [])
+            toolkit = target / ".the-loop" / "toolkit"
+            self.assertEqual(_broken_local_markdown_links(toolkit), [])
+
+            second_target = temporary / "second-project"
+            second_target.mkdir()
+            second_plan = plan_install(
+                toolkit,
+                second_target,
+                toolkit,
+                harnesses=["codex"],
+                executable_finder=_finder("codex"),
+            )
+            apply_install(second_plan, actor="tester", source_version="0.1")
+            second_root_count, second_root_failures = _resolved_documentation_links(
+                second_target / ".agents" / "skills"
+            )
+            second_toolkit_count, second_toolkit_failures = _resolved_documentation_links(
+                second_target / ".the-loop" / "toolkit" / ".agents" / "skills"
+            )
+            self.assertEqual(second_root_count, 80)
+            self.assertEqual(second_toolkit_count, 80)
+            self.assertEqual(second_root_failures, [])
+            self.assertEqual(second_toolkit_failures, [])
+            self.assertEqual(_broken_local_markdown_links(second_target / ".the-loop" / "toolkit"), [])
 
     def test_transformed_digests_skip_identical_install_and_restore_approved_upgrade(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

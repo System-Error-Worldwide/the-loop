@@ -56,6 +56,22 @@ class ProvenanceReleaseContracts(unittest.TestCase):
             self.assertEqual("pre_release", manifest["release"]["status"])
             self.assertIsNone(manifest["release"]["tag"])
 
+    def test_installed_skills_name_their_offline_execution_surface(self) -> None:
+        statement = "Core execution does not require network access or the source checkout."
+        management = {
+            "the-loop-setup": ".the-loop/toolkit/scripts/the_loop_setup.py",
+            "the-loop-doctor": ".the-loop/toolkit/scripts/the_loop_doctor.py",
+        }
+        for skill, executable in management.items():
+            with self.subTest(skill=skill):
+                text = (ROOT / ".agents" / "skills" / skill / "SKILL.md").read_text(encoding="utf-8")
+                self.assertIn(executable, text)
+        for skill in sorted(EXPECTED - set(management)):
+            with self.subTest(skill=skill):
+                text = (ROOT / ".agents" / "skills" / skill / "SKILL.md").read_text(encoding="utf-8")
+                self.assertIn(statement, text)
+                self.assertIn("complete bundled fallback", text.casefold())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -58,18 +58,18 @@ live four-harness evidence required for a support claim or tagged release.
 
 | Skill | Public file | SHA-256 | Licence | Authoring commit | Live evidence |
 | --- | --- | --- | --- | --- | --- |
-| `the-loop-setup` | `.agents/skills/the-loop-setup/SKILL.md` | `f8cd5c3268c030af944e90d33d8f4f5a5c0f5aedee9c9068a4df5cb8f6edf252` | MIT | `7e31448` | pending |
-| `the-loop-doctor` | `.agents/skills/the-loop-doctor/SKILL.md` | `41beae44d5125f479b1df84f1903f915744b624c96577cb0f98d1167b152f71f` | MIT | `7e31448` | pending |
-| `the-loop` | `.agents/skills/the-loop/SKILL.md` | `4ff795a26344ed87d3f898dde03e368cef4b6d647f51748c178ee78821a34c63` | MIT | `cdd7618` | pending |
-| `the-loop-auto` | `.agents/skills/the-loop-auto/SKILL.md` | `61dfbe23d159cba3ffe24296d4d2c052f06aebafc0867c2aeffcc432cc966b7c` | MIT | `cdd7618` | pending |
-| `strategize` | `.agents/skills/strategize/SKILL.md` | `e5149b34bbac58225e6b66b1505c437289b3ecef46bbdb8c130fc88b50e02956` | MIT | `cdd7618` | pending |
-| `spec-pack` | `.agents/skills/spec-pack/SKILL.md` | `a1dd759812d4d1d7280d6868c4de409a5615b8a05710c1e91caefa2913f229a4` | MIT | `cdd7618` | pending |
-| `build` | `.agents/skills/build/SKILL.md` | `82f00e41b70abbb4b3ab286dd08574eac0d3fac8c2b06b5822e25d810f50d8bd` | MIT | `cdd7618` | pending |
-| `test` | `.agents/skills/test/SKILL.md` | `fc1525473a9d0a950842177244d9cdfad54d7a8b464dbf91928dc3ea7a01c32c` | MIT | `cdd7618` | pending |
-| `resolve` | `.agents/skills/resolve/SKILL.md` | `8bd9d8e0ce8c1b80ba87b3b9a03b9b316f118e5d1f5bed39c15e8223dd2e1a3b` | MIT | `cdd7618` | pending |
-| `health-check` | `.agents/skills/health-check/SKILL.md` | `e5b047147102c5cfbd9880aa43393c1f0c260e3990c92d04f3c09404fa0acf66` | MIT | `cdd7618` | pending |
-| `audit` | `.agents/skills/audit/SKILL.md` | `acfa739d7b5dabc28bfe2a808656fe7759f232bdc830712889cb5a5fca1b6b66` | MIT | `cdd7618` | pending |
-| `close` | `.agents/skills/close/SKILL.md` | `a4ab055d42a65bc7c89a02f145b2bc96a735391fdc1e6f2865c75aa255732ec9` | MIT | `cdd7618` | pending |
+| `the-loop-setup` | `.agents/skills/the-loop-setup/SKILL.md` | `6ef33ec021ae3bd38667b0feb5f8bb088c1443c24be10c642948a4e3e68f9e06` | MIT | `7e31448` | pending |
+| `the-loop-doctor` | `.agents/skills/the-loop-doctor/SKILL.md` | `00f4afd969aa263bc248cbac2a21be406b1dbf0ea6d2d67f6fae357e67076bc3` | MIT | `7e31448` | pending |
+| `the-loop` | `.agents/skills/the-loop/SKILL.md` | `402c254ca886757b952fa5a0bc7f147847f949f3ab81c840fcc6f6682ad6ad3e` | MIT | `cdd7618` | pending |
+| `the-loop-auto` | `.agents/skills/the-loop-auto/SKILL.md` | `fa752bf5002e576a285d87da5317411d524dee02952be1b87c2029c88b0e5806` | MIT | `cdd7618` | pending |
+| `strategize` | `.agents/skills/strategize/SKILL.md` | `ee0b715247d2c8ae82c534d9e0ab97e3bb4f5b0b1046aecd6d06a164748f1398` | MIT | `cdd7618` | pending |
+| `spec-pack` | `.agents/skills/spec-pack/SKILL.md` | `456d26c104e571daccb23ef31230d978082f13636683c87030eae55e5457fadf` | MIT | `cdd7618` | pending |
+| `build` | `.agents/skills/build/SKILL.md` | `b85ce34b49405c1920f00c272ee88a3c288bdf7b0ed9027c3cd2954cf2bc6974` | MIT | `cdd7618` | pending |
+| `test` | `.agents/skills/test/SKILL.md` | `ff405eb608a670b585445bc367afb2888c2de03afbe0aaaea4cd25ce780ef1a1` | MIT | `cdd7618` | pending |
+| `resolve` | `.agents/skills/resolve/SKILL.md` | `8d5d4e257314f32b5f0b366eb5f94d88e2b770ed06be15a1a1259c960965fd26` | MIT | `cdd7618` | pending |
+| `health-check` | `.agents/skills/health-check/SKILL.md` | `9dbb14a24ec80572869684afd3aba8ca59fe756530c2f3d7cf3be64d19876aac` | MIT | `cdd7618` | pending |
+| `audit` | `.agents/skills/audit/SKILL.md` | `71444831f1530287ccdc29c3300468d11d84dc9233553ec221f2f36f18645bcf` | MIT | `cdd7618` | pending |
+| `close` | `.agents/skills/close/SKILL.md` | `c94672867df06abcb5d6d102f600bb2f5e0c2823bab74da12ae96d7697f8836b` | MIT | `cdd7618` | pending |
 
 ## Remaining release update
 

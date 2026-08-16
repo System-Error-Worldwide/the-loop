@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any, Callable, Mapping
 
 from .doctor import run_doctor
+from .integrity import release_integrity_errors
 from .setup import SUPPORTED_HARNESSES, apply_install, load_adapter_manifests, plan_install
 
 
@@ -48,6 +49,80 @@ REQUIRED_SCENARIOS = frozenset(
         "auto-halt-recover-close",
     }
 )
+SCENARIO_CONTRACTS = {
+    "setup": {
+        "capability": "safe installation",
+        "track": "code",
+        "expected_artifacts": ["installation plan", "install receipt"],
+        "safety_assertions": ["dry-run changes no files", "collisions require approval"],
+    },
+    "doctor": {
+        "capability": "installation diagnosis",
+        "track": "code",
+        "expected_artifacts": ["discovery report", "collision report"],
+        "safety_assertions": ["doctor is read-only", "discovery is not behavior proof"],
+    },
+    "explicit-loop": {
+        "capability": "attended orchestration",
+        "track": "code",
+        "expected_artifacts": ["run record", "stage evidence"],
+        "safety_assertions": ["stage gates remain attended", "no outward action without approval"],
+    },
+    "verified-provider-route": {
+        "capability": "capability routing",
+        "track": "code",
+        "expected_artifacts": ["route record", "behavior evidence reference"],
+        "safety_assertions": ["current matching proof is required", "fallback remains available"],
+    },
+    "permission-denial": {
+        "capability": "permission enforcement",
+        "track": "code",
+        "expected_artifacts": ["denial evidence", "halted run state"],
+        "safety_assertions": ["host denial stays denied", "no bypass flag is used"],
+    },
+    "provider-failure-fallback": {
+        "capability": "fallback routing",
+        "track": "code",
+        "expected_artifacts": ["failed provider evidence", "bundled fallback route"],
+        "safety_assertions": ["failure is recorded", "fallback does not weaken gates"],
+    },
+    "attended-code-lifecycle": {
+        "capability": "code lifecycle",
+        "track": "code",
+        "expected_artifacts": ["branch evidence", "test evidence", "close summary"],
+        "safety_assertions": ["approved slice is preserved", "blocking issues prevent green"],
+    },
+    "attended-noncode-lifecycle": {
+        "capability": "non-code lifecycle",
+        "track": "noncode",
+        "expected_artifacts": ["source inventory", "factuality evidence", "close summary"],
+        "safety_assertions": ["unsupported claims halt", "publication remains an approval gate"],
+    },
+    "health-check-feeder": {
+        "capability": "reactive feeder",
+        "track": "code",
+        "expected_artifacts": ["health finding", "bounded work proposal"],
+        "safety_assertions": ["the feeder does not mutate", "no work is invented"],
+    },
+    "audit-feeder": {
+        "capability": "proactive feeder",
+        "track": "noncode",
+        "expected_artifacts": ["drift finding", "evidence reference"],
+        "safety_assertions": ["the feeder does not mutate", "refuted findings are dropped"],
+    },
+    "auto-green": {
+        "capability": "bounded automatic mission",
+        "track": "code",
+        "expected_artifacts": ["bounded run record", "green evidence", "close summary"],
+        "safety_assertions": ["one declared asset only", "budgets and lease remain enforced"],
+    },
+    "auto-halt-recover-close": {
+        "capability": "safe automatic recovery",
+        "track": "code",
+        "expected_artifacts": ["halt event", "fresh recovery lease", "close summary"],
+        "safety_assertions": ["kill or budget gate stops work", "resume is explicit and audited"],
+    },
+}
 REQUIRED_ADAPTER_KEYS = frozenset(
     {
         "schema_version",
@@ -63,8 +138,6 @@ REQUIRED_ADAPTER_KEYS = frozenset(
         "fallback",
     }
 )
-
-
 def _adapter_errors(harness: str, manifest: Mapping[str, Any]) -> list[str]:
     errors: list[str] = []
     if set(manifest) != REQUIRED_ADAPTER_KEYS:
@@ -124,8 +197,14 @@ def _load_scenarios(repository: Path) -> tuple[list[dict[str, Any]], list[str]]:
         if not isinstance(item, Mapping):
             errors.append("scenario record is not an object")
             continue
-        if not item.get("expected_artifacts") or not item.get("safety_assertions"):
-            errors.append(f"scenario {item.get('id', '<unknown>')} lacks evidence or safety assertions")
+        identifier = item.get("id")
+        expected = SCENARIO_CONTRACTS.get(identifier)
+        if expected is None:
+            errors.append(f"scenario {identifier or '<unknown>'} is not part of v0.1")
+            continue
+        expected_record = {"id": identifier, **expected}
+        if dict(item) != expected_record:
+            errors.append(f"scenario {identifier} does not match its locked contract")
     return [dict(item) for item in scenarios if isinstance(item, Mapping)], errors
 
 
@@ -159,11 +238,11 @@ def run_contract_conformance(
     projects = Path(project_root).resolve(strict=False)
     projects.mkdir(parents=True, exist_ok=True)
     scenarios, scenario_errors = _load_scenarios(repository)
-    skill_errors = _source_skill_errors(repository)
+    skill_errors = release_integrity_errors(repository) + _source_skill_errors(repository)
     manifest_reports = load_adapter_manifests(repository)
 
     harness_reports: dict[str, dict[str, Any]] = {}
-    passed = 0
+    validated = 0
     failed = 0
     for harness in SUPPORTED_HARNESSES:
         errors = list(scenario_errors) + list(skill_errors)
@@ -220,17 +299,25 @@ def run_contract_conformance(
             except Exception as exc:  # the report must stay truthful on any contract failure
                 errors.append(f"Setup or Doctor failed: {exc.__class__.__name__}: {exc}")
 
-        status = "contract_passed" if not errors else "contract_failed"
+        status = "contract_validated" if not errors else "contract_failed"
         scenario_results = [
             {
                 "id": scenario["id"],
                 "status": status,
-                "evidence": list(scenario.get("expected_artifacts", [])),
+                "expected_artifacts": list(scenario.get("expected_artifacts", [])),
+                "contract_checks": [
+                    "locked scenario declaration",
+                    "release integrity manifest",
+                    "bundled fallback structure",
+                    "adapter safety declaration",
+                    "synthetic Setup receipt",
+                    "read-only Doctor discovery",
+                ],
                 "errors": list(errors),
             }
             for scenario in scenarios
         ]
-        passed += sum(item["status"] == "contract_passed" for item in scenario_results)
+        validated += sum(item["status"] == "contract_validated" for item in scenario_results)
         failed += sum(item["status"] == "contract_failed" for item in scenario_results)
         harness_reports[harness] = {
             "install_result": install_result,
@@ -242,11 +329,11 @@ def run_contract_conformance(
             "scenarios": scenario_results,
         }
 
-    total = passed + failed
+    total = validated + failed
     return {
         "schema_version": SCHEMA_VERSION,
         "kind": "contract_conformance",
         "live_behavior_claim": False,
         "harnesses": harness_reports,
-        "summary": {"passed": passed, "failed": failed, "total": total},
+        "summary": {"validated": validated, "failed": failed, "total": total},
     }
