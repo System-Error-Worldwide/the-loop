@@ -15,9 +15,15 @@ concurrency:
 
 jobs:
   repository:
-    name: Repository policy
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+    name: Repository policy (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
     steps:
       - name: Check out repository
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
