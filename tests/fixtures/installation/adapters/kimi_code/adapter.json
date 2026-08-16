@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "harness": "kimi_code",
+  "display_name": "Kimi Code",
+  "executables": ["kimi"],
+  "project_skill_roots": [".agents/skills", ".kimi-code/skills"],
+  "user_skill_roots": ["$KIMI_CODE_HOME/skills", "$HOME/.agents/skills"],
+  "explicit_invocation": {"kind": "skill_command"},
+  "implicit_invocation": {"kind": "description_match"},
+  "permission_model": {"kind": "host_managed"},
+  "delegation": {"kind": "optional"},
+  "fallback": {"kind": "sequential"}
+}
