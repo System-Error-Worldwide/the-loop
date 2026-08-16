@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "install-receipt.schema.json",
+  "type": "object",
+  "required": ["schema_version", "receipt_id", "created_at", "actor", "source_version", "target_root", "harnesses", "operations", "result"],
+  "properties": {
+    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
+    "receipt_id": {"$ref": "common.schema.json#/$defs/uuidV4"},
+    "created_at": {"$ref": "common.schema.json#/$defs/timestamp"},
+    "actor": {"type": "string", "minLength": 1},
+    "source_version": {"type": "string", "minLength": 1},
+    "target_root": {"$ref": "common.schema.json#/$defs/configuredPath"},
+    "harnesses": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["codex", "claude_code", "kimi_code", "opencode"]}
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["action", "source_digest", "destination", "pre_existing_digest", "resulting_digest", "rollback_action"],
+        "properties": {
+          "action": {"enum": ["copy", "link", "mkdir", "skip"]},
+          "source_digest": {"anyOf": [{"$ref": "common.schema.json#/$defs/digest"}, {"type": "null"}]},
+          "destination": {"$ref": "common.schema.json#/$defs/relativePath"},
+          "pre_existing_digest": {"anyOf": [{"$ref": "common.schema.json#/$defs/digest"}, {"type": "null"}]},
+          "resulting_digest": {"anyOf": [{"$ref": "common.schema.json#/$defs/digest"}, {"type": "null"}]},
+          "rollback_action": {"enum": ["remove_if_unchanged", "restore_if_unchanged", "none"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "result": {"enum": ["complete", "partial", "rolled_back", "failed"]}
+  },
+  "additionalProperties": false
+}

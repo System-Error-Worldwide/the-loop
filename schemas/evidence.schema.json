@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "evidence.schema.json",
+  "type": "object",
+  "required": ["schema_version", "evidence_id", "run_id", "stage", "requirement_ids", "type", "description", "procedure", "outcome", "artifact_refs", "digest", "actor", "observed_at", "environment"],
+  "properties": {
+    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
+    "evidence_id": {"$ref": "common.schema.json#/$defs/uuidV4"},
+    "run_id": {"$ref": "common.schema.json#/$defs/uuidV4"},
+    "stage": {"$ref": "common.schema.json#/$defs/stage"},
+    "requirement_ids": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "type": {"enum": ["command", "file", "visual", "source", "manual", "harness_probe"]},
+    "description": {"type": "string", "minLength": 1},
+    "procedure": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "outcome": {"enum": ["passed", "failed", "blocked", "denied", "unverified"]},
+    "artifact_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["kind", "ref"],
+        "properties": {
+          "kind": {"enum": ["file", "command_output", "url", "manual_observation"]},
+          "ref": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "manual_observation": {"type": "string", "minLength": 1},
+    "digest": {"anyOf": [{"$ref": "common.schema.json#/$defs/digest"}, {"type": "null"}]},
+    "actor": {"$ref": "common.schema.json#/$defs/actor"},
+    "observed_at": {"$ref": "common.schema.json#/$defs/timestamp"},
+    "environment": {"type": "object", "additionalProperties": {"type": ["string", "number", "boolean", "null"]}}
+  },
+  "additionalProperties": false
+}

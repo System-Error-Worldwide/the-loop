@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "lease.schema.json",
+  "type": "object",
+  "required": ["schema_version", "lease_id", "run_id", "lane_id", "owner", "acquired_at", "renewed_at", "expires_at", "generation"],
+  "properties": {
+    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
+    "lease_id": {"$ref": "common.schema.json#/$defs/uuidV4"},
+    "run_id": {"$ref": "common.schema.json#/$defs/uuidV4"},
+    "lane_id": {"anyOf": [{"$ref": "common.schema.json#/$defs/uuidV4"}, {"type": "null"}]},
+    "owner": {"$ref": "common.schema.json#/$defs/actor"},
+    "acquired_at": {"$ref": "common.schema.json#/$defs/timestamp"},
+    "renewed_at": {"$ref": "common.schema.json#/$defs/timestamp"},
+    "expires_at": {"$ref": "common.schema.json#/$defs/timestamp"},
+    "generation": {"type": "integer", "minimum": 0}
+  },
+  "additionalProperties": false
+}

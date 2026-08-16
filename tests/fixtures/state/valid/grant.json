@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "grant_id": "22222222-2222-4222-8222-222222222222",
+  "level": "bounded",
+  "actor": "synthetic-user",
+  "scope": {"assets": ["synthetic-asset"], "actions": ["local_write"], "destinations": ["repository"], "exclusions": ["network"]},
+  "risks_shown": ["Local files may be changed within the declared asset."],
+  "confirmation_text": "CONFIRM BOUNDED SYNTHETIC ASSET",
+  "confirmed_at": "2026-08-16T08:00:00Z",
+  "expires_at": "2026-08-16T10:00:00Z",
+  "revoked_at": null,
+  "revoked_by": null,
+  "permanent_invariants": ["visible_authority", "audit_log", "evidence_required", "run_ownership", "leases", "external_kill_switch", "faithful_failure", "no_silent_elevation"]
+}

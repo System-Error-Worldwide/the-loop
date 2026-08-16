@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "run.schema.json",
+  "type": "object",
+  "required": ["schema_version", "run_id", "asset", "mode", "status", "stage", "objective", "done_gate", "authority_grant_id", "budgets", "usage", "owner", "selected_routes", "open_blocking_issues", "last_heartbeat_at", "created_at", "updated_at", "terminal_reason"],
+  "properties": {
+    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
+    "run_id": {"$ref": "common.schema.json#/$defs/uuidV4"},
+    "asset": {
+      "type": "object",
+      "required": ["name", "root", "track", "boundaries"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "root": {"$ref": "common.schema.json#/$defs/relativePath"},
+        "track": {"enum": ["code", "noncode"]},
+        "boundaries": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": false
+    },
+    "mode": {"enum": ["loop", "auto"]},
+    "status": {"enum": ["draft", "ready", "active", "waiting_approval", "waiting_external", "blocked", "failed", "halted_kill_switch", "complete", "cancelled"]},
+    "stage": {"anyOf": [{"$ref": "common.schema.json#/$defs/stage"}, {"type": "null"}]},
+    "objective": {"type": "string", "minLength": 1},
+    "done_gate": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "authority_grant_id": {"$ref": "common.schema.json#/$defs/uuidV4"},
+    "budgets": {"$ref": "common.schema.json#/$defs/budgets"},
+    "usage": {"$ref": "common.schema.json#/$defs/usage"},
+    "owner": {"anyOf": [{"$ref": "common.schema.json#/$defs/actor"}, {"type": "null"}]},
+    "selected_routes": {"type": "object", "additionalProperties": {"$ref": "route.schema.json"}},
+    "open_blocking_issues": {"type": "integer", "minimum": 0},
+    "last_heartbeat_at": {"anyOf": [{"$ref": "common.schema.json#/$defs/timestamp"}, {"type": "null"}]},
+    "created_at": {"$ref": "common.schema.json#/$defs/timestamp"},
+    "updated_at": {"$ref": "common.schema.json#/$defs/timestamp"},
+    "terminal_reason": {
+      "anyOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["code", "explanation"],
+          "properties": {"code": {"type": "string", "minLength": 1}, "explanation": {"type": "string", "minLength": 1}},
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

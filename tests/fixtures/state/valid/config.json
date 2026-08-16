@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "project_id": "77777777-7777-4777-8777-777777777777",
+  "default_mode": "auto",
+  "state_root": ".the-loop",
+  "kill_switches": [".the-loop/STOP"],
+  "heartbeat_seconds": 120,
+  "lease_seconds": 300,
+  "routing": {"capability_pins": {}, "disabled_providers": []},
+  "budgets": {"max_duration_seconds": 7200, "max_stage_attempts": 3, "max_mutations": 100, "max_external_actions": 0, "max_cost_usd": null},
+  "telemetry": false,
+  "harnesses": {}
+}

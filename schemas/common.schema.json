@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "common.schema.json",
+  "$defs": {
+    "schemaVersion": {"const": "1.0"},
+    "uuidV4": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]+)?Z$"
+    },
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "money": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]*)(?:\\.[0-9]{1,6})?$"
+    },
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?![A-Za-z]:[\\\\/])(?![\\\\/])(?!~(?:[\\\\/]|$))(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+    },
+    "configuredPath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!~(?:[\\\\/]|$))(?!.*(?:^|[\\\\/])\\.\\.(?:[\\\\/]|$)).+$"
+    },
+    "actor": {
+      "type": "object",
+      "required": ["harness", "actor", "session_id"],
+      "properties": {
+        "harness": {"enum": ["codex", "claude_code", "kimi_code", "opencode", "manual"]},
+        "actor": {"type": "string", "minLength": 1},
+        "session_id": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "budgets": {
+      "type": "object",
+      "required": ["max_duration_seconds", "max_stage_attempts", "max_mutations", "max_external_actions", "max_cost_usd"],
+      "properties": {
+        "max_duration_seconds": {"type": "integer", "minimum": 1},
+        "max_stage_attempts": {"type": "integer", "minimum": 1},
+        "max_mutations": {"type": "integer", "minimum": 0},
+        "max_external_actions": {"type": "integer", "minimum": 0},
+        "max_cost_usd": {"anyOf": [{"$ref": "#/$defs/money"}, {"type": "null"}]}
+      },
+      "additionalProperties": false
+    },
+    "usage": {
+      "type": "object",
+      "required": ["duration_seconds", "stage_attempts", "mutations", "external_actions", "cost_usd"],
+      "properties": {
+        "duration_seconds": {"type": "number", "minimum": 0},
+        "stage_attempts": {
+          "type": "object",
+          "required": ["strategize", "spec_pack", "build", "test", "resolve", "close"],
+          "properties": {
+            "strategize": {"type": "integer", "minimum": 0},
+            "spec_pack": {"type": "integer", "minimum": 0},
+            "build": {"type": "integer", "minimum": 0},
+            "test": {"type": "integer", "minimum": 0},
+            "resolve": {"type": "integer", "minimum": 0},
+            "close": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        },
+        "mutations": {"type": "integer", "minimum": 0},
+        "external_actions": {"type": "integer", "minimum": 0},
+        "cost_usd": {"anyOf": [{"$ref": "#/$defs/money"}, {"type": "null"}]}
+      },
+      "additionalProperties": false
+    },
+    "stage": {"enum": ["strategize", "spec_pack", "build", "test", "resolve", "close"]},
+    "harnessStatus": {
+      "type": "object",
+      "required": ["installed", "version", "discovery", "behavior", "skill_roots", "collisions", "checked_at", "evidence_id"],
+      "properties": {
+        "installed": {"type": "boolean"},
+        "version": {"type": ["string", "null"]},
+        "discovery": {"enum": ["verified", "failed", "denied", "unverified"]},
+        "behavior": {"enum": ["verified", "failed", "denied", "unverified"]},
+        "skill_roots": {"type": "array", "items": {"$ref": "#/$defs/configuredPath"}},
+        "collisions": {"type": "array", "items": {"type": "object"}},
+        "checked_at": {"$ref": "#/$defs/timestamp"},
+        "evidence_id": {"anyOf": [{"$ref": "#/$defs/uuidV4"}, {"type": "null"}]}
+      },
+      "additionalProperties": false
+    }
+  }
+}

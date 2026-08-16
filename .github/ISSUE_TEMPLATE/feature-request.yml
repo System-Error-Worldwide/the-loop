@@ -1,0 +1,34 @@
+name: Feature request
+description: Propose one bounded capability or compatibility improvement.
+title: "feature: "
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the user problem without prescribing a large implementation.
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: State a testable result and which harnesses it affects.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Existing alternatives
+      description: Name installed or upstream skills that already address the capability.
+  - type: checkboxes
+    id: boundaries
+    attributes:
+      label: Product boundaries
+      options:
+        - label: This request does not require silent permission elevation or unbounded work selection.
+          required: true
+        - label: I have not copied third-party or private skill text into this issue.
+          required: true

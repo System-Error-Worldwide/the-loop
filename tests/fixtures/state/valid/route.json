@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "capability": "lifecycle.test",
+  "harness": "codex",
+  "track": "code",
+  "environment_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "decided_at": "2026-08-16T08:05:00Z",
+  "behavior_max_age_seconds": 86400,
+  "requirements": ["run reproducible checks"],
+  "candidates": [{"provider": "bundled-test", "source": "bundled", "compatibility": ["codex", "claude_code", "kimi_code", "opencode"], "capability_evidence": ["metadata:lifecycle.test"], "description_score": 1, "behavior_status": "verified", "behavior_observations": [{"capability": "lifecycle.test", "harness": "codex", "track": "code", "environment_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "outcome": "passed", "observed_at": "2026-08-16T08:00:00Z", "evidence_id": "99999999-9999-4999-8999-999999999999"}], "rejection_reasons": [], "provenance_type": "system-error-original"}],
+  "selected_provider": "bundled-test",
+  "selected_source": "bundled",
+  "reason": "Complete verified fallback.",
+  "verified_at": "2026-08-16T08:00:00Z",
+  "fallback_reason": "No verified installed specialist was available."
+}

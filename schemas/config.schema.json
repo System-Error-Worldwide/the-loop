@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "config.schema.json",
+  "type": "object",
+  "required": ["schema_version", "project_id", "default_mode", "state_root", "kill_switches", "heartbeat_seconds", "lease_seconds", "routing", "budgets", "telemetry", "harnesses"],
+  "properties": {
+    "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
+    "project_id": {"$ref": "common.schema.json#/$defs/uuidV4"},
+    "default_mode": {"enum": ["loop", "auto"]},
+    "state_root": {"$ref": "common.schema.json#/$defs/relativePath"},
+    "kill_switches": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "common.schema.json#/$defs/configuredPath"}},
+    "heartbeat_seconds": {"type": "integer", "minimum": 15, "maximum": 600},
+    "lease_seconds": {"type": "integer", "minimum": 16, "maximum": 86400},
+    "routing": {
+      "type": "object",
+      "required": ["capability_pins", "disabled_providers"],
+      "properties": {
+        "capability_pins": {"type": "object", "additionalProperties": {"type": "string", "minLength": 1}},
+        "disabled_providers": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": false
+    },
+    "budgets": {"$ref": "common.schema.json#/$defs/budgets"},
+    "telemetry": {"const": false},
+    "harnesses": {
+      "type": "object",
+      "propertyNames": {"enum": ["codex", "claude_code", "kimi_code", "opencode"]},
+      "additionalProperties": {"$ref": "common.schema.json#/$defs/harnessStatus"}
+    }
+  },
+  "additionalProperties": false
+}
