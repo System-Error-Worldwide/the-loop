@@ -4,10 +4,10 @@ An autonomous agentic skill pack for Codex, Claude Code, Kimi Code, and OpenCode
 
 Created and maintained by Moses Mawila through System Error Worldwide.
 
-> **Installable pre-release candidate.** The 12 v0.1 skill packages, Setup, Doctor,
-> four thin adapters, shared protocols, schemas, bounded runtime kernel, examples and
-> deterministic conformance suite are present. There is no public support claim or
-> tagged release until the live four-harness matrix passes independent review.
+> **Installable private pre-release candidate.** The 12 v0.1 skill packages, Setup,
+> Doctor, four thin adapters, shared protocols, schemas, bounded runtime kernel,
+> examples and deterministic conformance suite are present. The remote repository is
+> private, there is no tag, and no harness has a public support claim yet.
 
 ## What THE LOOP is
 
@@ -18,8 +18,11 @@ THE LOOP is designed to run one evidence-led lifecycle:
 It detects installed skills by capability and behavior evidence, selects a qualified
 specialist when one is available, and retains a complete bundled fallback for every
 core stage. The bounded Auto mode drives one declared asset to green or to a visible
-gate. Parallel, Cloud, and Endless are later layers and cannot bypass the same state,
-lease, authority, evidence, budget, and kill-switch contracts.
+gate. Parallel, Cloud, Endless, the Watch/Control/Autonomy modes and the
+skill-planner/creator + handoff/quality support utilities remain part of
+the full product architecture. They follow the bounded v0.1 kernel because they must
+reuse, not bypass, its state, lease, authority, evidence, budget and kill-switch
+contracts.
 
 ## Current repository contents
 
@@ -72,6 +75,10 @@ python3 /path/to/project/.the-loop/toolkit/scripts/the_loop_doctor.py \
   --json
 ```
 
+The canonical remote is private during pre-release. The clone command becomes the
+public quickstart only after an approved visibility change; until then it requires
+authorised repository access.
+
 Setup refuses a differing pre-existing skill unless its exact destination is repeated
 with `--approve-destination`. Doctor can exit `1` while discovery is valid but live
 behavior is still unverified; its JSON report distinguishes that warning from a
@@ -104,7 +111,12 @@ harness-specific root. It does not copy the same package into every search root.
 
 Start with attended `the-loop`. Use `the-loop-auto` only for one declared asset with
 an exact done gate, frozen budgets, visible authority and a working kill switch.
-Parallel, Cloud and Endless are not included in v0.1.
+The bounded v0.1 install includes Loop and Auto. Parallel, Cloud, Endless, Watch,
+Control, user-facing Autonomy, Portfolio Review, parallel/cloud/watch/endless
+runtime modes, and adaptive skill utilities (planner, creator, skill-planner,
+supporting handoff/quality utilities) are planned full-product extensions, not
+rejected or removed features. Their prerequisite order is documented in the
+[engineering plan](docs/specs/engineering-plan.md#phase-4-full-product-extensions).
 
 ### Contract conformance
 
@@ -123,18 +135,22 @@ python3 scripts/run_conformance.py \
 See the [synthetic code example](examples/code/README.md) and
 [synthetic non-code example](examples/noncode/README.md).
 
-## Target compatibility
+## Current compatibility evidence
 
-| Harness | Target discovery | Release evidence |
-| --- | --- | --- |
-| Codex | `.agents/skills` | Contract-tested; live behavior pending |
-| Claude Code | `.claude/skills` thin adapter | Contract-tested; live behavior pending |
-| Kimi Code | `.kimi-code/skills` or `.agents/skills` | Contract-tested; live behavior pending |
-| OpenCode | `.opencode/skills` or `.agents/skills` | Contract-tested; live behavior pending |
+The frozen 2026-08-16 candidate passed Setup and Doctor on all four target harnesses.
+Live behavior passed on none, so all four remain unsupported for release purposes.
+
+| Harness | Setup and Doctor | Live behavior | Blocking evidence |
+| --- | --- | --- | --- |
+| Codex 0.144.1 | passed | blocked | The host loaded private global context during an implicit probe, so the result is not privacy-clean evidence. |
+| Claude Code 2.1.221 | passed | blocked | Authentication is required before model execution. |
+| Kimi Code 0.36.1 | passed | blocked | Authentication and a configured model are required before model execution. |
+| OpenCode 1.15.1 | passed | blocked | An isolated no-skill smoke test fails with `InstanceRef not provided`, so the failure is not THE LOOP-specific. |
 
 Compatibility is a release target, not a current support claim. A harness is marked
 supported only after installation, discovery, invocation, denial, fallback, and close
-behavior pass the release matrix.
+behavior pass the release matrix. See the
+[dated compatibility report](docs/release/live-compatibility-2026-08-16.md).
 
 ## Safety model
 
@@ -145,8 +161,9 @@ behavior pass the release matrix.
 - Audit logging, evidence requirements, run ownership, leases, visible authority,
   truthful failure reporting, and the external kill switch remain mandatory at every
   autonomy level.
-- Auto is one bounded mission. Endless is explicitly deferred until bounded Auto,
-  state, leases, heartbeat, permissions, budgets, and kill-switch recovery are proven.
+- Auto is one bounded mission. Endless is a planned supervisor layer and becomes
+  eligible only after bounded Auto, state, leases, heartbeat, permissions, budgets,
+  kill-switch recovery and empty-queue behavior are proven in live harnesses.
 
 ## Repository map
 
@@ -179,7 +196,9 @@ not part of this repository's implementation scope.
 
 ## Licence and security
 
-Original work in this repository is released under the [MIT License](LICENSE).
+All clean-room work authored for this repository, including both
+`system-error-original` and `system-error-rewrite` files, is released under the
+[MIT License](LICENSE). The classification records lineage, not different ownership.
 Third-party dependencies remain subject to their own licences and are not copied into
 this repository without an approved provenance record. Report vulnerabilities through
 the process in [SECURITY.md](SECURITY.md); do not publish credentials or private

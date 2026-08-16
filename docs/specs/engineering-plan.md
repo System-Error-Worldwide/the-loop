@@ -19,7 +19,8 @@ root README is the source of truth for current implementation and release status
 - Product slices: `feature/<slice>` after the remote exists.
 - Each green slice receives one focused commit.
 - Before every multi-file commit: inspect the staged diff, run targeted validation, scan for secrets and private identifiers, then commit.
-- Push every completed stage during the currently authorised session once the remote exists.
+- Push only with current explicit authority after the milestone's green verification;
+  an earlier session's grant is never carried forward.
 - Deployment is never implied by a push.
 
 ## Phase 0: provenance and boundary
@@ -74,6 +75,11 @@ Status: this pack.
 - A focused Phase 1 commit.
 
 ## Phase 2: v0.1 kernel
+
+Status: implemented and independently green in deterministic repository tests. The
+installable candidate is frozen at `8029ff05fd2720627fe3137cbce01ad98150152d` for the
+first live matrix; later documentation commits do not retroactively change that
+evidence target.
 
 Estimated agent execution time: 8 to 12 hours across focused slices, excluding user approval and external service waits.
 
@@ -241,6 +247,11 @@ Done gate:
 
 ## Phase 3: independent four-harness verification
 
+Status: blocked after the 2026-08-16 frozen-candidate run. Setup and Doctor passed on
+all four target harnesses. Valid live behavior passed on zero: Codex failed the privacy
+isolation gate, Claude Code and Kimi Code stopped at authentication/configuration, and
+OpenCode failed an isolated no-skill smoke test with `InstanceRef not provided`.
+
 Estimated agent execution time: 2 to 4 hours, excluding installation or authentication waits.
 
 For each harness:
@@ -263,7 +274,12 @@ For each harness:
 - No open blocking issue remains.
 - A reviewer who did not author the implementation approves the evidence and provenance records.
 
-## Phase 4: later modes and controls
+## Phase 4: full-product extensions
+
+These are committed product-roadmap components, not rejected candidates. The order is
+dependency-driven: each extension must use the v0.1 control plane and may not ship an
+alternate authority, lease, budget, evidence or kill-switch path. Implementation begins
+after Phase 3 supplies valid live behavior evidence for the kernel.
 
 Order is fixed:
 
@@ -367,7 +383,8 @@ Every slice follows:
 5. Resolve one owned issue at a time.
 6. Rerun the regression check and affected suite.
 7. Stop after three red passes or one reopened issue.
-8. Review the staged diff, then commit and push the green milestone.
+8. Review the staged diff, commit the green milestone, and push only when current
+   outward authority explicitly covers that push.
 
 ## Rollback
 
@@ -379,7 +396,7 @@ Every slice follows:
 
 ## Unresolved human gates
 
-1. Name the independent final reviewer before release candidate.
+1. Name the independent final reviewer before any support claim or release approval.
 2. Supply the final Agent Workflow Audit or consulting CTA URL.
 3. Approve the landing page preview before production deployment.
 
@@ -387,7 +404,7 @@ Every slice follows:
 
 | Assumption | Class | Consequence if wrong |
 | --- | --- | --- |
-| The user wants milestone pushes during this session once the remote exists. | locked for current session | Ask again in a future session rather than carrying the grant forward. |
+| Milestone pushes require fresh, explicit outward authority after green verification. | locked | Do not infer a push grant from earlier sessions or from local commit authority. |
 | Repository administrators may bypass pull-request protection for emergency recovery, with the action remaining visible in Git history and the audit log. | safe default | Remove the bypass if a second maintainer makes mandatory review practical. |
 | Landing implementation belongs to a separate dedicated session and website repository. | corrected scope | This session supplies only launch data and acceptance requirements. |
 | A tagged release should exist before the landing page is deployed. | safe default | If preview comes earlier, label every status as pre-release and keep production blocked. |

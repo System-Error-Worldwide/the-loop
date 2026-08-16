@@ -1,15 +1,21 @@
 # Phase 0 provenance audit
 
-Status: complete for architecture and source triage. Release approval remains blocked by the human gates in [risks-and-gates.md](risks-and-gates.md).
+Status: complete for architecture, source triage and the installable 12-package v0.1
+candidate. Live four-harness behavior evidence, independent approval, public
+visibility, tag/release and the separate landing-page delivery remain pending under
+[risks-and-gates.md](risks-and-gates.md).
 
-This audit covers the 31 product candidates, shared protocol material, installer helpers, hooks, scripts and harness documentation relevant to the first public release.
+This audit covers the 31-candidate full product roadmap and provenance universe,
+shared protocol material, installer helpers, hooks, scripts and harness documentation.
+The exact v0.1 shipping set is 12 packages; the other 19 candidates are planned
+extensions or excluded sources, not hidden v0.1 contents.
 
 - [Candidate inventory](candidate-inventory.md)
 - [Per-skill records](skill-records.md)
 - [Exact release integrity manifest](release-integrity.json)
 - [Public and private boundary](public-private-boundary.md)
 - [Risks and human gates](risks-and-gates.md)
-- [Recommended v0.1 shipping manifest](v0.1-shipping-manifest.md)
+- [Exact v0.1 pre-release shipping manifest](v0.1-shipping-manifest.md)
 
 ## Audit method
 

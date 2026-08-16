@@ -59,7 +59,7 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 - **[DSP-054]** Repeated reopening after one attempted closure or three red Test/Resolve passes MUST halt for a human gate.
 - **[DSP-055]** A dispatcher MUST cancel or halt remaining workers when their outputs become invalidated by a kill switch, scope change, lost authority, failed shared prerequisite, or terminal parent state.
 
-## Boundaries for later modes
+## Boundaries for full-product extensions
 
 - **[DSP-060]** Parallel work MUST use disjoint lane ownership and a single declared integration owner before it can claim conformance.
 - **[DSP-061]** Remote or restricted work MUST use only material present and authorized in that environment and MUST hand off when required protected state is unavailable.
@@ -80,4 +80,4 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 | DSP-020–026 | [PRD FR-030–035](../docs/specs/prd.md#state-ownership-and-recovery) |
 | DSP-030–033 | [Backend audit event contract](../docs/specs/backend-schema.md#audit-event) |
 | DSP-040–055 | [App flow: Auto halt and Resume](../docs/specs/app-flow.md#auto-halt-conditions) |
-| DSP-060–063 | [App flow: Later modes](../docs/specs/app-flow.md#later-mode-journeys) |
+| DSP-060–063 | [App flow: Full-product extensions](../docs/specs/app-flow.md#full-product-extension-journeys) |

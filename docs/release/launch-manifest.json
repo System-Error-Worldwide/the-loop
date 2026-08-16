@@ -10,22 +10,41 @@
   "release": {
     "version": "0.1.0",
     "status": "pre_release",
-    "tag": null
+    "repository_visibility": "private",
+    "tag": null,
+    "tested_commit": "8029ff05fd2720627fe3137cbce01ad98150152d",
+    "evidence_date": "2026-08-16"
   },
   "available_modes": {
     "the-loop": "release_candidate",
     "the-loop-auto": "release_candidate"
   },
-  "deferred_modes": [
-    "the-loop-parallel",
-    "the-loop-cloud",
-    "the-loop-endless"
-  ],
+  "planned_extensions": {
+    "the-loop-autonomy": "awaiting live-proven authority and revocation controls",
+    "the-loop-control": "awaiting live-proven runtime control plane",
+    "the-loop-watch": "awaiting live proof of read-only non-owning observation",
+    "the-loop-parallel": "awaiting disjoint lane ownership and integration proof",
+    "the-loop-cloud": "awaiting a generic restricted-environment implementation",
+    "the-loop-skill-planner": "awaiting architecture for capability/selector planning with safe fallback semantics",
+    "the-loop-skill-creator": "awaiting adaptive skill routing integration with explicit self-modification approval",
+    "portfolio-review": "awaiting a generic implementation without private portfolio intelligence",
+    "live-state-preflight": "awaiting generic preflight provider probe and namespace-safe bootstrap",
+    "idea-to-brief": "awaiting clean public planning-to-brief fallback",
+    "stack-summary": "awaiting a clean public fallback independent of private stack helpers",
+    "bootstrap-agent-context": "awaiting public, configurable bootstrap context binding",
+    "pre-commit-review": "awaiting proven public-compatible repository-level review gate",
+    "feature-tracker": "awaiting a proven issue-tracker fallback with compact evidence schema",
+    "decision-log": "awaiting clean public decision-record protocol",
+    "handoff": "awaiting clean project handoff contract without private-memory assumptions",
+    "retrospective": "awaiting concise post-mission learning capture without private-repository assumptions",
+    "session-summary": "awaiting deterministic portable session handoff summary contract",
+    "the-loop-endless": "last; requires proven Auto, state, leases, heartbeat, permissions, budgets, kill switch and empty-queue behavior"
+  },
   "compatibility": {
-    "codex": {"discovery_status": "not_tested", "behavior_status": "not_tested", "evidence": null},
-    "claude_code": {"discovery_status": "not_tested", "behavior_status": "not_tested", "evidence": null},
-    "kimi_code": {"discovery_status": "not_tested", "behavior_status": "not_tested", "evidence": null},
-    "opencode": {"discovery_status": "not_tested", "behavior_status": "not_tested", "evidence": null}
+    "codex": {"version": "0.144.1", "installation_status": "passed", "discovery_status": "passed", "behavior_status": "blocked_isolation", "evidence": "docs/release/live-compatibility-2026-08-16.md"},
+    "claude_code": {"version": "2.1.221", "installation_status": "passed", "discovery_status": "passed", "behavior_status": "blocked_auth", "evidence": "docs/release/live-compatibility-2026-08-16.md"},
+    "kimi_code": {"version": "0.36.1", "installation_status": "passed", "discovery_status": "passed", "behavior_status": "blocked_auth", "evidence": "docs/release/live-compatibility-2026-08-16.md"},
+    "opencode": {"version": "1.15.1", "installation_status": "passed", "discovery_status": "passed", "behavior_status": "blocked_runtime", "evidence": "docs/release/live-compatibility-2026-08-16.md"}
   },
   "quickstart_url": "https://github.com/System-Error-Worldwide/the-loop#quickstart",
   "examples": {
@@ -38,7 +57,9 @@
   },
   "limitations": [
     "This manifest is a pre-release handoff and does not claim live harness support.",
-    "Parallel, Cloud, and Endless are not included in v0.1.",
+    "The canonical GitHub repository is private and untagged.",
+    "The bounded v0.1 install contains Loop and Auto; the remaining named modes and utilities are planned full-product extensions.",
+    "The frozen live matrix passed Setup and Doctor on four harnesses and valid live behavior on zero.",
     "The landing page is delivered and deployed in a separate approved session."
   ]
 }

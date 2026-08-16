@@ -15,7 +15,7 @@ These ten Markdown contracts define the harness-neutral behavior of THE LOOP. Ha
 | [Issue ledger](issue-ledger.md) | Defect lifecycle, blocking rules and regression closure | `ISS` |
 | [Evidence contract](evidence-contract.md) | Reproducible proof, outcomes and environment records | `EVD` |
 | [Watcher contract](watcher-contract.md) | Read-only monitoring, staleness and escalation | `WAT` |
-| [Harness capability map](harness-capability-map.md) | Discovery and behavior status across supported harnesses | `CAP` |
+| [Harness capability map](harness-capability-map.md) | Discovery and evidence-scoped behavior status across target harnesses | `CAP` |
 
 ## Normative language
 

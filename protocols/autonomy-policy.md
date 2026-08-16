@@ -106,4 +106,4 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 | AUT-030–037 | [TDD run manager safety order](../docs/specs/tdd.md#run-manager), `FR-037` and `FR-038` in [PRD state requirements](../docs/specs/prd.md#state-ownership-and-recovery) |
 | AUT-040–047 | [Backend authority revocation contract](../docs/specs/backend-schema.md#audit-event) |
 | AUT-100–109 | [PRD FR-031 and FR-045](../docs/specs/prd.md#state-ownership-and-recovery), [`permanent_invariants`](../schemas/grant.schema.json), [Run lease lifecycle](run-state-leases.md#lease-lifecycle) |
-| AUT-120–123 | [PRD modes](../docs/specs/prd.md#modes-and-relationship), [App flow: Later modes](../docs/specs/app-flow.md#later-mode-journeys) |
+| AUT-120–123 | [PRD modes](../docs/specs/prd.md#modes-and-relationship), [App flow: Full-product extensions](../docs/specs/app-flow.md#full-product-extension-journeys) |

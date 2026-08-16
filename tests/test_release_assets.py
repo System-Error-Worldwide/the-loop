@@ -79,17 +79,46 @@ class ReleaseAssetContracts(unittest.TestCase):
         )
         self.assertEqual("https://systemerror.app/services/", manifest["ctas"]["secondary"])
         self.assertEqual("pre_release", manifest["release"]["status"])
+        self.assertEqual("private", manifest["release"]["repository_visibility"])
         self.assertIsNone(manifest["release"]["tag"])
         self.assertEqual(
             {"codex", "claude_code", "kimi_code", "opencode"},
             set(manifest["compatibility"]),
         )
-        self.assertTrue(
-            all(entry["behavior_status"] == "not_tested" for entry in manifest["compatibility"].values())
+        self.assertTrue(all(entry["installation_status"] == "passed" for entry in manifest["compatibility"].values()))
+        self.assertTrue(all(entry["discovery_status"] == "passed" for entry in manifest["compatibility"].values()))
+        self.assertEqual(
+            {
+                "codex": "blocked_isolation",
+                "claude_code": "blocked_auth",
+                "kimi_code": "blocked_auth",
+                "opencode": "blocked_runtime",
+            },
+            {key: entry["behavior_status"] for key, entry in manifest["compatibility"].items()},
         )
         self.assertEqual(
-            {"the-loop-parallel", "the-loop-cloud", "the-loop-endless"},
-            set(manifest["deferred_modes"]),
+            {
+                "the-loop-autonomy",
+                "the-loop-control",
+                "the-loop-watch",
+                "the-loop-parallel",
+                "the-loop-cloud",
+                "the-loop-skill-planner",
+                "the-loop-skill-creator",
+                "portfolio-review",
+                "the-loop-endless",
+                "live-state-preflight",
+                "idea-to-brief",
+                "stack-summary",
+                "bootstrap-agent-context",
+                "pre-commit-review",
+                "feature-tracker",
+                "decision-log",
+                "handoff",
+                "retrospective",
+                "session-summary",
+            },
+            set(manifest["planned_extensions"]),
         )
 
     def test_release_asset_links_are_repository_relative_or_locked_https(self) -> None:

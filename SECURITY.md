@@ -6,7 +6,11 @@ The project has no stable release yet. Security fixes currently target the defau
 
 ## Reporting a vulnerability
 
-Use GitHub's private vulnerability reporting for this repository. Open the repository's Security tab, select **Report a vulnerability**, and include the affected version, reproduction steps, impact and any proposed mitigation.
+GitHub private vulnerability reporting is not currently enabled for this repository.
+Until it is enabled and verified, email `contact@mosesmawila.de` with the subject
+`THE LOOP security report`. Include the affected version, reproduction steps, impact
+and any proposed mitigation. Do not attach live secrets; coordinate a safe transfer
+method first if sensitive evidence is necessary.
 
 Do not open a public issue for a vulnerability. Do not include live credentials, customer data or private infrastructure details in a report. Use synthetic or redacted evidence wherever possible.
 

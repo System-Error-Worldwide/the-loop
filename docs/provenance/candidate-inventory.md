@@ -13,11 +13,21 @@
 | Memory and handoff | 4 | 4 | 0 |
 | Total | 31 | 21 | 10 |
 
-## Existing private artifacts
+The 31 records describe the complete architecture and provenance review. They are not
+an approved shipping manifest. v0.1 contains 12 packages; the remaining 19 records are
+planned extensions or source exclusions governed by their individual decisions.
+
+## Existing private System Error predecessors
 
 `the-loop`, `the-loop-auto`, `the-loop-parallel`, `the-loop-cloud`, `strategize`, `spec-pack`, `build`, `test`, `resolve`, `health-check`, `audit`, `portfolio-review`, `idea-to-brief`, `stack-summary`, `pre-commit-review`, `feature-tracker`, `decision-log`, `handoff`, `retrospective`, `session-summary` and `close`.
 
-Every existing artifact failed at least one public reuse gate. Common failures were missing licence evidence, private paths and state assumptions, harness-specific commands, private portfolio knowledge or operational incident detail. None is approved for direct copying.
+Most of these predecessors were built by System Error for private use. That ownership
+fact is separate from the public shipping decision. Every artifact still failed at
+least one public reuse gate because the audited file contained private paths or state
+assumptions, harness-specific commands, private portfolio knowledge, operational
+detail, or insufficient file-level licence evidence. None is approved for direct
+copying. Included v0.1 capabilities were implemented again as clean public System
+Error work.
 
 ## Missing artifacts
 

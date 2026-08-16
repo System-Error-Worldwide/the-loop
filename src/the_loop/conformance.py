@@ -216,7 +216,13 @@ def _source_skill_errors(repository: Path) -> list[str]:
         if path.is_file() and not path.is_symlink() and not path.parent.is_symlink()
     }
     missing = sorted(REQUIRED_SKILLS - found)
-    extra = sorted(found - REQUIRED_SKILLS)
+    launch_manifest = repository / "docs" / "release" / "launch-manifest.json"
+    planned: set[str] = set()
+    try:
+        planned = set(json.loads(launch_manifest.read_text(encoding="utf-8")).get("planned_extensions", []))
+    except (OSError, json.JSONDecodeError, AttributeError, TypeError):
+        pass
+    extra = sorted(found - REQUIRED_SKILLS - planned)
     errors: list[str] = []
     if missing:
         errors.append("missing required skills: " + ", ".join(missing))

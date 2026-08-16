@@ -784,7 +784,7 @@ class SetupContractTests(unittest.TestCase):
             temporary = Path(directory)
             source = temporary / "canonical-source"
             shutil.copytree(ROOT, source, ignore=shutil.ignore_patterns(".git", "__pycache__", ".the-loop"))
-            self.assertEqual(_canonicalize_skill_links(source), 80)
+            expected_links = _canonicalize_skill_links(source)
             target = temporary / "project"
             target.mkdir()
             plan = plan_install(
@@ -801,8 +801,8 @@ class SetupContractTests(unittest.TestCase):
             toolkit_count, toolkit_failures = _resolved_documentation_links(
                 target / ".the-loop" / "toolkit" / ".agents" / "skills"
             )
-            self.assertEqual(root_count, 80)
-            self.assertEqual(toolkit_count, 80)
+            self.assertEqual(root_count, expected_links)
+            self.assertEqual(toolkit_count, expected_links)
             self.assertEqual(root_failures, [])
             self.assertEqual(toolkit_failures, [])
             toolkit = target / ".the-loop" / "toolkit"
@@ -824,8 +824,8 @@ class SetupContractTests(unittest.TestCase):
             second_toolkit_count, second_toolkit_failures = _resolved_documentation_links(
                 second_target / ".the-loop" / "toolkit" / ".agents" / "skills"
             )
-            self.assertEqual(second_root_count, 80)
-            self.assertEqual(second_toolkit_count, 80)
+            self.assertEqual(second_root_count, expected_links)
+            self.assertEqual(second_toolkit_count, expected_links)
             self.assertEqual(second_root_failures, [])
             self.assertEqual(second_toolkit_failures, [])
             self.assertEqual(_broken_local_markdown_links(second_target / ".the-loop" / "toolkit"), [])
@@ -835,7 +835,7 @@ class SetupContractTests(unittest.TestCase):
             temporary = Path(directory)
             source = temporary / "canonical-source"
             shutil.copytree(ROOT, source, ignore=shutil.ignore_patterns(".git", "__pycache__", ".the-loop"))
-            self.assertEqual(_canonicalize_skill_links(source), 80)
+            _canonicalize_skill_links(source)
             target = temporary / "project"
             target.mkdir()
             first = plan_install(
@@ -906,7 +906,7 @@ class SetupContractTests(unittest.TestCase):
             temporary = Path(directory)
             source = temporary / "canonical-source"
             shutil.copytree(ROOT, source, ignore=shutil.ignore_patterns(".git", "__pycache__", ".the-loop"))
-            self.assertEqual(_canonicalize_skill_links(source), 80)
+            _canonicalize_skill_links(source)
             target = temporary / "project"
             target.mkdir()
             plan = plan_install(

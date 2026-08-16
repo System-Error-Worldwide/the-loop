@@ -325,7 +325,8 @@ No product telemetry is sent. Landing-page analytics remain absent unless separa
 - Lease conflict: halt the losing writer and report current owner and expiry.
 - Missing skill root: continue with bundled fallback if available and report the discovery gap.
 - Permission denial: record denied, never convert it to failed or passed.
-- Harness unavailable: label that harness unverified, do not block use on an installed supported harness.
+- Harness unavailable: label that harness unverified; do not block a separately
+  installed harness whose exact behavior evidence is verified.
 - External state inaccessible: report the coverage gap and prevent claims that depend on it.
 - Landing deployment failure: retain the previous production state and report the failed preview or deployment; never retry by weakening security headers.
 

@@ -23,7 +23,7 @@ The presentation must make five things clear:
 The repository README should follow this order:
 
 1. Precise one-sentence promise.
-2. Supported harnesses and current verification status.
+2. Target harnesses and current verification status.
 3. Fastest safe installation path.
 4. Setup and Doctor.
 5. Attended Loop and bounded Auto.
@@ -154,7 +154,7 @@ The separate landing-page asset must receive only release-approved public facts.
 - Creator attribution to Moses Mawila through System Error Worldwide.
 - Tagged version and release date.
 - Public repository and versioned quickstart URLs.
-- Supported harness list and dated compatibility results.
+- Target-harness compatibility matrix and dated evidence results.
 - Shipped, preview, planned and gated mode status.
 - Relationship between Setup, Loop, Auto, Parallel, Cloud and Endless.
 - Installed-skill capability detection and bundled fallback explanation.

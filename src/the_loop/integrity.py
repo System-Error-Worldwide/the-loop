@@ -68,6 +68,10 @@ def release_integrity_errors(repository: Path) -> list[str]:
         if unexpected:
             errors.append("release integrity manifest omits toolkit files: " + ", ".join(unexpected))
     for relative, expected_digest in sorted(files.items()):
+        if relative == RELEASE_INTEGRITY_PATH:
+            # Self-referential hashes are intentionally not verifiable without an external
+            # manifest anchor. Keep the manifest itself presence-bound instead.
+            continue
         candidate = repository / relative
         if not candidate.is_file() or candidate.is_symlink():
             errors.append(f"release file is missing or unsafe: {relative}")

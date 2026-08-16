@@ -2,7 +2,10 @@
 
 ## Purpose
 
-This protocol separates portable product behavior from host-specific discovery, invocation, permission and delegation APIs. The supported harness identifiers are `codex`, `claude_code`, `kimi_code` and `opencode`. Capability claims are evidence-scoped and require release-time revalidation.
+This protocol separates portable product behavior from host-specific discovery,
+invocation, permission and delegation APIs. The canonical target harness identifiers
+are `codex`, `claude_code`, `kimi_code` and `opencode`. Capability and support claims
+are evidence-scoped and require release-time revalidation.
 
 ## Baseline map
 
@@ -54,9 +57,9 @@ The baseline is a release input, not proof. A current compatibility record and h
 
 ### Behavior conformance
 
-- **[CAP-030]** Each supported harness MUST be tested in an isolated synthetic repository for installation, discovery, explicit invocation, implicit trigger, permission denial, bundled fallback and truthful Close behavior.
+- **[CAP-030]** Each harness claimed as supported MUST be tested in an isolated synthetic repository for installation, discovery, explicit invocation, implicit trigger, permission denial, bundled fallback and truthful Close behavior.
 - **[CAP-031]** Behavior-probe evidence MUST record harness version, installation scope, invoked capability, permission state, result, and evidence ID; its typed route observation MUST record capability, canonical harness, `code` or `noncode` track, environment digest, `passed`, `failed`, `denied`, or `unverified` outcome, observation time, and that evidence ID.
-- **[CAP-032]** A harness MAY be usable when another supported harness is unavailable; unavailable harnesses MUST be labeled unverified or failed without blocking the verified installed harness.
+- **[CAP-032]** A verified harness MAY be usable when another target harness is unavailable; unavailable harnesses MUST be labeled unverified or failed without blocking the verified installed harness.
 - **[CAP-033]** Compatibility claims MUST distinguish package discovery from successful behavior; discovery alone MUST NOT prove invocation, permission handling or stage conformance.
 - **[CAP-034]** A harness adapter MUST pass the same run-state, lease, authority, kill-switch, pending-operation, issue and evidence scenarios as every other adapter.
 - **[CAP-035]** Any skipped, denied or environment-limited probe MUST remain visible in the compatibility matrix and release evidence.

@@ -31,7 +31,7 @@ THE LOOP has no custom application UI in v0.1. Users interact through their agen
 
 | Failure | State | Recovery |
 | --- | --- | --- |
-| No supported harness found | `setup_blocked` | Install one supported harness, or use documentation only. |
+| No target harness executable found | `setup_blocked` | Install one target harness, or use documentation only. |
 | Destination contains unknown files | `approval_required` | Choose another target, copy plan or explicit overwrite. |
 | Partial install | `setup_failed` | Roll back operations from the receipt; preserve pre-existing files. |
 | Skill discovered twice | `doctor_warning` or `doctor_blocked` | Show precedence and let the user remove, disable or pin the intended source. |
@@ -133,7 +133,12 @@ No elevation can disable permanent invariants.
 6. Status and Close explain the last completed action and any uncertain state.
 7. Removing the switch does not resume work. The user explicitly resumes.
 
-## Later mode journeys
+## Full-product extension journeys
+
+These journeys remain part of THE LOOP's product architecture. They are sequenced
+after the bounded v0.1 kernel so they reuse its authority, state, evidence and recovery
+contracts. They are not canceled or treated as optional substitutes for the full
+product.
 
 ### Parallel
 
@@ -152,7 +157,8 @@ Endless reads an approved queue, selects one eligible item, creates a bounded Au
 This journey defines the product information contract for the separate landing-page session. It is not an implementation flow owned by the skill pack.
 
 1. Visitor arrives at `systemerror.app/the-loop` from search, GitHub, a shared link or System Error Software navigation.
-2. Hero states what THE LOOP does, who made it and the four supported harnesses.
+2. Hero states what THE LOOP does, who made it and the four target harnesses with
+   their current evidence-backed status.
 3. Primary CTA opens the public repository or installation section.
 4. A compact “how it works” section explains Setup, Loop and Auto first, then labels Parallel, Cloud and Endless by release status.
 5. Capability section shows installed-specialist routing plus bundled fallbacks.

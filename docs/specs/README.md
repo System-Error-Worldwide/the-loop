@@ -19,7 +19,8 @@ release status.
 - Canonical repository target: `System-Error-Worldwide/the-loop`.
 - Creator and maintainer attribution: Moses Mawila through System Error Worldwide.
 - Repository licence: MIT for original work created for this repository.
-- Supported harnesses: Codex, Claude Code, Kimi Code and OpenCode.
+- Target harnesses: Codex, Claude Code, Kimi Code and OpenCode. Support is claimed
+  only after the dated live matrix passes for that exact harness and environment.
 - The product routes by capability and description, uses installed specialists when safe, reports real gaps and always retains complete bundled fallback stages.
 - v0.1 proves attended Loop and one bounded Auto mission.
 - External actions, strategic expansion and self-modification require approval by default.
@@ -39,10 +40,14 @@ release status.
 ### Needs confirmation before release
 
 - Independent final reviewer.
-- Final launch copy and consulting destination URL.
+- Final launch copy approval and live revalidation of the recorded consulting route.
+- A privacy-clean Codex execution path, Claude Code login, Kimi Code login/default
+  model and a working OpenCode runtime for the live behavior matrix.
 
 ### Human gates
 
-- The public repository exists at `System-Error-Worldwide/the-loop`; milestone pushes are approved for this session and must pass the repository's verification gate.
+- The canonical remote exists at `System-Error-Worldwide/the-loop` but remains private.
+  Every future push or visibility change requires current explicit authority and green
+  verification; no session-scoped grant is carried forward in this public spec.
 - Any production deployment, including the landing page, requires explicit approval.
 - Any elevated autonomy grant requires typed confirmation with actor, scope and expiry.

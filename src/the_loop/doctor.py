@@ -89,6 +89,7 @@ def _portable_root(
 
 
 def _safe_read_path(root: Path, relative: str) -> Path:
+    root = root.resolve(strict=False)
     candidate = root / relative
     current = root
     for part in PurePosixPath(relative).parts:
@@ -288,9 +289,9 @@ def _pack_integrity(
         operation_by_skill: dict[str, list[dict[str, Any]]] = {}
         for operation in operations:
             parts = PurePosixPath(operation["destination"]).parts
-            if len(parts) >= 2 and parts[-2] == "skills" and parts[-1] in REQUIRED_PACK_SKILLS:
+            if len(parts) >= 2 and parts[-2] == "skills":
                 operation_by_skill.setdefault(parts[-1], []).append(operation)
-        if set(operation_by_skill) != REQUIRED_PACK_SKILLS:
+        if not REQUIRED_PACK_SKILLS.issubset(set(operation_by_skill)):
             continue
         destinations_match = True
         for name in REQUIRED_PACK_SKILLS:

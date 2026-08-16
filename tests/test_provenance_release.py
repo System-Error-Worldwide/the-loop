@@ -49,11 +49,16 @@ class ProvenanceReleaseContracts(unittest.TestCase):
                 self.assertEqual(row["skill"], path.parent.name)
                 self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), row["digest"])
 
-    def test_pending_live_evidence_keeps_launch_manifest_pre_release(self) -> None:
-        pending = [row for row in self.records() if row["evidence"].strip() == "pending"]
+    def test_nonpassing_live_evidence_keeps_launch_manifest_pre_release(self) -> None:
+        nonpassing = [
+            row
+            for row in self.records()
+            if not row["evidence"].strip().startswith("passed:")
+        ]
         manifest = json.loads((ROOT / "docs" / "release" / "launch-manifest.json").read_text(encoding="utf-8"))
-        if pending:
+        if nonpassing:
             self.assertEqual("pre_release", manifest["release"]["status"])
+            self.assertEqual("private", manifest["release"]["repository_visibility"])
             self.assertIsNone(manifest["release"]["tag"])
 
     def test_installed_skills_name_their_offline_execution_surface(self) -> None:

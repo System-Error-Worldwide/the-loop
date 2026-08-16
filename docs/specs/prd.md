@@ -55,7 +55,7 @@ THE LOOP addresses these failures with portable stage contracts, capability rout
 - Public provenance records and release checks.
 - A static canonical landing page specification and launch gate for `systemerror.app/the-loop`.
 
-### Later
+### Full-product extensions after the bounded v0.1 kernel
 
 - Parallel independent lanes.
 - Generic remote and restricted Cloud mode.
@@ -85,6 +85,10 @@ THE LOOP addresses these failures with portable stage contracts, capability rout
 | Endless | Supervisor that selects only approved work and runs bounded Auto missions. Empty queue means monitor, never invent. | later, safety-gated |
 
 Setup installs and configures the pack. Doctor proves what each harness can discover and execute. Control and Autonomy later expose runtime authority. Watch later observes state without taking ownership. Endless sits above these components and cannot bypass them.
+
+“After v0.1” is a dependency order, not a rejection. The kernel first proves the
+control plane every extension relies on. Phase 4 then adds these planned components in
+the order defined by the engineering plan.
 
 ## Functional requirements
 
@@ -155,8 +159,11 @@ Setup installs and configures the pack. Doctor proves what each harness can disc
 
 - **WEB-001** `https://systemerror.app/the-loop` must be the canonical marketing and product page.
 - **WEB-002** The hero must state the product promise and System Error provenance without implying vendor ownership or endorsement.
-- **WEB-003** The page must name Codex, Claude Code, Kimi Code and OpenCode as supported harnesses.
-- **WEB-004** It must explain how Setup, Loop, Auto, Parallel, Cloud and Endless relate and label deferred modes honestly.
+- **WEB-003** The page must name Codex, Claude Code, Kimi Code and OpenCode as target
+  harnesses and show their current evidence-backed status. It must not call a harness
+  supported until the release matrix passes for that harness.
+- **WEB-004** It must explain how Setup, Loop, Auto, Parallel, Cloud and Endless relate
+  and label planned extensions honestly without implying they were rejected.
 - **WEB-005** It must explain installed-skill capability detection and bundled fallbacks.
 - **WEB-006** It must show autonomy levels, visible warnings and permanent invariants.
 - **WEB-007** It must include a provenance and licensing trust section plus a compatibility/status matrix.
@@ -203,7 +210,11 @@ Setup installs and configures the pack. Doctor proves what each harness can disc
 
 ## Acceptance gate
 
-The product may be called v0.1 only when the kernel, all protocols and all four adapters pass conformance tests with captured evidence, the issue ledger is empty, provenance review is approved and the public licence is present.
+The product may be called v0.1 only when the kernel, all protocols and all four
+adapters pass conformance tests with captured evidence, the issue ledger is empty,
+provenance review is approved and the public licence is present. The 2026-08-16
+candidate is installable but does not pass this gate: Setup and Doctor pass on four of
+four targets, while valid live behavior evidence passes on zero of four.
 
 The launch may be called complete only after the repository is public, the static landing page matches the released compatibility matrix, both CTAs are valid and production deployment has separate explicit approval.
 

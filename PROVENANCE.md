@@ -1,6 +1,9 @@
 # Provenance policy
 
-SYSTEM ERROR'S THE LOOP is a clean public product. Its architecture was informed by private operational experience, but private source files are not a shipping source tree.
+SYSTEM ERROR'S THE LOOP is a clean-room pre-release candidate intended for public
+release. Its architecture was informed by private operational experience, but private
+source files are not a shipping source tree. The canonical remote currently remains
+private.
 
 Every skill and protocol must pass these gates before release:
 
@@ -14,10 +17,16 @@ Every skill and protocol must pass these gates before release:
 
 ## Classification
 
-- `system-error-original`: designed and written cleanly for this repository.
-- `system-error-rewrite`: preserves an abstract capability but does not copy the audited private artifact.
+- `system-error-original`: new System Error work designed and written for this public repository without a predecessor artifact.
+- `system-error-rewrite`: new public System Error work that implements a capability previously present in a private System Error predecessor, without copying that private artifact.
 - `upstream-dependency`: detected and invoked from its maintained upstream source; never vendored here.
 - `excluded`: not shipped because provenance, licence or privacy requirements are not satisfied.
+
+Both `system-error-original` and `system-error-rewrite` are System Error-authored public
+work. The distinction records lineage and the clean-public-boundary method; it does not
+mean that a rewrite is third-party work, has weaker ownership, or is a lightly reworded
+copy. Where the predecessor's original authorship or licence cannot be proven, that
+predecessor remains excluded even if a separate public fallback is later written.
 
 Rewording does not remove licence obligations. A missing licence is a failed reuse gate, not permission to copy.
 
