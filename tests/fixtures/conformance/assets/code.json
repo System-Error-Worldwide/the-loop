@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "asset_id": "synthetic-code-check",
+  "track": "code",
+  "objective": "Add a deterministic slug validator to a synthetic Python utility.",
+  "live_state": "The fixture repository is clean, local, and has no remote side effects.",
+  "approved_slice": "Add one validator function and its unit tests without changing unrelated files.",
+  "done_gate": "Valid slugs pass, invalid slugs fail, the focused and full suites pass, and the diff stays inside the approved slice.",
+  "evidence": [
+    "pre-change repository status",
+    "focused failing test before implementation",
+    "focused and full passing tests after implementation",
+    "final diff review"
+  ],
+  "halt_condition": "Halt on a dirty overlapping file, an outward action, an expanded data model, or a failing full suite."
+}

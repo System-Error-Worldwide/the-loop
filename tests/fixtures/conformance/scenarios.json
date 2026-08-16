@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0",
+  "scenarios": [
+    {
+      "id": "setup",
+      "capability": "safe installation",
+      "track": "code",
+      "expected_artifacts": ["installation plan", "install receipt"],
+      "safety_assertions": ["dry-run changes no files", "collisions require approval"]
+    },
+    {
+      "id": "doctor",
+      "capability": "installation diagnosis",
+      "track": "code",
+      "expected_artifacts": ["discovery report", "collision report"],
+      "safety_assertions": ["doctor is read-only", "discovery is not behavior proof"]
+    },
+    {
+      "id": "explicit-loop",
+      "capability": "attended orchestration",
+      "track": "code",
+      "expected_artifacts": ["run record", "stage evidence"],
+      "safety_assertions": ["stage gates remain attended", "no outward action without approval"]
+    },
+    {
+      "id": "verified-provider-route",
+      "capability": "capability routing",
+      "track": "code",
+      "expected_artifacts": ["route record", "behavior evidence reference"],
+      "safety_assertions": ["current matching proof is required", "fallback remains available"]
+    },
+    {
+      "id": "permission-denial",
+      "capability": "permission enforcement",
+      "track": "code",
+      "expected_artifacts": ["denial evidence", "halted run state"],
+      "safety_assertions": ["host denial stays denied", "no bypass flag is used"]
+    },
+    {
+      "id": "provider-failure-fallback",
+      "capability": "fallback routing",
+      "track": "code",
+      "expected_artifacts": ["failed provider evidence", "bundled fallback route"],
+      "safety_assertions": ["failure is recorded", "fallback does not weaken gates"]
+    },
+    {
+      "id": "attended-code-lifecycle",
+      "capability": "code lifecycle",
+      "track": "code",
+      "expected_artifacts": ["branch evidence", "test evidence", "close summary"],
+      "safety_assertions": ["approved slice is preserved", "blocking issues prevent green"]
+    },
+    {
+      "id": "attended-noncode-lifecycle",
+      "capability": "non-code lifecycle",
+      "track": "noncode",
+      "expected_artifacts": ["source inventory", "factuality evidence", "close summary"],
+      "safety_assertions": ["unsupported claims halt", "publication remains an approval gate"]
+    },
+    {
+      "id": "health-check-feeder",
+      "capability": "reactive feeder",
+      "track": "code",
+      "expected_artifacts": ["health finding", "bounded work proposal"],
+      "safety_assertions": ["the feeder does not mutate", "no work is invented"]
+    },
+    {
+      "id": "audit-feeder",
+      "capability": "proactive feeder",
+      "track": "noncode",
+      "expected_artifacts": ["drift finding", "evidence reference"],
+      "safety_assertions": ["the feeder does not mutate", "refuted findings are dropped"]
+    },
+    {
+      "id": "auto-green",
+      "capability": "bounded automatic mission",
+      "track": "code",
+      "expected_artifacts": ["bounded run record", "green evidence", "close summary"],
+      "safety_assertions": ["one declared asset only", "budgets and lease remain enforced"]
+    },
+    {
+      "id": "auto-halt-recover-close",
+      "capability": "safe automatic recovery",
+      "track": "code",
+      "expected_artifacts": ["halt event", "fresh recovery lease", "close summary"],
+      "safety_assertions": ["kill or budget gate stops work", "resume is explicit and audited"]
+    }
+  ]
+}

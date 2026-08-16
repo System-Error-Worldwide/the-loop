@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "product": {
+    "name": "SYSTEM ERROR'S THE LOOP",
+    "maintainer": "Moses Mawila through System Error Worldwide",
+    "license": "MIT",
+    "repository_url": "https://github.com/System-Error-Worldwide/the-loop",
+    "canonical_page": "https://systemerror.app/the-loop"
+  },
+  "release": {
+    "version": "0.1.0",
+    "status": "pre_release",
+    "tag": null
+  },
+  "available_modes": {
+    "the-loop": "release_candidate",
+    "the-loop-auto": "release_candidate"
+  },
+  "deferred_modes": [
+    "the-loop-parallel",
+    "the-loop-cloud",
+    "the-loop-endless"
+  ],
+  "compatibility": {
+    "codex": {"discovery_status": "not_tested", "behavior_status": "not_tested", "evidence": null},
+    "claude_code": {"discovery_status": "not_tested", "behavior_status": "not_tested", "evidence": null},
+    "kimi_code": {"discovery_status": "not_tested", "behavior_status": "not_tested", "evidence": null},
+    "opencode": {"discovery_status": "not_tested", "behavior_status": "not_tested", "evidence": null}
+  },
+  "quickstart_url": "https://github.com/System-Error-Worldwide/the-loop#quickstart",
+  "examples": {
+    "code": "examples/code/README.md",
+    "noncode": "examples/noncode/README.md"
+  },
+  "ctas": {
+    "primary": "https://github.com/System-Error-Worldwide/the-loop",
+    "secondary": "https://systemerror.app/services/"
+  },
+  "limitations": [
+    "This manifest is a pre-release handoff and does not claim live harness support.",
+    "Parallel, Cloud, and Endless are not included in v0.1.",
+    "The landing page is delivered and deployed in a separate approved session."
+  ]
+}

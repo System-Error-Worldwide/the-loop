@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "asset_id": "synthetic-policy-brief",
+  "track": "noncode",
+  "objective": "Produce a factual one-page decision brief for a synthetic community workshop.",
+  "live_state": "The supplied source packet contains three synthetic notes and no personal data.",
+  "approved_slice": "Draft the brief from the supplied notes, identify uncertainty, and preserve the requested Markdown format.",
+  "done_gate": "Every factual statement traces to a supplied note, uncertainty is labelled, formatting passes review, and no unsupported claim remains.",
+  "evidence": [
+    "source inventory",
+    "claim-to-source table",
+    "factuality review",
+    "format and final-reader review"
+  ],
+  "halt_condition": "Halt when a required fact is absent, a claim cannot be sourced, personal data appears, or publication is requested."
+}
