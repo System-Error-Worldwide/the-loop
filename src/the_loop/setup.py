@@ -234,6 +234,72 @@ def _skill_packages(source_root: Path) -> list[Path]:
     return sorted(packages, key=lambda item: item.name)
 
 
+def _toolkit_files(repository_root: Path) -> list[str]:
+    """Return the exact public runtime inventory copied into an installation."""
+
+    patterns = (
+        (".agents/skills", {".md"}),
+        ("adapters", {".json"}),
+        ("protocols", {".md"}),
+        ("schemas", {".json", ".md"}),
+        ("scripts", {".py"}),
+        ("src/the_loop", {".py"}),
+    )
+    files: list[str] = []
+    for directory, suffixes in patterns:
+        root = repository_root / directory
+        if not root.is_dir() or root.is_symlink():
+            raise SetupError(f"repository has no safe toolkit directory: {directory}")
+        for path in sorted(root.rglob("*")):
+            if path.is_symlink():
+                raise SetupError(f"toolkit source contains a symlink: {path.relative_to(repository_root)}")
+            if path.is_file() and path.suffix in suffixes:
+                files.append(path.relative_to(repository_root).as_posix())
+    license_path = repository_root / "LICENSE"
+    if license_path.is_file() and not license_path.is_symlink():
+        files.append("LICENSE")
+    required = {
+        "adapters/codex/adapter.json",
+        "adapters/claude_code/adapter.json",
+        "adapters/kimi_code/adapter.json",
+        "adapters/opencode/adapter.json",
+        ".agents/skills/the-loop-setup/SKILL.md",
+        ".agents/skills/the-loop-doctor/SKILL.md",
+        "protocols/stage-contracts.md",
+        "schemas/config.schema.json",
+        "scripts/the_loop_setup.py",
+        "scripts/the_loop_doctor.py",
+        "src/the_loop/setup.py",
+        "src/the_loop/doctor.py",
+        "src/the_loop/validation.py",
+    }
+    missing = sorted(required - set(files))
+    if missing:
+        raise SetupError("repository toolkit is incomplete: " + ", ".join(missing))
+    return sorted(files)
+
+
+def _toolkit_digest(repository_root: Path, files: Iterable[str]) -> str:
+    digest = hashlib.sha256()
+    digest.update(b"directory\0")
+    normalized = sorted(files)
+    directories: set[str] = set()
+    for relative in normalized:
+        parent = PurePosixPath(relative).parent
+        while str(parent) != ".":
+            directories.add(parent.as_posix())
+            parent = parent.parent
+    entries = [(value, "d") for value in directories] + [(value, "f") for value in normalized]
+    for relative, kind in sorted(entries):
+        encoded = relative.encode("utf-8", "surrogateescape")
+        digest.update(kind.encode("ascii") + b"\0" + encoded + b"\0")
+        if kind == "f":
+            with (repository_root / relative).open("rb") as handle:
+                for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                    digest.update(chunk)
+    return digest.hexdigest()
+
+
 def _adapter_roots(manifest: Mapping[str, Any], scope: str) -> list[str]:
     field = "project_skill_roots" if scope == "project" else "user_skill_roots"
     roots: list[str] = []
@@ -360,6 +426,46 @@ def plan_install(
                 }
             )
 
+    toolkit_files = _toolkit_files(repository)
+    toolkit_relative = ".the-loop/toolkit"
+    for missing_directory in _missing_directories(target, ".the-loop"):
+        if missing_directory not in planned_directories:
+            planned_directories.add(missing_directory)
+            operations.append(
+                {
+                    "action": "mkdir",
+                    "source": None,
+                    "source_digest": None,
+                    "destination": missing_directory,
+                    "pre_existing_digest": None,
+                    "collision": False,
+                    "approval_required": False,
+                    "rollback_action": "none",
+                }
+            )
+    toolkit_destination = _safe_destination(target, toolkit_relative)
+    toolkit_source_digest = _toolkit_digest(repository, toolkit_files)
+    toolkit_existing_digest = _digest_path(toolkit_destination)
+    operations.append(
+        {
+            "action": "skip" if toolkit_existing_digest == toolkit_source_digest else "copy",
+            "source": str(repository),
+            "source_digest": toolkit_source_digest,
+            "destination": toolkit_relative,
+            "pre_existing_digest": toolkit_existing_digest,
+            "collision": toolkit_existing_digest is not None and toolkit_existing_digest != toolkit_source_digest,
+            "approval_required": toolkit_existing_digest is not None and toolkit_existing_digest != toolkit_source_digest,
+            "rollback_action": (
+                "none"
+                if toolkit_existing_digest == toolkit_source_digest
+                else "restore_if_unchanged"
+                if toolkit_existing_digest is not None
+                else "remove_if_unchanged"
+            ),
+            "toolkit_files": toolkit_files,
+        }
+    )
+
     deduplicated: list[dict[str, Any]] = []
     seen: set[tuple[str, str]] = set()
     for operation in operations:
@@ -384,53 +490,283 @@ def plan_install(
     }
 
 
-def _remove_path(path: Path) -> None:
+_DIRECTORY_FLAGS = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_CLOEXEC", 0)
+_READ_FLAGS = os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_CLOEXEC", 0)
+
+
+def _identity(info: os.stat_result) -> tuple[int, int]:
+    return info.st_dev, info.st_ino
+
+
+class _RootBinding:
+    """A retained target descriptor plus a fresh-path namespace identity chain."""
+
+    def __init__(self, target: Path):
+        if not target.is_absolute() or target == Path(target.anchor):
+            raise SetupError("target root must be a non-root absolute directory")
+        self.path = target
+        self.parts = target.parts[1:]
+        self.identities: list[tuple[int, int]] = []
+        descriptor = os.open(target.anchor, _DIRECTORY_FLAGS)
+        try:
+            for part in self.parts:
+                child = os.open(part, _DIRECTORY_FLAGS, dir_fd=descriptor)
+                os.close(descriptor)
+                descriptor = child
+                self.identities.append(_identity(os.fstat(descriptor)))
+            self.fd = descriptor
+        except BaseException:
+            os.close(descriptor)
+            raise
+
+    def assert_current(self) -> None:
+        descriptor = os.open(self.path.anchor, _DIRECTORY_FLAGS)
+        try:
+            for index, part in enumerate(self.parts):
+                child = os.open(part, _DIRECTORY_FLAGS, dir_fd=descriptor)
+                os.close(descriptor)
+                descriptor = child
+                if _identity(os.fstat(descriptor)) != self.identities[index]:
+                    raise SetupError("target root namespace identity changed after planning")
+            if _identity(os.fstat(descriptor)) != _identity(os.fstat(self.fd)):
+                raise SetupError("target root identity changed after planning")
+        except (FileNotFoundError, NotADirectoryError, OSError) as exc:
+            if isinstance(exc, SetupError):
+                raise
+            raise SetupError(f"target root namespace changed after planning: {exc}") from exc
+        finally:
+            os.close(descriptor)
+
+    def close(self) -> None:
+        os.close(self.fd)
+
+
+class _DestinationBinding:
+    """A retained destination-parent descriptor whose canonical chain is rechecked."""
+
+    def __init__(self, root: _RootBinding, relative: str):
+        normalized = validate_relative_path(relative, path="$.destination")
+        parts = PurePosixPath(normalized).parts
+        if not parts or normalized == ".":
+            raise SetupError("destination must name a path below the target root")
+        self.root = root
+        self.relative = normalized
+        self.name = parts[-1]
+        self.parent_parts = parts[:-1]
+        self.parent_identities: list[tuple[int, int]] = []
+        descriptor = os.dup(root.fd)
+        try:
+            for part in self.parent_parts:
+                child = os.open(part, _DIRECTORY_FLAGS, dir_fd=descriptor)
+                os.close(descriptor)
+                descriptor = child
+                self.parent_identities.append(_identity(os.fstat(descriptor)))
+            self.parent_fd = descriptor
+        except BaseException:
+            os.close(descriptor)
+            raise
+
+    def assert_current(self) -> None:
+        self.root.assert_current()
+        descriptor = os.dup(self.root.fd)
+        try:
+            for index, part in enumerate(self.parent_parts):
+                child = os.open(part, _DIRECTORY_FLAGS, dir_fd=descriptor)
+                os.close(descriptor)
+                descriptor = child
+                if _identity(os.fstat(descriptor)) != self.parent_identities[index]:
+                    raise SetupError(f"destination namespace changed after validation: {self.relative}")
+            if _identity(os.fstat(descriptor)) != _identity(os.fstat(self.parent_fd)):
+                raise SetupError(f"destination parent identity changed after validation: {self.relative}")
+        except (FileNotFoundError, NotADirectoryError, OSError) as exc:
+            if isinstance(exc, SetupError):
+                raise
+            raise SetupError(f"destination namespace changed after validation: {self.relative}: {exc}") from exc
+        finally:
+            os.close(descriptor)
+
+    def close(self) -> None:
+        os.close(self.parent_fd)
+
+
+def _entry_stat(parent_fd: int, name: str) -> os.stat_result | None:
+    try:
+        return os.stat(name, dir_fd=parent_fd, follow_symlinks=False)
+    except FileNotFoundError:
+        return None
+
+
+def _directory_digest_entries(directory_fd: int, prefix: str = "") -> list[tuple[str, str, bytes | None]]:
+    entries: list[tuple[str, str, bytes | None]] = []
+    for name in sorted(os.listdir(directory_fd)):
+        relative = f"{prefix}/{name}" if prefix else name
+        info = os.stat(name, dir_fd=directory_fd, follow_symlinks=False)
+        if stat.S_ISLNK(info.st_mode):
+            raise SetupError(f"installed directory contains a symlink: {relative}")
+        if stat.S_ISDIR(info.st_mode):
+            child = os.open(name, _DIRECTORY_FLAGS, dir_fd=directory_fd)
+            try:
+                entries.append((relative, "d", None))
+                entries.extend(_directory_digest_entries(child, relative))
+            finally:
+                os.close(child)
+        elif stat.S_ISREG(info.st_mode):
+            descriptor = os.open(name, _READ_FLAGS, dir_fd=directory_fd)
+            try:
+                chunks: list[bytes] = []
+                while True:
+                    chunk = os.read(descriptor, 1024 * 1024)
+                    if not chunk:
+                        break
+                    chunks.append(chunk)
+            finally:
+                os.close(descriptor)
+            entries.append((relative, "f", b"".join(chunks)))
+        else:
+            raise SetupError(f"installed directory contains an unsupported object: {relative}")
+    return entries
+
+
+def _digest_entry_at(parent_fd: int, name: str) -> str | None:
+    info = _entry_stat(parent_fd, name)
+    if info is None:
+        return None
+    digest = hashlib.sha256()
+    if stat.S_ISLNK(info.st_mode):
+        digest.update(b"link\0")
+        digest.update(os.readlink(name, dir_fd=parent_fd).encode("utf-8", "surrogateescape"))
+        return digest.hexdigest()
+    if stat.S_ISREG(info.st_mode):
+        digest.update(b"file\0")
+        descriptor = os.open(name, _READ_FLAGS, dir_fd=parent_fd)
+        try:
+            while True:
+                chunk = os.read(descriptor, 1024 * 1024)
+                if not chunk:
+                    break
+                digest.update(chunk)
+        finally:
+            os.close(descriptor)
+        return digest.hexdigest()
+    if not stat.S_ISDIR(info.st_mode):
+        raise SetupError(f"unsupported filesystem object: {name}")
+    digest.update(b"directory\0")
+    descriptor = os.open(name, _DIRECTORY_FLAGS, dir_fd=parent_fd)
+    try:
+        for relative, kind, content in sorted(_directory_digest_entries(descriptor), key=lambda item: item[0]):
+            encoded = relative.encode("utf-8", "surrogateescape")
+            digest.update(kind.encode("ascii") + b"\0" + encoded + b"\0")
+            if content is not None:
+                digest.update(content)
+    finally:
+        os.close(descriptor)
+    return digest.hexdigest()
+
+
+def _copy_toolkit(repository: Path, destination: Path, files: Iterable[str]) -> None:
+    destination.mkdir(mode=0o700)
+    for relative in files:
+        source = repository / relative
+        output = destination / relative
+        output.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(source, output, follow_symlinks=False)
+
+
+def _stage_copy(operation: Mapping[str, Any], transaction: Path, index: int) -> str:
+    name = f"stage-{index:04d}"
+    destination = transaction / name
+    source = Path(operation["source"])
+    if operation.get("toolkit_files") is not None:
+        if _toolkit_digest(source, operation["toolkit_files"]) != operation["source_digest"]:
+            raise SetupError("toolkit source changed after planning")
+        _copy_toolkit(source, destination, operation["toolkit_files"])
+    else:
+        if _digest_path(source) != operation["source_digest"]:
+            raise SetupError(f"source changed after planning: {operation['destination']}")
+        shutil.copytree(source, destination, symlinks=False)
+    if _digest_path(destination) != operation["source_digest"]:
+        raise SetupError(f"staged output does not match its planned source: {operation['destination']}")
+    return name
+
+
+def _private_directory_info(descriptor: int, *, label: str) -> None:
+    info = os.fstat(descriptor)
+    if hasattr(os, "getuid") and info.st_uid != os.getuid():
+        raise SetupError(f"private install directory is not owned by the current user: {label}")
+    if stat.S_IMODE(info.st_mode) & 0o077:
+        raise SetupError(f"private install directory grants group or other access: {label}")
+
+
+def _open_or_create_private(binding: _DestinationBinding) -> tuple[int, bool]:
+    binding.assert_current()
+    created = False
+    if _entry_stat(binding.parent_fd, binding.name) is None:
+        os.mkdir(binding.name, mode=0o700, dir_fd=binding.parent_fd)
+        created = True
+    descriptor = os.open(binding.name, _DIRECTORY_FLAGS, dir_fd=binding.parent_fd)
+    _private_directory_info(descriptor, label=binding.relative)
+    binding.assert_current()
+    return descriptor, created
+
+
+def _write_json_stage(transaction: Path, name: str, value: Mapping[str, Any]) -> None:
+    path = transaction / name
+    descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
+        json.dump(value, handle, indent=2, sort_keys=True)
+        handle.write("\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+
+
+def _remove_private(path: Path) -> None:
     if path.is_symlink() or path.is_file():
         path.unlink()
     elif path.is_dir():
         shutil.rmtree(path)
 
 
-def _copy_to(source: Path, destination: Path) -> None:
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(source, destination, symlinks=True)
-
-
-def _atomic_json(path: Path, value: Mapping[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    descriptor, temporary = tempfile.mkstemp(prefix=f".{path.name}.", dir=path.parent)
-    try:
-        with os.fdopen(descriptor, "w", encoding="utf-8") as handle:
-            json.dump(value, handle, indent=2, sort_keys=True)
-            handle.write("\n")
-            handle.flush()
-            os.fsync(handle.fileno())
-        os.chmod(temporary, 0o600)
-        os.replace(temporary, path)
-        directory_descriptor = os.open(path.parent, os.O_RDONLY)
+def _conditional_rollback(
+    applied: list[dict[str, Any]],
+    transaction: Path,
+    transaction_fd: int,
+) -> list[str]:
+    incomplete: list[str] = []
+    for index, entry in reversed(list(enumerate(applied))):
+        operation = entry["operation"]
+        binding: _DestinationBinding = entry["binding"]
+        destination = operation["destination"]
+        quarantine = f"rollback-{index:04d}"
+        current = _entry_stat(binding.parent_fd, binding.name)
+        removed = current is None
+        if current is not None:
+            try:
+                os.rename(binding.name, quarantine, src_dir_fd=binding.parent_fd, dst_dir_fd=transaction_fd)
+            except OSError:
+                incomplete.append(destination)
+                continue
+            quarantined_digest = _digest_entry_at(transaction_fd, quarantine)
+            if quarantined_digest != entry["result_digest"]:
+                if _entry_stat(binding.parent_fd, binding.name) is None:
+                    os.rename(quarantine, binding.name, src_dir_fd=transaction_fd, dst_dir_fd=binding.parent_fd)
+                incomplete.append(destination)
+                continue
+            _remove_private(transaction / quarantine)
+            removed = True
+        backup_name = entry.get("backup_name")
+        if removed and backup_name is not None:
+            if _digest_entry_at(transaction_fd, backup_name) != operation["pre_existing_digest"]:
+                incomplete.append(destination)
+                continue
+            if _entry_stat(binding.parent_fd, binding.name) is not None:
+                incomplete.append(destination)
+                continue
+            os.rename(backup_name, binding.name, src_dir_fd=transaction_fd, dst_dir_fd=binding.parent_fd)
         try:
-            os.fsync(directory_descriptor)
-        finally:
-            os.close(directory_descriptor)
-    finally:
-        try:
-            os.unlink(temporary)
-        except FileNotFoundError:
-            pass
-
-
-def _ensure_private_directory(path: Path) -> None:
-    if path.is_symlink():
-        raise SetupError(f"private install directory must not be a symlink: {path.name}")
-    if not path.exists():
-        path.mkdir(mode=0o700)
-    info = path.stat()
-    if not path.is_dir():
-        raise SetupError(f"private install path is not a directory: {path.name}")
-    if hasattr(os, "getuid") and info.st_uid != os.getuid():
-        raise SetupError(f"private install directory is not owned by the current user: {path.name}")
-    if stat.S_IMODE(info.st_mode) & 0o077:
-        raise SetupError(f"private install directory grants group or other access: {path.name}")
+            binding.assert_current()
+        except SetupError:
+            incomplete.append(destination)
+    return list(dict.fromkeys(incomplete))
 
 
 def apply_install(
@@ -446,61 +782,80 @@ def apply_install(
     if not actor or not source_version:
         raise SetupError("actor and source_version must be non-empty")
     target = _canonical_root(plan.get("target_root", ""), label="target root")
-    identity = target.stat()
-    if list(plan.get("target_identity", [])) != [identity.st_dev, identity.st_ino]:
-        raise SetupError("target root identity changed after planning")
     approvals = set(approved_destinations)
     required = set(plan.get("approval_required", []))
     missing = sorted(required - approvals)
     if missing:
         raise SetupError("exact approval required for: " + ", ".join(missing))
+    root = _RootBinding(target)
+    identity = os.fstat(root.fd)
+    if list(plan.get("target_identity", [])) != [identity.st_dev, identity.st_ino]:
+        root.close()
+        raise SetupError("target root identity changed after planning")
     receipt_id = str(uuid.uuid4())
     transaction = Path(tempfile.mkdtemp(prefix=f"the-loop-install-{receipt_id}-", dir=target.parent))
-    backups = transaction / "backups"
-    applied: list[tuple[Mapping[str, Any], Path | None]] = []
+    transaction_fd = os.open(transaction, _DIRECTORY_FLAGS)
+    applied: list[dict[str, Any]] = []
     receipt_operations: list[dict[str, Any]] = []
-    receipt_path = target / ".the-loop" / "installs" / f"{receipt_id}.json"
-    persistent_backup = target / ".the-loop" / "installs" / f"{receipt_id}.backup"
-    state_root_existed = (target / ".the-loop").exists()
-    installs_existed = (target / ".the-loop" / "installs").exists()
+    operation_bindings: list[_DestinationBinding] = []
+    installs_binding: _DestinationBinding | None = None
+    installs_fd: int | None = None
+    installs_created = False
+    backups_promoted = False
+    cleanup_transaction = True
     try:
-        for operation in plan["operations"]:
-            destination = _safe_destination(target, operation["destination"], allow_final_symlink=True)
+        root.assert_current()
+        for index, operation in enumerate(plan["operations"]):
+            binding = _DestinationBinding(root, operation["destination"])
+            operation_bindings.append(binding)
+            binding.assert_current()
             action = operation["action"]
-            current_digest = _digest_path(destination)
+            current_digest = _digest_entry_at(binding.parent_fd, binding.name)
             if current_digest != operation["pre_existing_digest"]:
                 raise SetupError(f"destination changed after planning: {operation['destination']}")
             source = Path(operation["source"]) if operation["source"] else None
-            if source is not None and _digest_path(source) != operation["source_digest"]:
+            if source is not None and operation.get("toolkit_files") is None and _digest_path(source) != operation["source_digest"]:
                 raise SetupError(f"source changed after planning: {operation['destination']}")
+            stage_name = _stage_copy(operation, transaction, index) if action == "copy" else None
             if fault_injector:
                 fault_injector("before_operation", operation)
-            backup: Path | None = None
+            for retained_binding in operation_bindings:
+                retained_binding.assert_current()
+            backup_name: str | None = None
             if action == "mkdir":
-                destination.mkdir()
+                mode = 0o700 if operation["destination"] == ".the-loop" else 0o755
+                os.mkdir(binding.name, mode=mode, dir_fd=binding.parent_fd)
             elif action == "skip":
                 pass
             else:
                 if current_digest is not None:
                     if operation["destination"] not in approvals:
                         raise SetupError(f"exact approval required for: {operation['destination']}")
-                    backup = backups / operation["destination"]
-                    backup.parent.mkdir(parents=True, exist_ok=True)
-                    os.replace(destination, backup)
+                    backup_name = f"backup-{index:04d}"
+                    os.rename(binding.name, backup_name, src_dir_fd=binding.parent_fd, dst_dir_fd=transaction_fd)
                 assert source is not None
                 if action == "copy":
-                    _copy_to(source, destination)
+                    assert stage_name is not None
+                    os.rename(stage_name, binding.name, src_dir_fd=transaction_fd, dst_dir_fd=binding.parent_fd)
                 elif action == "link":
-                    destination.parent.mkdir(parents=True, exist_ok=True)
-                    os.symlink(source, destination, target_is_directory=True)
+                    os.symlink(str(source), binding.name, dir_fd=binding.parent_fd)
                 else:
                     raise SetupError(f"unsupported planned action: {action}")
-            applied.append((operation, backup))
-            result_digest = _digest_path(destination)
+            binding.assert_current()
+            result_digest = _digest_entry_at(binding.parent_fd, binding.name)
             if action == "copy" and result_digest != operation["source_digest"]:
                 raise SetupError(f"copied output does not match its planned source: {operation['destination']}")
-            if action == "link" and (not destination.is_symlink() or Path(os.readlink(destination)) != source):
+            if action == "link" and (result_digest is None or os.readlink(binding.name, dir_fd=binding.parent_fd) != str(source)):
                 raise SetupError(f"linked output does not match its planned source: {operation['destination']}")
+            if action != "skip":
+                applied.append(
+                    {
+                        "operation": operation,
+                        "binding": binding,
+                        "backup_name": backup_name,
+                        "result_digest": result_digest,
+                    }
+                )
             receipt_operations.append(
                 {
                     "action": action,
@@ -513,6 +868,10 @@ def apply_install(
             )
             if fault_injector:
                 fault_injector("after_operation", operation)
+            for retained_binding in operation_bindings:
+                retained_binding.assert_current()
+            if _digest_entry_at(binding.parent_fd, binding.name) != result_digest:
+                raise SetupError(f"destination changed during installation: {operation['destination']}")
 
         receipt = {
             "schema_version": SCHEMA_VERSION,
@@ -526,47 +885,82 @@ def apply_install(
             "result": "complete",
         }
         validate_record("install_receipt", receipt)
-        _ensure_private_directory(target / ".the-loop")
-        _ensure_private_directory(target / ".the-loop" / "installs")
-        if backups.exists():
-            os.replace(backups, persistent_backup)
-            os.chmod(persistent_backup, 0o700)
+        state_binding = _DestinationBinding(root, ".the-loop")
+        operation_bindings.append(state_binding)
+        state_fd = os.open(state_binding.name, _DIRECTORY_FLAGS, dir_fd=state_binding.parent_fd)
+        try:
+            _private_directory_info(state_fd, label=".the-loop")
+        finally:
+            os.close(state_fd)
+        installs_binding = _DestinationBinding(root, ".the-loop/installs")
+        operation_bindings.append(installs_binding)
+        installs_fd, installs_created = _open_or_create_private(installs_binding)
         if fault_injector:
             fault_injector(
                 "before_receipt_write",
                 {"action": "receipt", "destination": f".the-loop/installs/{receipt_id}.json"},
             )
-        _atomic_json(receipt_path, receipt)
+        for retained_binding in operation_bindings:
+            retained_binding.assert_current()
+        backup_entries = [entry for entry in applied if entry.get("backup_name") is not None]
+        if backup_entries:
+            backup_tree = transaction / "backup-tree"
+            backup_tree.mkdir(mode=0o700)
+            for entry in backup_entries:
+                output = backup_tree / entry["operation"]["destination"]
+                output.parent.mkdir(parents=True, exist_ok=True)
+                os.rename(transaction / entry["backup_name"], output)
+            os.rename("backup-tree", f"{receipt_id}.backup", src_dir_fd=transaction_fd, dst_dir_fd=installs_fd)
+            backups_promoted = True
+        receipt_stage = f"receipt-{receipt_id}.json"
+        _write_json_stage(transaction, receipt_stage, receipt)
+        installs_binding.assert_current()
+        os.rename(receipt_stage, f"{receipt_id}.json", src_dir_fd=transaction_fd, dst_dir_fd=installs_fd)
+        os.fsync(installs_fd)
+        for retained_binding in operation_bindings:
+            retained_binding.assert_current()
         return receipt
-    except BaseException:
-        for operation, backup in reversed(applied):
-            destination = _safe_destination(target, operation["destination"], allow_final_symlink=True)
-            if operation["action"] == "skip":
-                continue
-            if destination.exists() or destination.is_symlink():
-                _remove_path(destination)
-            if backup is not None and not backup.exists():
-                backup = persistent_backup / operation["destination"]
-            if backup is not None and backup.exists():
-                destination.parent.mkdir(parents=True, exist_ok=True)
-                os.replace(backup, destination)
-        if persistent_backup.exists():
-            shutil.rmtree(persistent_backup)
-        if receipt_path.exists():
-            receipt_path.unlink()
-        if not installs_existed:
+    except BaseException as exc:
+        if backups_promoted and installs_fd is not None:
             try:
-                receipt_path.parent.rmdir()
+                os.rename(f"{receipt_id}.backup", "backup-tree", src_dir_fd=installs_fd, dst_dir_fd=transaction_fd)
+                for index, entry in enumerate(applied):
+                    if entry.get("backup_name") is None:
+                        continue
+                    source = transaction / "backup-tree" / entry["operation"]["destination"]
+                    if source.exists() or source.is_symlink():
+                        os.rename(source, transaction / entry["backup_name"])
             except OSError:
                 pass
-        if not state_root_existed:
+        incomplete = _conditional_rollback(applied, transaction, transaction_fd)
+        if installs_fd is not None:
             try:
-                (target / ".the-loop").rmdir()
-            except OSError:
+                os.unlink(f"{receipt_id}.json", dir_fd=installs_fd)
+            except FileNotFoundError:
                 pass
+            if installs_created:
+                os.close(installs_fd)
+                installs_fd = None
+                try:
+                    os.rmdir(installs_binding.name, dir_fd=installs_binding.parent_fd)  # type: ignore[union-attr]
+                except OSError:
+                    incomplete.append(".the-loop/installs")
+        if incomplete:
+            cleanup_transaction = False
+            names = ", ".join(dict.fromkeys(incomplete))
+            raise SetupError(
+                f"rollback_incomplete: {names}; recovery artifacts retained at {transaction}; original failure: {exc}"
+            ) from exc
         raise
     finally:
-        shutil.rmtree(transaction, ignore_errors=True)
+        if installs_fd is not None:
+            os.close(installs_fd)
+        for binding in operation_bindings:
+            binding.close()
+        os.close(transaction_fd)
+        root.close()
+        if cleanup_transaction:
+            shutil.rmtree(transaction, ignore_errors=True)
 
 
 def rollback_install(receipt: Mapping[str, Any], *, target_root: Path | str | None = None) -> dict[str, Any]:
@@ -577,33 +971,90 @@ def rollback_install(receipt: Mapping[str, Any], *, target_root: Path | str | No
     target = _canonical_root(target_root or configured_target, label="target root")
     if target != configured_target.resolve(strict=True):
         raise SetupError("target root does not match receipt")
-    backup_root = target / ".the-loop" / "installs" / f"{receipt['receipt_id']}.backup"
+    root = _RootBinding(target)
+    transaction = Path(tempfile.mkdtemp(prefix=f"the-loop-rollback-{receipt['receipt_id']}-", dir=target.parent))
+    transaction_fd = os.open(transaction, _DIRECTORY_FLAGS)
+    bindings: list[_DestinationBinding] = []
     skipped = False
-    for operation in reversed(receipt["operations"]):
-        action = operation["rollback_action"]
-        if action == "none":
-            continue
-        destination = _safe_destination(target, operation["destination"], allow_final_symlink=True)
-        if _digest_path(destination) != operation["resulting_digest"]:
-            skipped = True
-            continue
-        backup = backup_root / operation["destination"]
-        if action == "restore_if_unchanged" and _digest_path(backup) != operation["pre_existing_digest"]:
-            skipped = True
-            continue
-        if destination.exists() or destination.is_symlink():
-            _remove_path(destination)
-        if action == "restore_if_unchanged":
-            if not backup.exists() and not backup.is_symlink():
+    try:
+        root.assert_current()
+        for index, operation in reversed(list(enumerate(receipt["operations"]))):
+            action = operation["rollback_action"]
+            if action == "none":
+                continue
+            binding = _DestinationBinding(root, operation["destination"])
+            bindings.append(binding)
+            binding.assert_current()
+            if _digest_entry_at(binding.parent_fd, binding.name) != operation["resulting_digest"]:
                 skipped = True
                 continue
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            os.replace(backup, destination)
-    result = dict(receipt)
-    result["result"] = "partial" if skipped else "rolled_back"
-    validate_record("install_receipt", result)
-    receipt_path = target / ".the-loop" / "installs" / f"{receipt['receipt_id']}.json"
-    _atomic_json(receipt_path, result)
-    if not skipped and backup_root.exists():
-        shutil.rmtree(backup_root)
-    return result
+            backup_binding: _DestinationBinding | None = None
+            if action == "restore_if_unchanged":
+                backup_relative = f".the-loop/installs/{receipt['receipt_id']}.backup/{operation['destination']}"
+                try:
+                    backup_binding = _DestinationBinding(root, backup_relative)
+                except (FileNotFoundError, NotADirectoryError, OSError):
+                    skipped = True
+                    continue
+                bindings.append(backup_binding)
+                backup_binding.assert_current()
+                if _digest_entry_at(backup_binding.parent_fd, backup_binding.name) != operation["pre_existing_digest"]:
+                    skipped = True
+                    continue
+            quarantine = f"rollback-{index:04d}"
+            os.rename(binding.name, quarantine, src_dir_fd=binding.parent_fd, dst_dir_fd=transaction_fd)
+            try:
+                binding.assert_current()
+            except SetupError:
+                if _entry_stat(binding.parent_fd, binding.name) is None:
+                    os.rename(quarantine, binding.name, src_dir_fd=transaction_fd, dst_dir_fd=binding.parent_fd)
+                raise
+            if _digest_entry_at(transaction_fd, quarantine) != operation["resulting_digest"]:
+                if _entry_stat(binding.parent_fd, binding.name) is None:
+                    os.rename(quarantine, binding.name, src_dir_fd=transaction_fd, dst_dir_fd=binding.parent_fd)
+                skipped = True
+                continue
+            _remove_private(transaction / quarantine)
+            if backup_binding is not None:
+                if _entry_stat(binding.parent_fd, binding.name) is not None:
+                    skipped = True
+                    continue
+                os.rename(
+                    backup_binding.name,
+                    binding.name,
+                    src_dir_fd=backup_binding.parent_fd,
+                    dst_dir_fd=binding.parent_fd,
+                )
+                binding.assert_current()
+
+        result = dict(receipt)
+        result["result"] = "partial" if skipped else "rolled_back"
+        validate_record("install_receipt", result)
+        installs_binding = _DestinationBinding(root, ".the-loop/installs")
+        bindings.append(installs_binding)
+        installs_binding.assert_current()
+        installs_fd = os.open(installs_binding.name, _DIRECTORY_FLAGS, dir_fd=installs_binding.parent_fd)
+        try:
+            _private_directory_info(installs_fd, label=".the-loop/installs")
+            stage_name = f"receipt-{receipt['receipt_id']}.json"
+            _write_json_stage(transaction, stage_name, result)
+            os.rename(stage_name, f"{receipt['receipt_id']}.json", src_dir_fd=transaction_fd, dst_dir_fd=installs_fd)
+            os.fsync(installs_fd)
+        finally:
+            os.close(installs_fd)
+        if not skipped:
+            backup_root = _DestinationBinding(root, f".the-loop/installs/{receipt['receipt_id']}.backup")
+            bindings.append(backup_root)
+            if _entry_stat(backup_root.parent_fd, backup_root.name) is not None:
+                backup_root.assert_current()
+                os.rename(backup_root.name, "spent-backup", src_dir_fd=backup_root.parent_fd, dst_dir_fd=transaction_fd)
+                root.assert_current()
+                _remove_private(transaction / "spent-backup")
+        root.assert_current()
+        return result
+    finally:
+        for binding in bindings:
+            binding.close()
+        os.close(transaction_fd)
+        root.close()
+        shutil.rmtree(transaction, ignore_errors=True)

@@ -1,7 +1,10 @@
 from __future__ import annotations
 
 import json
+import os
+import shutil
 import stat
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -62,7 +65,7 @@ class SetupContractTests(unittest.TestCase):
             plan = plan_install(
                 FIXTURE_ROOT / "source",
                 target,
-                FIXTURE_ROOT,
+                ROOT,
                 harnesses=["codex", "kimi_code", "opencode"],
                 executable_finder=_finder("codex", "kimi", "opencode"),
             )
@@ -87,14 +90,14 @@ class SetupContractTests(unittest.TestCase):
                 plan = plan_install(
                     FIXTURE_ROOT / "source",
                     target,
-                    FIXTURE_ROOT,
+                    ROOT,
                     harnesses=[harness],
                     executable_finder=_finder(*executables),
                 )
                 copies = [
                     operation["destination"]
                     for operation in plan["operations"]
-                    if operation["action"] == "copy"
+                    if operation["action"] == "copy" and operation["destination"] != ".the-loop/toolkit"
                 ]
                 self.assertEqual([destination], copies)
 
@@ -113,7 +116,7 @@ class SetupContractTests(unittest.TestCase):
                 plan = plan_install(
                     FIXTURE_ROOT / "source",
                     target,
-                    FIXTURE_ROOT,
+                    ROOT,
                     harnesses=[harness],
                     scope="user",
                     executable_finder=_finder(*executables),
@@ -121,7 +124,7 @@ class SetupContractTests(unittest.TestCase):
                 copies = [
                     operation["destination"]
                     for operation in plan["operations"]
-                    if operation["action"] == "copy"
+                    if operation["action"] == "copy" and operation["destination"] != ".the-loop/toolkit"
                 ]
                 self.assertEqual([destination], copies)
 
@@ -134,7 +137,7 @@ class SetupContractTests(unittest.TestCase):
             plan = plan_install(
                 FIXTURE_ROOT / "source",
                 target,
-                FIXTURE_ROOT,
+                ROOT,
                 harnesses=["codex"],
                 executable_finder=_finder("codex"),
             )
@@ -157,7 +160,7 @@ class SetupContractTests(unittest.TestCase):
                 plan_install(
                     FIXTURE_ROOT / "source",
                     target,
-                    FIXTURE_ROOT,
+                    ROOT,
                     harnesses=["codex"],
                     mode="link",
                     executable_finder=_finder("codex"),
@@ -170,7 +173,7 @@ class SetupContractTests(unittest.TestCase):
             plan = plan_install(
                 FIXTURE_ROOT / "source",
                 target,
-                FIXTURE_ROOT,
+                ROOT,
                 harnesses=["codex"],
                 mode="link",
                 prove_link_support=True,
@@ -190,7 +193,7 @@ class SetupContractTests(unittest.TestCase):
             plan = plan_install(
                 FIXTURE_ROOT / "source",
                 target,
-                FIXTURE_ROOT,
+                ROOT,
                 harnesses=["codex"],
                 executable_finder=_finder("codex"),
             )
@@ -210,7 +213,7 @@ class SetupContractTests(unittest.TestCase):
             plan = plan_install(
                 FIXTURE_ROOT / "source",
                 target,
-                FIXTURE_ROOT,
+                ROOT,
                 harnesses=["codex"],
                 executable_finder=_finder("codex"),
             )
@@ -225,7 +228,7 @@ class SetupContractTests(unittest.TestCase):
             plan = plan_install(
                 FIXTURE_ROOT / "source",
                 target,
-                FIXTURE_ROOT,
+                ROOT,
                 harnesses=["codex"],
                 executable_finder=_finder("codex"),
             )
@@ -246,7 +249,7 @@ class SetupContractTests(unittest.TestCase):
             plan = plan_install(
                 FIXTURE_ROOT / "source",
                 target,
-                FIXTURE_ROOT,
+                ROOT,
                 harnesses=["codex"],
                 executable_finder=_finder("codex"),
             )
@@ -276,7 +279,7 @@ class SetupContractTests(unittest.TestCase):
             plan = plan_install(
                 FIXTURE_ROOT / "source",
                 target,
-                FIXTURE_ROOT,
+                ROOT,
                 harnesses=["codex"],
                 executable_finder=_finder("codex"),
             )
@@ -306,7 +309,7 @@ class SetupContractTests(unittest.TestCase):
             plan = plan_install(
                 FIXTURE_ROOT / "source",
                 target,
-                FIXTURE_ROOT,
+                ROOT,
                 harnesses=["codex"],
                 executable_finder=_finder("codex"),
             )
@@ -330,7 +333,7 @@ class SetupContractTests(unittest.TestCase):
             plan = plan_install(
                 FIXTURE_ROOT / "source",
                 target,
-                FIXTURE_ROOT,
+                ROOT,
                 harnesses=["codex"],
                 executable_finder=_finder("codex"),
             )
@@ -365,7 +368,7 @@ class SetupContractTests(unittest.TestCase):
             plan = plan_install(
                 FIXTURE_ROOT / "source",
                 target,
-                FIXTURE_ROOT,
+                ROOT,
                 harnesses=["codex"],
                 executable_finder=_finder("codex"),
             )
@@ -373,6 +376,228 @@ class SetupContractTests(unittest.TestCase):
             serialized = json.dumps({"plan": plan, "receipt": receipt})
             self.assertNotIn("prompt", serialized.lower())
             self.assertNotIn("environment", serialized.lower())
+
+    def test_apply_rejects_project_root_replacement_without_writing_replacement(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory)
+            target = parent / "project"
+            target.mkdir()
+            displaced = parent / "original-project"
+            plan = plan_install(
+                FIXTURE_ROOT / "source",
+                target,
+                ROOT,
+                harnesses=["codex"],
+                executable_finder=_finder("codex"),
+            )
+            swapped = False
+
+            def swap_root(stage, operation):
+                nonlocal swapped
+                if stage == "before_operation" and not swapped:
+                    target.rename(displaced)
+                    target.mkdir()
+                    swapped = True
+
+            with self.assertRaisesRegex(SetupError, "identity|namespace|changed"):
+                apply_install(
+                    plan,
+                    actor="tester",
+                    source_version="0.1",
+                    fault_injector=swap_root,
+                )
+            self.assertEqual(list(target.iterdir()), [])
+            self.assertFalse((displaced / ".agents" / "skills" / "example" / "SKILL.md").exists())
+
+    def test_apply_rejects_intermediate_symlink_swap_without_external_write(self) -> None:
+        if not hasattr(os, "symlink"):
+            self.skipTest("symlinks unavailable")
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory)
+            target = parent / "project"
+            target.mkdir()
+            external = parent / "external"
+            (external / "skills").mkdir(parents=True)
+            parked = target / ".agents-parked"
+            plan = plan_install(
+                FIXTURE_ROOT / "source",
+                target,
+                ROOT,
+                harnesses=["codex"],
+                executable_finder=_finder("codex"),
+            )
+            swapped = False
+
+            def swap_intermediate(stage, operation):
+                nonlocal swapped
+                if (
+                    stage == "before_operation"
+                    and operation["destination"] == ".agents/skills/example"
+                    and not swapped
+                ):
+                    (target / ".agents").rename(parked)
+                    (target / ".agents").symlink_to(external, target_is_directory=True)
+                    swapped = True
+
+            with self.assertRaisesRegex(SetupError, "symlink|namespace|changed|rollback_incomplete"):
+                apply_install(
+                    plan,
+                    actor="tester",
+                    source_version="0.1",
+                    fault_injector=swap_intermediate,
+                )
+            self.assertEqual(list((external / "skills").iterdir()), [])
+
+    def test_apply_rechecks_prior_destination_namespaces_before_later_operations(self) -> None:
+        if not hasattr(os, "symlink"):
+            self.skipTest("symlinks unavailable")
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory)
+            target = parent / "project"
+            target.mkdir()
+            external = parent / "external"
+            (external / "skills").mkdir(parents=True)
+            parked = target / ".agents-parked"
+            plan = plan_install(
+                FIXTURE_ROOT / "source",
+                target,
+                ROOT,
+                harnesses=["codex"],
+                executable_finder=_finder("codex"),
+            )
+            last_copy = [operation for operation in plan["operations"] if operation["action"] == "copy"][-1]
+
+            def swap_prior_namespace(stage, operation):
+                if stage == "before_operation" and operation is last_copy:
+                    (target / ".agents").rename(parked)
+                    (target / ".agents").symlink_to(external, target_is_directory=True)
+
+            with self.assertRaisesRegex(SetupError, "namespace|symlink|rollback_incomplete"):
+                apply_install(
+                    plan,
+                    actor="tester",
+                    source_version="0.1",
+                    fault_injector=swap_prior_namespace,
+                )
+            self.assertEqual(list((external / "skills").iterdir()), [])
+            self.assertFalse((target / ".the-loop" / "installs").exists())
+
+    def test_failed_apply_preserves_concurrent_change_and_reports_rollback_incomplete(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "project"
+            target.mkdir()
+            plan = plan_install(
+                FIXTURE_ROOT / "source",
+                target,
+                ROOT,
+                harnesses=["codex"],
+                executable_finder=_finder("codex"),
+            )
+            marker = target / ".agents" / "skills" / "example" / "user-created.txt"
+
+            def change_then_fail(stage, operation):
+                if stage == "after_operation" and operation["destination"] == ".agents/skills/example":
+                    marker.write_text("concurrent user content\n", encoding="utf-8")
+                    raise RuntimeError("synthetic interruption")
+
+            with self.assertRaisesRegex(SetupError, r"rollback_incomplete.*\.agents/skills/example"):
+                apply_install(
+                    plan,
+                    actor="tester",
+                    source_version="0.1",
+                    fault_injector=change_then_fail,
+                )
+            self.assertEqual(marker.read_text(encoding="utf-8"), "concurrent user content\n")
+
+    def test_applied_install_contains_offline_toolkit_and_runs_without_source(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            temporary = Path(directory)
+            source = temporary / "source-checkout"
+            shutil.copytree(
+                ROOT,
+                source,
+                ignore=shutil.ignore_patterns(".git", "__pycache__", ".the-loop"),
+            )
+            target = temporary / "project"
+            target.mkdir()
+            plan = plan_install(
+                source,
+                target,
+                source,
+                harnesses=["codex"],
+                executable_finder=_finder("codex"),
+            )
+            receipt = apply_install(plan, actor="tester", source_version="0.1")
+            toolkit = target / ".the-loop" / "toolkit"
+            required = (
+                ".agents/skills/the-loop-setup/SKILL.md",
+                ".agents/skills/the-loop-doctor/SKILL.md",
+                "adapters/codex/adapter.json",
+                "protocols/stage-contracts.md",
+                "schemas/config.schema.json",
+                "scripts/the_loop_setup.py",
+                "scripts/the_loop_doctor.py",
+                "scripts/run_conformance.py",
+                "src/the_loop/setup.py",
+                "src/the_loop/doctor.py",
+                "src/the_loop/validation.py",
+                "LICENSE",
+            )
+            self.assertEqual([relative for relative in required if not (toolkit / relative).is_file()], [])
+            toolkit_operation = next(
+                operation for operation in receipt["operations"] if operation["destination"] == ".the-loop/toolkit"
+            )
+            self.assertEqual(toolkit_operation["rollback_action"], "remove_if_unchanged")
+            source.rename(temporary / "source-unavailable")
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(toolkit / "scripts" / "the_loop_doctor.py"),
+                    "--repository-root",
+                    str(toolkit),
+                    "--project-root",
+                    str(target),
+                    "--json",
+                ],
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=10,
+            )
+            self.assertIn(completed.returncode, {0, 1}, completed.stderr)
+            report = json.loads(completed.stdout)
+            self.assertIn(report["overall_status"], {"ready", "warning"})
+            fake_bin = temporary / "bin"
+            fake_bin.mkdir()
+            fake_codex = fake_bin / "codex"
+            fake_codex.write_text("#!/bin/sh\nexit 0\n", encoding="utf-8")
+            fake_codex.chmod(0o755)
+            second_target = temporary / "second-project"
+            second_target.mkdir()
+            environment = dict(os.environ)
+            environment["PATH"] = str(fake_bin) + os.pathsep + environment.get("PATH", "")
+            dry_run = subprocess.run(
+                [
+                    sys.executable,
+                    str(toolkit / "scripts" / "the_loop_setup.py"),
+                    "--target-root",
+                    str(second_target),
+                    "--harness",
+                    "codex",
+                    "--json",
+                ],
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=10,
+                env=environment,
+            )
+            self.assertEqual(dry_run.returncode, 0, dry_run.stderr)
+            second_plan = json.loads(dry_run.stdout)
+            self.assertEqual(Path(second_plan["target_root"]), second_target.resolve())
+            self.assertIn(".the-loop/toolkit", [operation["destination"] for operation in second_plan["operations"]])
 
 
 if __name__ == "__main__":
