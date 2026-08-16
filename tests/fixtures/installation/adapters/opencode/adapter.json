@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "harness": "opencode",
+  "display_name": "OpenCode",
+  "executables": ["opencode"],
+  "project_skill_roots": [".agents/skills", ".opencode/skills"],
+  "user_skill_roots": ["$HOME/.config/opencode/skills", "$HOME/.agents/skills", "$HOME/.claude/skills"],
+  "explicit_invocation": {"kind": "skill_tool"},
+  "implicit_invocation": {"kind": "description_match"},
+  "permission_model": {"kind": "host_managed"},
+  "delegation": {"kind": "optional"},
+  "fallback": {"kind": "sequential"}
+}
