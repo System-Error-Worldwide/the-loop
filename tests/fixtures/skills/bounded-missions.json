@@ -1,0 +1,25 @@
+{
+  "schema_version": "1.0",
+  "missions": [
+    {
+      "id": "synthetic-attended-code",
+      "mode": "loop",
+      "track": "code",
+      "asset": "synthetic-repository",
+      "installed_providers": [],
+      "stages": ["strategize", "spec-pack", "build", "test", "close"],
+      "expected_provider_source": "bundled",
+      "expected_status": "complete"
+    },
+    {
+      "id": "synthetic-bounded-noncode",
+      "mode": "auto",
+      "track": "noncode",
+      "asset": "synthetic-report",
+      "installed_providers": [],
+      "stages": ["strategize", "spec-pack", "build", "test", "resolve", "test", "close"],
+      "expected_provider_source": "bundled",
+      "expected_status": "complete"
+    }
+  ]
+}
