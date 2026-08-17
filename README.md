@@ -5,13 +5,11 @@ The official DeepSeek Harness is under isolated compatibility evaluation.
 
 Created and maintained by Moses Mawila through System Error Worldwide.
 
-> **Installable private pre-release candidate.** All 31 public `SKILL.md` packages,
-> Setup, Doctor, four thin adapters, shared protocols, schemas, the bounded runtime
-> kernel, examples and deterministic conformance suite are present. The packages do
-> not all have the same maturity: the bounded kernel is runtime-backed, Parallel also
-> has lane primitives, and the remaining expansion packages currently ship as portable
-> fallback contracts. The remote repository is private, there is no tag, and no
-> harness has a public support claim yet.
+> **The full 31-skill pack is included and installable.** Setup installs the skills
+> with their offline toolkit, Doctor verifies the resulting pack, and bundled
+> fallbacks keep every capability available when no qualified specialist is detected.
+> Harness support remains evidence-gated: installation compatibility alone is not
+> presented as proof of live behavior.
 
 ## What THE LOOP is
 
