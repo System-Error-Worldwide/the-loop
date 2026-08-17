@@ -89,6 +89,11 @@ Each operation records action (`copy`, `link`, `mkdir`, `skip`), source digest, 
 
 ## Harness status
 
+The current enum surface covers the four implemented adapters: `codex`,
+`claude_code`, `kimi_code` and `opencode`. Official DSH 0.1.0-rc.6 evaluation does
+not add a schema identifier; DSH remains adapter-pending until a separately tested
+schema and Setup/Doctor change is made.
+
 | Field | Type | Meaning |
 | --- | --- | --- |
 | `installed` | boolean | Executable or host integration found. |
@@ -98,7 +103,7 @@ Each operation records action (`copy`, `link`, `mkdir`, `skip`), source digest, 
 | `skill_roots` | path array | Roots inspected by Doctor. |
 | `collisions` | object array | Name, sources and winning precedence where knowable. |
 | `pack_status` | enum | `complete`, `incomplete`, `integrity_unverified`, or `unverified`; ready requires `complete`. |
-| `missing_skills` | string array | Required v0.1 package names not verified in the inspected roots. |
+| `missing_skills` | string array | Required 31-package candidate names not verified in the inspected roots. |
 | `pack_receipt_id` | UUID or null | Complete Setup receipt whose package and toolkit digests still match. |
 | `pack_digest` | digest or null | Path-free digest of the verified receipt-owned pack identity. |
 | `environment_digest` | digest or null | Doctor-derived harness, adapter, pack and runtime fingerprint supplied to an approved probe. |

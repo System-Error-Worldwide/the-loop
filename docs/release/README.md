@@ -1,21 +1,22 @@
-# Release handoff
+# Release evidence
 
-[`launch-manifest.json`](launch-manifest.json) is the machine-readable interface
-between the skill pack and the separately owned `systemerror.app/the-loop` landing
-page. It remains explicitly `pre_release` and all harness behavior remains
-blocked or unverified until the independent live matrix passes. The current dated
-result is recorded in
-[`live-compatibility-2026-08-16.md`](live-compatibility-2026-08-16.md): Setup and
-Doctor passed on four of four target harnesses, while valid live behavior passed on
-zero of four.
+This directory carries the machine-readable handoff between the private pre-release
+repository and the separately owned `systemerror.app/the-loop` landing page.
 
-Changing repository visibility, creating a tag or release, or deploying the landing
-page are separate outward actions that require explicit approval.
+The current candidate contains all 31 public skill packages. The release manifest
+separates the 12-package bounded kernel, the Parallel runtime preview and 18 included
+fallback contracts whose live behavior remains unverified. Four harness adapters are
+implemented. The official DeepSeek Harness is recorded separately as an evaluated
+candidate because THE LOOP does not yet provide its adapter, Setup path or Doctor path.
 
-The canonical GitHub repository is currently private. The launch manifest must be
-updated again after any later behavior rerun, tag, release or visibility change.
+- [`launch-manifest.json`](launch-manifest.json) is the current source of public release
+  facts and limitations.
+- [`live-compatibility-2026-08-16.md`](live-compatibility-2026-08-16.md) is frozen
+  historical evidence for commit `8029ff05fd2720627fe3137cbce01ad98150152d` and its
+  12-package, four-adapter matrix.
+- [`live-compatibility-2026-08-17.md`](live-compatibility-2026-08-17.md) records the
+  31-package baseline and the bounded DeepSeek Harness evaluation.
 
-The publish candidate is also gated by
-[`release-integrity.json`](../provenance/release-integrity.json), which pins every
-file copied into the offline toolkit. It does not replace the separate live
-four-harness evidence gate.
+Changing repository visibility, creating a tag or release, promoting an evaluated
+harness to the compatibility matrix, or deploying the landing page remains an explicit
+human gate.

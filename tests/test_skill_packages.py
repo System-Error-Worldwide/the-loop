@@ -9,6 +9,39 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SKILLS_ROOT = ROOT / ".agents" / "skills"
 FIXTURE = ROOT / "tests" / "fixtures" / "skills" / "bounded-missions.json"
+SHIPPING_SKILLS = {
+    "audit",
+    "bootstrap-agent-context",
+    "build",
+    "close",
+    "decision-log",
+    "feature-tracker",
+    "handoff",
+    "health-check",
+    "idea-to-brief",
+    "live-state-preflight",
+    "portfolio-review",
+    "pre-commit-review",
+    "resolve",
+    "retrospective",
+    "session-summary",
+    "spec-pack",
+    "stack-summary",
+    "strategize",
+    "test",
+    "the-loop",
+    "the-loop-auto",
+    "the-loop-autonomy",
+    "the-loop-cloud",
+    "the-loop-control",
+    "the-loop-doctor",
+    "the-loop-endless",
+    "the-loop-parallel",
+    "the-loop-setup",
+    "the-loop-skill-creator",
+    "the-loop-skill-planner",
+    "the-loop-watch",
+}
 
 SKILLS = {
     "the-loop": "orchestration.attended",
@@ -83,9 +116,31 @@ def frontmatter(text: str) -> tuple[dict[str, str], dict[str, str]]:
 
 
 class BundledFallbackPackageTests(unittest.TestCase):
-    def test_all_ten_packages_exist(self) -> None:
-        missing = [name for name in SKILLS if not (SKILLS_ROOT / name / "SKILL.md").is_file()]
+    def test_all_thirty_one_shipping_packages_exist(self) -> None:
+        missing = [
+            name for name in SHIPPING_SKILLS if not (SKILLS_ROOT / name / "SKILL.md").is_file()
+        ]
         self.assertEqual([], missing, f"missing bundled fallback packages: {missing}")
+        self.assertEqual(
+            SHIPPING_SKILLS,
+            {path.parent.name for path in SKILLS_ROOT.glob("*/SKILL.md")},
+        )
+
+    def test_all_shipping_frontmatter_is_portable(self) -> None:
+        for name in SHIPPING_SKILLS:
+            with self.subTest(skill=name):
+                text = (SKILLS_ROOT / name / "SKILL.md").read_text(encoding="utf-8")
+                top, metadata = frontmatter(text)
+                self.assertEqual(
+                    {"name", "description", "license", "compatibility", "metadata"},
+                    set(top),
+                )
+                self.assertEqual(name, top["name"])
+                self.assertTrue(top["description"])
+                self.assertEqual("MIT", top["license"])
+                self.assertEqual("Codex, Claude Code, Kimi Code and OpenCode", top["compatibility"])
+                self.assertTrue(metadata.get("the-loop-capability"))
+                self.assertEqual("0.1", metadata.get("the-loop-version"))
 
     def test_frontmatter_is_portable_and_complete(self) -> None:
         for name, capability in SKILLS.items():

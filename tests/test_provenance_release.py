@@ -15,18 +15,7 @@ ROW = re.compile(
     r"\| (?P<evidence>[^|]+) \|$"
 )
 EXPECTED = {
-    "the-loop-setup",
-    "the-loop-doctor",
-    "the-loop",
-    "the-loop-auto",
-    "strategize",
-    "spec-pack",
-    "build",
-    "test",
-    "resolve",
-    "health-check",
-    "audit",
-    "close",
+    path.parent.name for path in (ROOT / ".agents" / "skills").glob("*/SKILL.md")
 }
 
 
@@ -39,9 +28,9 @@ class ProvenanceReleaseContracts(unittest.TestCase):
                 rows.append(match.groupdict())
         return rows
 
-    def test_all_twelve_public_skill_hashes_match_the_shipping_files(self) -> None:
+    def test_all_public_skill_hashes_match_the_shipping_files(self) -> None:
         rows = self.records()
-        self.assertEqual(12, len(rows))
+        self.assertEqual(31, len(rows))
         self.assertEqual(EXPECTED, {row["skill"] for row in rows})
         for row in rows:
             with self.subTest(skill=row["skill"]):
@@ -71,11 +60,15 @@ class ProvenanceReleaseContracts(unittest.TestCase):
             with self.subTest(skill=skill):
                 text = (ROOT / ".agents" / "skills" / skill / "SKILL.md").read_text(encoding="utf-8")
                 self.assertIn(executable, text)
-        for skill in sorted(EXPECTED - set(management)):
+        for skill in sorted(EXPECTED - set(management) - {"the-loop-parallel"}):
             with self.subTest(skill=skill):
                 text = (ROOT / ".agents" / "skills" / skill / "SKILL.md").read_text(encoding="utf-8")
                 self.assertIn(statement, text)
-                self.assertIn("complete bundled fallback", text.casefold())
+        parallel = (ROOT / ".agents" / "skills" / "the-loop-parallel" / "SKILL.md").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("bounded", parallel.casefold())
+        self.assertIn("fallback", parallel.casefold())
 
 
 if __name__ == "__main__":

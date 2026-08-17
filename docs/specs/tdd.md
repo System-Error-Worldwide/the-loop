@@ -110,7 +110,7 @@ Doctor is read-only. It checks:
 - Runtime version.
 - Repository state directory safety.
 - Kill-switch visibility.
-- Complete 12-package identity bound to an unchanged Setup receipt, every installed
+- Complete 31-package identity bound to an unchanged Setup receipt, every installed
   package digest, and the full offline-toolkit digest.
 - Optional typed behavior evidence when a library caller permits harness execution;
   verified evidence must match the exact portable invocation capability and the
@@ -204,7 +204,11 @@ Every elevation requires typed confirmation. The grant is visibly warned at star
 
 ## Harness capability map
 
-The map below is grounded in current official documentation and must be rechecked at release time.
+The four-column map below describes implemented adapters and must be rechecked at
+release time. Their package paths are implemented, but approved live behavior remains
+unverified. Official DeepSeek Harness 0.1.0-rc.6 was evaluated separately: its
+`.agents/skills` discovery path is compatible, but THE LOOP has no DSH adapter,
+Setup/Doctor option or schema support, so DSH is not added to this normative map.
 
 | Capability | Codex | Claude Code | Kimi Code | OpenCode |
 | --- | --- | --- | --- | --- |
@@ -294,7 +298,10 @@ The external asset contract therefore requires a static v1 that preserves the ex
 
 ### Harness tests
 
-For each harness, test installation, discovery, explicit invocation, implicit trigger, permission denial, fallback behavior and truthful close. Tests run in isolated temporary repositories with synthetic skills.
+For each implemented adapter, test installation, discovery, explicit invocation,
+implicit trigger, permission denial, fallback behavior and truthful close. Tests run
+in isolated temporary repositories with synthetic skills. An evaluated harness cannot
+be added to this set until its adapter, Setup, Doctor and schema surfaces exist.
 
 ### Evidence required from the separate landing-page delivery
 
@@ -334,7 +341,7 @@ No product telemetry is sent. Landing-page analytics remain absent unless separa
 
 | Assumption | Class | Consequence if wrong |
 | --- | --- | --- |
-| Python 3.11 is an acceptable v0.1 prerequisite on macOS and Linux. | safe default | Replace utilities with a compiled binary or support an older Python after measurement. |
+| Python 3.9 or newer is an acceptable v0.1 prerequisite on macOS and Linux. | verified repository baseline | Reassess only if a supported environment cannot run the standard-library toolkit. |
 | `.agents/skills` is the best canonical repository root. | safe default | Change adapter manifests while retaining one canonical package source. |
 | JSON is acceptable for human-edited config. | safe default | Add a parser adapter without changing normative schemas. |
 | Claude-specific plugin packaging is optional in v0.1. | safe default | Add it as an adapter without changing portable skills. |

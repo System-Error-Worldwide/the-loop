@@ -5,7 +5,7 @@ release. Its architecture was informed by private operational experience, but pr
 source files are not a shipping source tree. The canonical remote currently remains
 private.
 
-Every skill and protocol must pass these gates before release:
+Every skill and protocol must pass these gates before a support claim or tagged release:
 
 1. Trace its local history and record a content checksum.
 2. Compare its purpose and text against known upstream sources.
@@ -32,7 +32,22 @@ Rewording does not remove licence obligations. A missing licence is a failed reu
 
 ## Current decision
 
-No audited private skill or helper is approved for verbatim inclusion. Existing candidates either require a clean System Error rewrite or remain excluded. The exact v0.1 set is recorded in [docs/provenance/v0.1-shipping-manifest.md](docs/provenance/v0.1-shipping-manifest.md).
+No audited private skill or helper is approved for verbatim inclusion. All 31 public
+packages are included in the current private, untagged candidate: 9 are
+`system-error-original`, 21 are clean `system-error-rewrite` implementations of
+capabilities with private System Error predecessors, and 1 is an
+`upstream-dependency` orchestration wrapper. The classification records lineage, not
+package maturity. The exact package, maturity and checksum set is recorded in
+[docs/provenance/v0.1-shipping-manifest.md](docs/provenance/v0.1-shipping-manifest.md)
+and [docs/provenance/skill-records.md](docs/provenance/skill-records.md).
+
+The 12-package bounded kernel is runtime-backed. `the-loop-parallel` additionally has
+repository-tested lane primitives. The other 18 expansion packages are portable
+fallback contracts whose live routing and harness behavior remain unverified. Four
+harness adapters are implemented, but none has approved live behavior evidence. The
+official DeepSeek Harness 0.1.0-rc.6 has been evaluated in isolation; THE LOOP does
+not yet provide its adapter or Setup/Doctor support, so it is not a fifth target or
+support claim.
 
 Original System Error work created for this repository is licensed under MIT. That repository licence does not change the rights or reuse status of audited private, vendor or community artifacts.
 

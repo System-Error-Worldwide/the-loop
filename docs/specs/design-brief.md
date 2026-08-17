@@ -155,7 +155,8 @@ The separate landing-page asset must receive only release-approved public facts.
 - Tagged version and release date.
 - Public repository and versioned quickstart URLs.
 - Target-harness compatibility matrix and dated evidence results.
-- Shipped, preview, planned and gated mode status.
+- Package inclusion plus runtime-backed, lane-primitives, contract-only, gated and
+  live-unverified mode status.
 - Relationship between Setup, Loop, Auto, Parallel, Cloud and Endless.
 - Installed-skill capability detection and bundled fallback explanation.
 - Autonomy levels, visible warnings and permanent invariants.
@@ -190,7 +191,10 @@ The release candidate should generate or maintain a public launch manifest conta
 - Primary and secondary CTA URLs.
 - Known limitations.
 
-The separate landing session may transform this data into page content but may not upgrade `PLANNED`, `UNVERIFIED` or `UNSUPPORTED` to a stronger claim.
+The separate landing session may transform this data into page content but may not
+upgrade `CONTRACT_ONLY`, `ADAPTER_PENDING`, `UNVERIFIED` or `UNSUPPORTED` to a stronger
+claim. DSH may be described only as evaluated until an adapter and Setup/Doctor
+support exist.
 
 ### Acceptance evidence returned by the separate session
 

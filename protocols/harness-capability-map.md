@@ -7,6 +7,11 @@ invocation, permission and delegation APIs. The canonical target harness identif
 are `codex`, `claude_code`, `kimi_code` and `opencode`. Capability and support claims
 are evidence-scoped and require release-time revalidation.
 
+The official DeepSeek Harness 0.1.0-rc.6 is an evaluated candidate only. Its
+documented `.agents/skills` root is format-compatible, but THE LOOP has no DSH
+adapter, Setup/Doctor option or schema identifier. DSH is therefore outside the
+canonical baseline and cannot receive a support claim from shared-root discovery.
+
 ## Baseline map
 
 | Capability | Codex | Claude Code | Kimi Code | OpenCode |
@@ -67,7 +72,7 @@ The baseline is a release input, not proof. A current compatibility record and h
 ### Capability status publication
 
 - **[CAP-040]** Public compatibility output MUST identify the release version, harness version or range, tested environment, evidence date and status basis.
-- **[CAP-041]** Public status MUST use truthful labels such as shipped, preview, planned or unverified and MUST NOT imply four-harness behavior when only package shape was inspected.
+- **[CAP-041]** Public status MUST distinguish installed package, runtime-backed, contract only, evaluated, adapter-pending and live-unverified states and MUST NOT imply multi-harness behavior when only package shape or a shared root was inspected.
 - **[CAP-042]** Capability-map changes MUST update their evidence references and MUST be reviewed for changes to host documentation, permission behavior and discovery paths.
 - **[CAP-043]** Raw skill prompt content, secrets and private environment identifiers MUST NOT be stored in the capability map or route record.
 

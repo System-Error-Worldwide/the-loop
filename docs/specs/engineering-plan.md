@@ -32,14 +32,14 @@ Status: complete locally.
 - 31-candidate inventory.
 - Per-skill Git, checksum, licence and privacy decisions.
 - Public and private boundary.
-- Exact v0.1 shipping manifest.
+- Exact 31-package pre-release shipping manifest.
 - Risks and human gates.
 
 ### Done gate
 
 - Exactly 31 candidate records exist.
 - No audited private file is approved for verbatim reuse.
-- Every v0.1 candidate has one public classification.
+- Every candidate has one public classification and current maturity label.
 - Private scanners return no unexplained finding.
 
 ### Evidence
@@ -63,7 +63,7 @@ Status: this pack.
 ### Done gate
 
 - All six documents exist.
-- Every v0.1 requirement maps to a build or verification slice.
+- Every candidate requirement maps to a build or verification slice.
 - Run state, authority, lease, evidence, issue and kill-switch behavior agree across documents.
 - The external landing page is represented by a launch-data contract, returned-evidence gate and separate deploy approval.
 - No product code or copied private skill enters the commit.
@@ -76,10 +76,11 @@ Status: this pack.
 
 ## Phase 2: v0.1 kernel
 
-Status: implemented and independently green in deterministic repository tests. The
-installable candidate is frozen at `8029ff05fd2720627fe3137cbce01ad98150152d` for the
-first live matrix; later documentation commits do not retroactively change that
-evidence target.
+Status: implemented and independently green in deterministic repository tests. Commit
+`8029ff05fd2720627fe3137cbce01ad98150152d` remains the frozen target of the first
+2026-08-16 live matrix; later package and documentation work does not retroactively
+change that historical evidence. The current private candidate contains all 31
+packages at the maturity levels recorded in the shipping manifest.
 
 Estimated agent execution time: 8 to 12 hours across focused slices, excluding user approval and external service waits.
 
@@ -206,7 +207,7 @@ Done gate:
 - Rollback removes only unchanged files owned by its receipt.
 - Namespace replacement and symlink races fail closed without deleting concurrent user changes.
 - Doctor distinguishes discovery, behavior, denial and unverified states.
-- Doctor cannot report ready without an unchanged receipt-bound 12-package/toolkit
+- Doctor cannot report ready without an unchanged receipt-bound 31-package/toolkit
   digest set, a harness version, and typed behavior evidence matching the exact
   portable invocation capability and Doctor-derived environment fingerprint.
 - All four harness paths match current official documentation.
@@ -254,6 +255,11 @@ OpenCode failed an isolated no-skill smoke test with `InstanceRef not provided`.
 
 Estimated agent execution time: 2 to 4 hours, excluding installation or authentication waits.
 
+The official DeepSeek Harness 0.1.0-rc.6 has separate keyless evaluation evidence,
+but it is not part of Phase 3: THE LOOP has no DSH adapter, Setup/Doctor option or
+schema support. Adding it requires a separately scoped integration slice before live
+support testing.
+
 For each harness:
 
 1. Create a clean temporary repository.
@@ -274,14 +280,15 @@ For each harness:
 - No open blocking issue remains.
 - A reviewer who did not author the implementation approves the evidence and provenance records.
 
-## Phase 4: full-product extensions
+## Phase 4: expansion packages and runtime integration
 
-These are committed product-roadmap components, not rejected candidates. The order is
-dependency-driven: each extension must use the v0.1 control plane and may not ship an
-alternate authority, lease, budget, evidence or kill-switch path. Implementation begins
-after Phase 3 supplies valid live behavior evidence for the kernel.
+Status: all 19 packages are included. Parallel has repository-tested lane primitives;
+the other 18 are portable contract-only packages with unverified live behavior. The
+remaining work is integration and evidence, not creation of missing `SKILL.md` files.
+Each extension must use the kernel control plane and may not ship an alternate
+authority, lease, budget, evidence or kill-switch path.
 
-Order is fixed:
+Runtime integration order is fixed:
 
 1. User-facing Autonomy and Control.
 2. Watch using the proven watcher contract.
@@ -310,7 +317,7 @@ The landing page is designed, implemented, tested and deployed in a separate ded
 
 The skill-pack release supplies:
 
-- A tagged release and public repository.
+- A tagged release and public repository; neither exists yet.
 - A versioned launch manifest with approved product facts, mode status, compatibility evidence, quickstart, provenance, licence, examples, limitations and CTA destinations.
 - A content requirements checklist covering WEB-001 through WEB-016.
 
@@ -340,7 +347,7 @@ Estimated agent execution time after approvals: 30 to 60 minutes.
 ### Release gate
 
 - Public licence confirmed and present.
-- All v0.1 files have full provenance records.
+- All 31 candidate packages and release files have full provenance records.
 - Four-harness evidence approved.
 - CI green and issue ledger empty.
 - README quickstart tested from a clean environment.

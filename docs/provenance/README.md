@@ -1,14 +1,16 @@
 # Phase 0 provenance audit
 
-Status: complete for architecture, source triage and the installable 12-package v0.1
-candidate. Live four-harness behavior evidence, independent approval, public
-visibility, tag/release and the separate landing-page delivery remain pending under
-[risks-and-gates.md](risks-and-gates.md).
+Status: complete for architecture, source triage and the installable 31-package
+private candidate. Live behavior evidence for the four implemented adapters,
+independent approval, public visibility, tag/release and the separate landing-page
+delivery remain pending under [risks-and-gates.md](risks-and-gates.md).
 
-This audit covers the 31-candidate full product roadmap and provenance universe,
-shared protocol material, installer helpers, hooks, scripts and harness documentation.
-The exact v0.1 shipping set is 12 packages; the other 19 candidates are planned
-extensions or excluded sources, not hidden v0.1 contents.
+This audit covers all 31 included packages and their provenance universe, shared
+protocol material, installer helpers, hooks, scripts and harness documentation. The
+maturity split is 12 runtime-backed kernel packages, `the-loop-parallel` with
+repository-tested lane primitives, and 18 portable contract-only packages whose live
+behavior is unverified. Inclusion does not imply equal runtime maturity or harness
+support.
 
 - [Candidate inventory](candidate-inventory.md)
 - [Per-skill records](skill-records.md)
@@ -19,7 +21,7 @@ extensions or excluded sources, not hidden v0.1 contents.
 
 ## Audit method
 
-The review inspected the current canonical revisions of two private System Error source vaults, their Git history, relevant helpers and the current official skill documentation for all four target harnesses. Exact-phrase web searches were used only as negative evidence and never treated as proof of authorship.
+The review inspected the current canonical revisions of two private System Error source vaults, their Git history, relevant helpers and the current official skill documentation for all four implemented target adapters. Exact-phrase web searches were used only as negative evidence and never treated as proof of authorship. The official DeepSeek Harness 0.1.0-rc.6 was separately evaluated, but no DSH adapter or Setup/Doctor support exists in this candidate.
 
 ## Confidence scale
 

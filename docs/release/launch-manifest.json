@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0",
+  "schema_version": "1.1",
   "product": {
     "name": "SYSTEM ERROR'S THE LOOP",
     "maintainer": "Moses Mawila through System Error Worldwide",
@@ -12,39 +12,106 @@
     "status": "pre_release",
     "repository_visibility": "private",
     "tag": null,
-    "tested_commit": "8029ff05fd2720627fe3137cbce01ad98150152d",
-    "evidence_date": "2026-08-16"
+    "code_baseline_commit": "bff48338e74c59b8b2a1c558a4ccd3a3d5f8bc5e",
+    "latest_live_matrix_commit": "8029ff05fd2720627fe3137cbce01ad98150152d",
+    "evidence_date": "2026-08-17"
+  },
+  "package_inventory": {
+    "total": 31,
+    "kernel_release_candidate": [
+      "the-loop-setup",
+      "the-loop-doctor",
+      "the-loop",
+      "the-loop-auto",
+      "strategize",
+      "spec-pack",
+      "build",
+      "test",
+      "resolve",
+      "health-check",
+      "audit",
+      "close"
+    ],
+    "runtime_preview": ["the-loop-parallel"],
+    "included_contract_unverified": [
+      "the-loop-skill-planner",
+      "the-loop-skill-creator",
+      "the-loop-autonomy",
+      "the-loop-control",
+      "the-loop-watch",
+      "the-loop-cloud",
+      "the-loop-endless",
+      "portfolio-review",
+      "live-state-preflight",
+      "idea-to-brief",
+      "stack-summary",
+      "bootstrap-agent-context",
+      "pre-commit-review",
+      "feature-tracker",
+      "decision-log",
+      "handoff",
+      "retrospective",
+      "session-summary"
+    ]
   },
   "available_modes": {
-    "the-loop": "release_candidate",
-    "the-loop-auto": "release_candidate"
+    "the-loop": "kernel_release_candidate",
+    "the-loop-auto": "kernel_release_candidate",
+    "the-loop-parallel": "runtime_preview",
+    "the-loop-cloud": "included_contract_unverified",
+    "the-loop-endless": "included_contract_unverified"
   },
-  "planned_extensions": {
-    "the-loop-autonomy": "awaiting live-proven authority and revocation controls",
-    "the-loop-control": "awaiting live-proven runtime control plane",
-    "the-loop-watch": "awaiting live proof of read-only non-owning observation",
-    "the-loop-parallel": "awaiting disjoint lane ownership and integration proof",
-    "the-loop-cloud": "awaiting a generic restricted-environment implementation",
-    "the-loop-skill-planner": "awaiting architecture for capability/selector planning with safe fallback semantics",
-    "the-loop-skill-creator": "awaiting adaptive skill routing integration with explicit self-modification approval",
-    "portfolio-review": "awaiting a generic implementation without private portfolio intelligence",
-    "live-state-preflight": "awaiting generic preflight provider probe and namespace-safe bootstrap",
-    "idea-to-brief": "awaiting clean public planning-to-brief fallback",
-    "stack-summary": "awaiting a clean public fallback independent of private stack helpers",
-    "bootstrap-agent-context": "awaiting public, configurable bootstrap context binding",
-    "pre-commit-review": "awaiting proven public-compatible repository-level review gate",
-    "feature-tracker": "awaiting a proven issue-tracker fallback with compact evidence schema",
-    "decision-log": "awaiting clean public decision-record protocol",
-    "handoff": "awaiting clean project handoff contract without private-memory assumptions",
-    "retrospective": "awaiting concise post-mission learning capture without private-repository assumptions",
-    "session-summary": "awaiting deterministic portable session handoff summary contract",
-    "the-loop-endless": "last; requires proven Auto, state, leases, heartbeat, permissions, budgets, kill switch and empty-queue behavior"
+  "packaged_controls": {
+    "the-loop-watch": "included_contract_unverified",
+    "the-loop-control": "included_contract_unverified",
+    "the-loop-autonomy": "included_contract_unverified"
   },
   "compatibility": {
-    "codex": {"version": "0.144.1", "installation_status": "passed", "discovery_status": "passed", "behavior_status": "blocked_isolation", "evidence": "docs/release/live-compatibility-2026-08-16.md"},
-    "claude_code": {"version": "2.1.221", "installation_status": "passed", "discovery_status": "passed", "behavior_status": "blocked_auth", "evidence": "docs/release/live-compatibility-2026-08-16.md"},
-    "kimi_code": {"version": "0.36.1", "installation_status": "passed", "discovery_status": "passed", "behavior_status": "blocked_auth", "evidence": "docs/release/live-compatibility-2026-08-16.md"},
-    "opencode": {"version": "1.15.1", "installation_status": "passed", "discovery_status": "passed", "behavior_status": "blocked_runtime", "evidence": "docs/release/live-compatibility-2026-08-16.md"}
+    "codex": {
+      "version": "0.144.1",
+      "adapter_status": "implemented",
+      "installation_status": "passed",
+      "discovery_status": "passed",
+      "behavior_status": "blocked_isolation",
+      "evidence": "docs/release/live-compatibility-2026-08-16.md"
+    },
+    "claude_code": {
+      "version": "2.1.221",
+      "adapter_status": "implemented",
+      "installation_status": "passed",
+      "discovery_status": "passed",
+      "behavior_status": "blocked_auth",
+      "evidence": "docs/release/live-compatibility-2026-08-16.md"
+    },
+    "kimi_code": {
+      "version": "0.36.1",
+      "adapter_status": "implemented",
+      "installation_status": "passed",
+      "discovery_status": "passed",
+      "behavior_status": "blocked_auth",
+      "evidence": "docs/release/live-compatibility-2026-08-16.md"
+    },
+    "opencode": {
+      "version": "1.15.1",
+      "adapter_status": "implemented",
+      "installation_status": "passed",
+      "discovery_status": "passed",
+      "behavior_status": "blocked_runtime",
+      "evidence": "docs/release/live-compatibility-2026-08-16.md"
+    }
+  },
+  "evaluated_harnesses": {
+    "deepseek_harness": {
+      "version": "0.1.0-rc.6",
+      "source": "https://github.com/deepseek-ai/deepseek-harness",
+      "adapter_status": "not_implemented",
+      "shared_skill_root_status": "passed_keyless",
+      "setup_status": "unsupported",
+      "doctor_status": "unsupported",
+      "behavior_status": "not_tested",
+      "provider_path": "openrouter_deepseek_model_pending",
+      "evidence": "docs/release/live-compatibility-2026-08-17.md"
+    }
   },
   "quickstart_url": "https://github.com/System-Error-Worldwide/the-loop#quickstart",
   "examples": {
@@ -58,8 +125,9 @@
   "limitations": [
     "This manifest is a pre-release handoff and does not claim live harness support.",
     "The canonical GitHub repository is private and untagged.",
-    "The bounded v0.1 install contains Loop and Auto; the remaining named modes and utilities are planned full-product extensions.",
-    "The frozen live matrix passed Setup and Doctor on four harnesses and valid live behavior on zero.",
-    "The landing page is delivered and deployed in a separate approved session."
+    "All 31 packages are included, but only the bounded kernel and Parallel primitives have executable runtime coverage.",
+    "The four implemented adapters passed installation and discovery but valid live behavior passed on zero.",
+    "DeepSeek Harness is an evaluated candidate without a THE LOOP adapter, Setup support, Doctor support or live behavior proof.",
+    "The canonical landing page currently returns 404 and remains separately deployment-gated."
   ]
 }

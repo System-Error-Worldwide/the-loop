@@ -82,6 +82,23 @@ class ReleaseAssetContracts(unittest.TestCase):
         self.assertEqual("private", manifest["release"]["repository_visibility"])
         self.assertIsNone(manifest["release"]["tag"])
         self.assertEqual(
+            "bff48338e74c59b8b2a1c558a4ccd3a3d5f8bc5e",
+            manifest["release"]["code_baseline_commit"],
+        )
+        inventory = manifest["package_inventory"]
+        groups = (
+            inventory["kernel_release_candidate"]
+            + inventory["runtime_preview"]
+            + inventory["included_contract_unverified"]
+        )
+        self.assertEqual(31, inventory["total"])
+        self.assertEqual(31, len(groups))
+        self.assertEqual(31, len(set(groups)))
+        self.assertEqual(
+            {path.parent.name for path in (ROOT / ".agents" / "skills").glob("*/SKILL.md")},
+            set(groups),
+        )
+        self.assertEqual(
             {"codex", "claude_code", "kimi_code", "opencode"},
             set(manifest["compatibility"]),
         )
@@ -96,30 +113,12 @@ class ReleaseAssetContracts(unittest.TestCase):
             },
             {key: entry["behavior_status"] for key, entry in manifest["compatibility"].items()},
         )
-        self.assertEqual(
-            {
-                "the-loop-autonomy",
-                "the-loop-control",
-                "the-loop-watch",
-                "the-loop-parallel",
-                "the-loop-cloud",
-                "the-loop-skill-planner",
-                "the-loop-skill-creator",
-                "portfolio-review",
-                "the-loop-endless",
-                "live-state-preflight",
-                "idea-to-brief",
-                "stack-summary",
-                "bootstrap-agent-context",
-                "pre-commit-review",
-                "feature-tracker",
-                "decision-log",
-                "handoff",
-                "retrospective",
-                "session-summary",
-            },
-            set(manifest["planned_extensions"]),
-        )
+        dsh = manifest["evaluated_harnesses"]["deepseek_harness"]
+        self.assertEqual("0.1.0-rc.6", dsh["version"])
+        self.assertEqual("not_implemented", dsh["adapter_status"])
+        self.assertEqual("unsupported", dsh["setup_status"])
+        self.assertEqual("unsupported", dsh["doctor_status"])
+        self.assertEqual("not_tested", dsh["behavior_status"])
 
     def test_release_asset_links_are_repository_relative_or_locked_https(self) -> None:
         manifest = self.load_json("docs/release/launch-manifest.json")

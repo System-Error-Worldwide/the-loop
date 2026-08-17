@@ -78,6 +78,10 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 
 ## Autonomous modes
 
+The Auto, Parallel, Cloud and Endless packages may be installed while their runtime
+eligibility differs. Package presence does not satisfy the verification requirements
+below.
+
 - **[AUT-120]** Bounded Auto MUST run one declared asset toward one done gate and MUST halt on any authority, budget, scope, evidence, retry, or human-decision gate.
 - **[AUT-121]** Auto MUST NOT select unrelated work, extend its own lifetime, or turn an empty queue into invented work.
 - **[AUT-122]** Parallel, remote, and continuous modes MUST remain unavailable until their additional ownership, isolation, heartbeat, budget, and kill-switch contracts are verified.
@@ -106,4 +110,4 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 | AUT-030–037 | [TDD run manager safety order](../docs/specs/tdd.md#run-manager), `FR-037` and `FR-038` in [PRD state requirements](../docs/specs/prd.md#state-ownership-and-recovery) |
 | AUT-040–047 | [Backend authority revocation contract](../docs/specs/backend-schema.md#audit-event) |
 | AUT-100–109 | [PRD FR-031 and FR-045](../docs/specs/prd.md#state-ownership-and-recovery), [`permanent_invariants`](../schemas/grant.schema.json), [Run lease lifecycle](run-state-leases.md#lease-lifecycle) |
-| AUT-120–123 | [PRD modes](../docs/specs/prd.md#modes-and-relationship), [App flow: Full-product extensions](../docs/specs/app-flow.md#full-product-extension-journeys) |
+| AUT-120–123 | [PRD modes](../docs/specs/prd.md#modes-and-relationship), [App flow: Expansion packages](../docs/specs/app-flow.md#expansion-package-journeys) |

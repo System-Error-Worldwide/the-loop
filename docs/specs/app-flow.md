@@ -133,12 +133,13 @@ No elevation can disable permanent invariants.
 6. Status and Close explain the last completed action and any uncertain state.
 7. Removing the switch does not resume work. The user explicitly resumes.
 
-## Full-product extension journeys
+## Expansion-package journeys
 
-These journeys remain part of THE LOOP's product architecture. They are sequenced
-after the bounded v0.1 kernel so they reuse its authority, state, evidence and recovery
-contracts. They are not canceled or treated as optional substitutes for the full
-product.
+These packages are included in the current candidate, but their journeys remain
+runtime-support targets rather than verified behavior claims. Parallel has
+repository-tested lane primitives; the other expansion packages are portable
+contracts only. All must reuse the kernel's authority, state, evidence and recovery
+contracts.
 
 ### Parallel
 
@@ -157,14 +158,16 @@ Endless reads an approved queue, selects one eligible item, creates a bounded Au
 This journey defines the product information contract for the separate landing-page session. It is not an implementation flow owned by the skill pack.
 
 1. Visitor arrives at `systemerror.app/the-loop` from search, GitHub, a shared link or System Error Software navigation.
-2. Hero states what THE LOOP does, who made it and the four target harnesses with
-   their current evidence-backed status.
+2. Hero states what THE LOOP does, who made it and the four implemented target
+   adapters with evidence-backed status. DSH may appear only as evaluated and
+   adapter-pending.
 3. Primary CTA opens the public repository or installation section.
 4. A compact “how it works” section explains Setup, Loop and Auto first, then labels Parallel, Cloud and Endless by release status.
 5. Capability section shows installed-specialist routing plus bundled fallbacks.
 6. Safety section shows autonomy levels, visible warnings and permanent invariants.
 7. Trust section explains provenance, licence status and upstream dependency handling.
-8. Compatibility matrix states shipped, preview, planned or unverified for every mode and harness.
+8. Compatibility matrix distinguishes installed package, runtime-backed, contract
+   only, evaluated, adapter-pending and live-unverified states.
 9. Examples show one code mission and one non-code mission.
 10. Quickstart links to the matching tagged repository documentation.
 11. Primary CTA repeats at the close. Secondary CTA links to the Agent Workflow Audit or consulting offer.

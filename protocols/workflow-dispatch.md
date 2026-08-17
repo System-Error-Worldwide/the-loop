@@ -2,7 +2,10 @@
 
 ## Purpose
 
-This protocol defines harness-neutral delegation, concurrency, and handoff. It does not require a particular subagent or workflow API. Parallel and remote modes remain capability-gated extensions; the v0.1 lifecycle can execute every contract serially with bundled providers.
+This protocol defines harness-neutral delegation, concurrency, and handoff. It does
+not require a particular subagent or workflow API. The Parallel and remote packages
+are included, but their runtime modes remain capability-gated; the bounded lifecycle
+can execute every contract serially with bundled providers.
 
 RFC 2119 terms are normative only in numbered requirements. Each normative requirement has one stable `DSP` identifier.
 
@@ -23,7 +26,7 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 - **[DSP-012]** Two workers MUST NOT mutate the same file, state projection, issue record, or undeclared shared resource concurrently.
 - **[DSP-013]** A harness that lacks verified concurrent delegation MUST use serial or inline execution and record the capability fallback.
 - **[DSP-014]** The bundled inline fallback MUST accept the same packet and return the same result envelope as a delegated provider.
-- **[DSP-015]** Deferred Parallel mode MUST NOT be simulated by unsafe background work; it SHALL remain unavailable until lane ownership and isolation contracts are implemented and verified.
+- **[DSP-015]** Parallel runtime mode MUST NOT be simulated by unsafe background work; the package and lane primitives SHALL NOT be presented as live-supported until lane ownership and isolation contracts are implemented and verified in the active harness.
 
 ## Ownership and liveness
 
@@ -59,7 +62,7 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 - **[DSP-054]** Repeated reopening after one attempted closure or three red Test/Resolve passes MUST halt for a human gate.
 - **[DSP-055]** A dispatcher MUST cancel or halt remaining workers when their outputs become invalidated by a kill switch, scope change, lost authority, failed shared prerequisite, or terminal parent state.
 
-## Boundaries for full-product extensions
+## Boundaries for expansion-package runtimes
 
 - **[DSP-060]** Parallel work MUST use disjoint lane ownership and a single declared integration owner before it can claim conformance.
 - **[DSP-061]** Remote or restricted work MUST use only material present and authorized in that environment and MUST hand off when required protected state is unavailable.
@@ -80,4 +83,4 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 | DSP-020–026 | [PRD FR-030–035](../docs/specs/prd.md#state-ownership-and-recovery) |
 | DSP-030–033 | [Backend audit event contract](../docs/specs/backend-schema.md#audit-event) |
 | DSP-040–055 | [App flow: Auto halt and Resume](../docs/specs/app-flow.md#auto-halt-conditions) |
-| DSP-060–063 | [App flow: Full-product extensions](../docs/specs/app-flow.md#full-product-extension-journeys) |
+| DSP-060–063 | [App flow: Expansion packages](../docs/specs/app-flow.md#expansion-package-journeys) |

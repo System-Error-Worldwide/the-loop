@@ -19,18 +19,37 @@ from .setup import SUPPORTED_HARNESSES, apply_install, load_adapter_manifests, p
 SCHEMA_VERSION = "1.0"
 REQUIRED_SKILLS = frozenset(
     {
-        "the-loop-setup",
-        "the-loop-doctor",
+        "audit",
+        "bootstrap-agent-context",
+        "build",
+        "close",
+        "decision-log",
+        "feature-tracker",
+        "handoff",
+        "health-check",
+        "idea-to-brief",
+        "live-state-preflight",
+        "portfolio-review",
+        "pre-commit-review",
+        "resolve",
+        "retrospective",
+        "session-summary",
+        "spec-pack",
+        "stack-summary",
+        "strategize",
+        "test",
         "the-loop",
         "the-loop-auto",
-        "strategize",
-        "spec-pack",
-        "build",
-        "test",
-        "resolve",
-        "health-check",
-        "audit",
-        "close",
+        "the-loop-autonomy",
+        "the-loop-cloud",
+        "the-loop-control",
+        "the-loop-setup",
+        "the-loop-doctor",
+        "the-loop-endless",
+        "the-loop-parallel",
+        "the-loop-skill-creator",
+        "the-loop-skill-planner",
+        "the-loop-watch",
     }
 )
 REQUIRED_SCENARIOS = frozenset(
@@ -216,13 +235,7 @@ def _source_skill_errors(repository: Path) -> list[str]:
         if path.is_file() and not path.is_symlink() and not path.parent.is_symlink()
     }
     missing = sorted(REQUIRED_SKILLS - found)
-    launch_manifest = repository / "docs" / "release" / "launch-manifest.json"
-    planned: set[str] = set()
-    try:
-        planned = set(json.loads(launch_manifest.read_text(encoding="utf-8")).get("planned_extensions", []))
-    except (OSError, json.JSONDecodeError, AttributeError, TypeError):
-        pass
-    extra = sorted(found - REQUIRED_SKILLS - planned)
+    extra = sorted(found - REQUIRED_SKILLS)
     errors: list[str] = []
     if missing:
         errors.append("missing required skills: " + ", ".join(missing))

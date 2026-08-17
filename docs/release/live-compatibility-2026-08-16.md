@@ -1,5 +1,9 @@
 # Live compatibility report: 2026-08-16
 
+> Historical frozen report for commit `8029ff05fd2720627fe3137cbce01ad98150152d`.
+> The current 31-package and DeepSeek Harness evaluation is recorded in the
+> [2026-08-17 update](live-compatibility-2026-08-17.md).
+
 ## Verdict
 
 Frozen candidate `8029ff05fd2720627fe3137cbce01ad98150152d` is installable but

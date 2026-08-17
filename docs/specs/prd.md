@@ -44,7 +44,7 @@ THE LOOP addresses these failures with portable stage contracts, capability rout
 
 ## Scope
 
-### v0.1 kernel
+### Current 31-package candidate
 
 - Setup and doctor.
 - Attended Loop and bounded Auto.
@@ -54,16 +54,13 @@ THE LOOP addresses these failures with portable stage contracts, capability rout
 - Thin adapters and conformance fixtures for all four harnesses.
 - Public provenance records and release checks.
 - A static canonical landing page specification and launch gate for `systemerror.app/the-loop`.
+- Nineteen expansion packages: Parallel independent lanes; generic Cloud; Watch,
+  Control and Autonomy; portfolio review; adaptive skill planning and creation;
+  grounding, quality and handoff utilities; and Endless supervision.
 
-### Full-product extensions after the bounded v0.1 kernel
-
-- Parallel independent lanes.
-- Generic remote and restricted Cloud mode.
-- Watch, Control and user-facing Autonomy configuration.
-- Portfolio review.
-- Adaptive skill planning and creation.
-- Grounding, quality and memory utilities outside the v0.1 kernel.
-- Endless supervision above proven bounded Auto.
+The maturity split is 12 runtime-backed bounded-kernel packages, Parallel with
+repository-tested lane primitives, and 18 portable contract-only packages. Inclusion
+does not imply runtime activation or verified live behavior.
 
 ### Out of scope
 
@@ -76,19 +73,18 @@ THE LOOP addresses these failures with portable stage contracts, capability rout
 
 ## Modes and relationship
 
-| Mode | Contract | v0.1 |
+| Mode | Contract | Current maturity |
 | --- | --- | --- |
-| Loop | Attended default. Confirms or surfaces each meaningful gate. | yes |
-| Auto | One bounded asset to green or a configured gate. | yes |
-| Parallel | Independent capability-gated lanes with explicit merge ownership. | later |
-| Cloud | Remote or restricted planning, drafting and handoff without private infrastructure assumptions. | later |
-| Endless | Supervisor that selects only approved work and runs bounded Auto missions. Empty queue means monitor, never invent. | later, safety-gated |
+| Loop | Attended default. Confirms or surfaces each meaningful gate. | runtime-backed package; live behavior unverified |
+| Auto | One bounded asset to green or a configured gate. | runtime-backed package; live behavior unverified |
+| Parallel | Independent capability-gated lanes with explicit merge ownership. | package plus repository-tested lane primitives; live behavior unverified |
+| Cloud | Remote or restricted planning, drafting and handoff without private infrastructure assumptions. | contract-only package |
+| Endless | Supervisor that selects only approved work and runs bounded Auto missions. Empty queue means monitor, never invent. | contract-only package; runtime activation safety-gated |
 
-Setup installs and configures the pack. Doctor proves what each harness can discover and execute. Control and Autonomy later expose runtime authority. Watch later observes state without taking ownership. Endless sits above these components and cannot bypass them.
-
-“After v0.1” is a dependency order, not a rejection. The kernel first proves the
-control plane every extension relies on. Phase 4 then adds these planned components in
-the order defined by the engineering plan.
+Setup installs and configures the pack. Doctor reports what each implemented adapter
+can discover and what remains unverified. The Control, Autonomy and Watch packages
+define their contracts without claiming integrated control-plane behavior. Endless
+sits above these components and cannot bypass them.
 
 ## Functional requirements
 
@@ -153,7 +149,7 @@ the order defined by the engineering plan.
 - **FR-060** Every shipped file must have a source classification, compatible licence and authoring history.
 - **FR-061** Release checks must scan tracked files and Git history for private data and credential patterns.
 - **FR-062** The project must publish candidate decisions and explain why imported skills are dependencies or exclusions.
-- **FR-063** Each release candidate must pass behavior tests in all four harnesses and an independent final review.
+- **FR-063** Each release candidate must pass behavior tests in all four implemented adapters and an independent final review.
 
 ## Landing page requirements
 
@@ -163,7 +159,8 @@ the order defined by the engineering plan.
   harnesses and show their current evidence-backed status. It must not call a harness
   supported until the release matrix passes for that harness.
 - **WEB-004** It must explain how Setup, Loop, Auto, Parallel, Cloud and Endless relate
-  and label planned extensions honestly without implying they were rejected.
+  and distinguish included packages, runtime-backed behavior, contract-only behavior
+  and safety-gated activation.
 - **WEB-005** It must explain installed-skill capability detection and bundled fallbacks.
 - **WEB-006** It must show autonomy levels, visible warnings and permanent invariants.
 - **WEB-007** It must include a provenance and licensing trust section plus a compatibility/status matrix.
@@ -194,7 +191,9 @@ the order defined by the engineering plan.
 
 ### Product readiness
 
-- All 12 v0.1 skills are discoverable in all four harnesses.
+- All 31 packages install through every implemented adapter.
+- The 12-package kernel passes the locked behavior matrix on every implemented adapter.
+- Parallel and each of the 18 contract-only packages remain explicitly unverified until their relevant live matrix passes.
 - Every conformance scenario produces the expected route, state transition, evidence and halt behavior.
 - Kill-switch latency is under one state-changing action: after detection, no further mutation occurs.
 - No open blocking issues or private-content scan findings at release candidate.
@@ -210,11 +209,13 @@ the order defined by the engineering plan.
 
 ## Acceptance gate
 
-The product may be called v0.1 only when the kernel, all protocols and all four
-adapters pass conformance tests with captured evidence, the issue ledger is empty,
-provenance review is approved and the public licence is present. The 2026-08-16
-candidate is installable but does not pass this gate: Setup and Doctor pass on four of
-four targets, while valid live behavior evidence passes on zero of four.
+The product may be called v0.1 only when the 31-package manifest, kernel, all protocols
+and all four implemented adapters pass their required release checks with captured
+evidence, the issue ledger is empty, provenance review is approved and the public
+licence is present. The frozen 2026-08-16 matrix remains historical evidence for the
+then-current kernel: Setup and Doctor passed on four of four targets, while valid live
+behavior evidence passed on zero of four. The current repository is private and
+untagged.
 
 The launch may be called complete only after the repository is public, the static landing page matches the released compatibility matrix, both CTAs are valid and production deployment has separate explicit approval.
 

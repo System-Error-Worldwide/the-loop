@@ -19,10 +19,14 @@ release status.
 - Canonical repository target: `System-Error-Worldwide/the-loop`.
 - Creator and maintainer attribution: Moses Mawila through System Error Worldwide.
 - Repository licence: MIT for original work created for this repository.
-- Target harnesses: Codex, Claude Code, Kimi Code and OpenCode. Support is claimed
-  only after the dated live matrix passes for that exact harness and environment.
+- Implemented adapter targets: Codex, Claude Code, Kimi Code and OpenCode. Support is
+  claimed only after the dated live matrix passes for that exact harness and
+  environment. Official DeepSeek Harness 0.1.0-rc.6 is evaluated only; it has no THE
+  LOOP adapter or Setup/Doctor support.
 - The product routes by capability and description, uses installed specialists when safe, reports real gaps and always retains complete bundled fallback stages.
-- v0.1 proves attended Loop and one bounded Auto mission.
+- The private candidate includes all 31 packages: 12 runtime-backed kernel packages,
+  Parallel with lane primitives, and 18 contract-only packages. Live harness behavior
+  remains unverified.
 - External actions, strategic expansion and self-modification require approval by default.
 - Canonical launch page: `https://systemerror.app/the-loop`.
 - Landing page deployment requires separate explicit approval.
