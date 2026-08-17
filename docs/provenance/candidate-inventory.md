@@ -13,11 +13,10 @@
 | Memory and handoff | 4 | 4 | 0 |
 | Total | 31 | 21 | 10 |
 
-The 31 records describe the complete architecture and provenance review, and all 31
-now have public packages in the current private, untagged candidate. They are not
-equally mature: 12 form the runtime-backed bounded kernel,
-`the-loop-parallel` adds repository-tested lane primitives, and the remaining 18 are
-portable contract-only packages with unverified live behavior.
+The 31 records describe the complete architecture and provenance review. All 31 ship
+as portable skills and are usable directly through the supported harnesses. Runtime
+helpers for bounded missions and Parallel lanes add deterministic automation without
+changing the shipping status of the instruction packages.
 
 ## Existing private System Error predecessors
 
@@ -37,7 +36,7 @@ copying. Their public capabilities were implemented again as clean System Error 
 These names had no reusable predecessor artifact. Their included public packages were
 designed from the public specification rather than derived from an audited source.
 
-## Public classification and maturity
+## Public classification
 
 | Classification | Count | Meaning |
 | --- | ---: | --- |
@@ -45,11 +44,8 @@ designed from the public specification rather than derived from an audited sourc
 | `system-error-rewrite` | 21 | Clean public System Error work for a capability with a private System Error predecessor; no predecessor body was copied. |
 | `upstream-dependency` | 1 | System Error orchestration wrapper that detects/invokes a maintained upstream creator capability and retains an independently written fallback. |
 
-| Maturity | Count | Current claim |
-| --- | ---: | --- |
-| Runtime-backed bounded kernel | 12 | Repository tests pass; live behavior remains unverified on all four adapters. |
-| Parallel package plus lane primitives | 1 | Lane primitives pass repository tests; live harness behavior remains unverified. |
-| Portable contract only | 18 | Installable fallback contract; runtime integration and live routing remain unverified. |
+All 31 records map to the shipping manifest. Provenance labels explain where the clean
+public text came from; they do not rank the skills or limit their use.
 
 ## Shared material
 

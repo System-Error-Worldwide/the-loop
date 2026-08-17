@@ -2,7 +2,7 @@
 name: close
 description: Reconcile authoritative run evidence and issues into a truthful terminal status, limitations and portable handoff. Use when a lifecycle run must end as complete, failed, cancelled or explicitly handed off with all evidence and open issues reconciled.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: lifecycle.close
   the-loop-version: "0.1"

@@ -2,7 +2,7 @@
 name: the-loop-control
 description: Runtime control plane for stop/recover/halt transitions and explicit escalation boundaries.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: control.runtime
   the-loop-version: "0.1"

@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "harness": "deepseek_harness",
+  "display_name": "DeepSeek Harness",
+  "executables": [
+    "dsh"
+  ],
+  "project_skill_roots": [
+    ".dsh/skills",
+    ".agents/skills"
+  ],
+  "user_skill_roots": [
+    "$DSH_HOME/skills",
+    "$DSH_AGENTS_HOME/skills"
+  ],
+  "explicit_invocation": {
+    "kind": "slash_command",
+    "template": "/<skill-name>",
+    "behavior_status": "unverified"
+  },
+  "implicit_invocation": {
+    "basis": "description",
+    "behavior_status": "unverified",
+    "requires_harness_probe": true
+  },
+  "permission_model": {
+    "surface": "DSH_PERMISSION_MODE and user approval",
+    "preserve_denial": true,
+    "allow_bypass": false,
+    "forbidden_flags": []
+  },
+  "delegation": {
+    "availability": "optional",
+    "on_unavailable": "sequential",
+    "behavior_status": "unverified"
+  },
+  "fallback": {
+    "provider": "bundled",
+    "mode": "sequential",
+    "preserve_authority": true,
+    "preserve_denial": true
+  }
+}

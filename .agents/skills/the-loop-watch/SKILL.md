@@ -2,7 +2,7 @@
 name: the-loop-watch
 description: Read-only visibility lane for shared signals, state, and issue visibility without taking locks or leases.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: watch.runtime
   the-loop-version: "0.1"

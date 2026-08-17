@@ -2,7 +2,7 @@
 name: build
 description: Implement one approved code slice or non-code drafting unit while preserving unrelated work and recording the smallest relevant checks. Use after strategy and required specifications are green and one bounded implementation unit is approved.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: lifecycle.build
   the-loop-version: "0.1"

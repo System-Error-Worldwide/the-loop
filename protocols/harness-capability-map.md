@@ -4,25 +4,20 @@
 
 This protocol separates portable product behavior from host-specific discovery,
 invocation, permission and delegation APIs. The canonical target harness identifiers
-are `codex`, `claude_code`, `kimi_code` and `opencode`. Capability and support claims
-are evidence-scoped and require release-time revalidation.
-
-The official DeepSeek Harness 0.1.0-rc.6 is an evaluated candidate only. Its
-documented `.agents/skills` root is format-compatible, but THE LOOP has no DSH
-adapter, Setup/Doctor option or schema identifier. DSH is therefore outside the
-canonical baseline and cannot receive a support claim from shared-root discovery.
+are `codex`, `claude_code`, `kimi_code`, `opencode` and `deepseek_harness`.
+Capability evidence is environment-scoped and revalidated for each release.
 
 ## Baseline map
 
-| Capability | Codex | Claude Code | Kimi Code | OpenCode |
-| --- | --- | --- | --- | --- |
-| Portable package | `<name>/SKILL.md` | `<name>/SKILL.md` | `<name>/SKILL.md` | `<name>/SKILL.md` |
-| Portable project root | `.agents/skills` | adapter to `.claude/skills` | `.agents/skills` | `.agents/skills` |
-| Native project root | `.agents/skills` | `.claude/skills` | `.kimi-code/skills` | `.opencode/skills` |
-| Portable metadata | `name`, `description` | portable subset through adapter | `name`, `description` | `name`, `description` |
-| Explicit invocation | skill selector or `$name` | `/name` | `/skill:name` | native `skill` tool |
-| Permission surface | sandbox and tool approval | allowed tools and permission mode | approval mode and available tools | pattern-based skill and tool permissions |
-| Delegation | optional, host capability | optional subagent capability | optional agent capability | optional task/subagent capability |
+| Capability | Codex | Claude Code | Kimi Code | OpenCode | DeepSeek Harness |
+| --- | --- | --- | --- | --- | --- |
+| Portable package | `<name>/SKILL.md` | `<name>/SKILL.md` | `<name>/SKILL.md` | `<name>/SKILL.md` | `<name>/SKILL.md` |
+| Portable project root | `.agents/skills` | adapter to `.claude/skills` | `.agents/skills` | `.agents/skills` | `.agents/skills` |
+| Native project root | `.agents/skills` | `.claude/skills` | `.kimi-code/skills` | `.opencode/skills` | `.dsh/skills` |
+| Portable metadata | `name`, `description` | portable subset through adapter | `name`, `description` | `name`, `description` | `name`, `description` |
+| Explicit invocation | skill selector or `$name` | `/name` | `/skill:name` | native `skill` tool | `/name` |
+| Permission surface | sandbox and tool approval | allowed tools and permission mode | approval mode and available tools | pattern-based skill and tool permissions | permission mode and workspace policy |
+| Delegation | optional, host capability | optional subagent capability | optional agent capability | optional task/subagent capability | optional host capability |
 
 The baseline is a release input, not proof. A current compatibility record and harness-probe evidence determine actual status.
 
@@ -35,7 +30,7 @@ The baseline is a release input, not proof. A current compatibility record and h
 - **[CAP-003]** A `verified` status MUST link current evidence for the exact harness, version, installation scope and probe behavior.
 - **[CAP-004]** A denied probe MUST remain `denied`, an unrun or inconclusive probe MUST remain `unverified`, and neither MUST be promoted to verified by documentation or name match.
 - **[CAP-005]** Skill roots and collisions MUST be reported as observed without silently changing precedence, overwriting a package or deleting a collision.
-- **[CAP-006]** Harness capability evidence MUST be rechecked for each release candidate before publishing compatibility claims.
+- **[CAP-006]** Harness capability evidence MUST be rechecked for each release before publishing compatibility claims.
 
 ### Portable package and adapter boundary
 
@@ -72,7 +67,7 @@ The baseline is a release input, not proof. A current compatibility record and h
 ### Capability status publication
 
 - **[CAP-040]** Public compatibility output MUST identify the release version, harness version or range, tested environment, evidence date and status basis.
-- **[CAP-041]** Public status MUST distinguish installed package, runtime-backed, contract only, evaluated, adapter-pending and live-unverified states and MUST NOT imply multi-harness behavior when only package shape or a shared root was inspected.
+- **[CAP-041]** Public status MUST distinguish portable skill support from optional toolkit automation and MUST NOT imply that one adapter's evidence covers a different harness or environment.
 - **[CAP-042]** Capability-map changes MUST update their evidence references and MUST be reviewed for changes to host documentation, permission behavior and discovery paths.
 - **[CAP-043]** Raw skill prompt content, secrets and private environment identifiers MUST NOT be stored in the capability map or route record.
 

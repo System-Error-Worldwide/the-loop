@@ -2,7 +2,7 @@
 name: decision-log
 description: Persist high-value architecture and scope decisions with rationale.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: quality.decision-log
   the-loop-version: "0.1"

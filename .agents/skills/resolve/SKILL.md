@@ -2,7 +2,7 @@
 name: resolve
 description: Apply the minimum repair for owned reproducible issues and return them to independent verification without closing them yourself. Use when Test has recorded a reproducible owned defect with a bounded repair gate.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: lifecycle.resolve
   the-loop-version: "0.1"

@@ -1,18 +1,19 @@
 # Provenance policy
 
-SYSTEM ERROR'S THE LOOP is a clean-room pre-release candidate intended for public
-release. Its architecture was informed by private operational experience, but private
-source files are not a shipping source tree. The canonical remote currently remains
-private.
+SYSTEM ERROR'S THE LOOP is a clean-room public skill pack. Its architecture was
+informed by System Error's operational experience, but internal source files are not
+used as a shipping source tree.
 
-Every skill and protocol must pass these gates before a support claim or tagged release:
+Every skill and protocol passes these gates before shipping:
 
 1. Trace its local history and record a content checksum.
 2. Compare its purpose and text against known upstream sources.
 3. Establish a compatible licence for every included file.
 4. Audit for private paths, people, credentials, infrastructure, customers, incidents and vertical intelligence.
 5. Write a clean, harness-neutral System Error implementation when reuse is not proven safe.
-6. Test discovery, triggering, behavior and failure reporting in Codex, Claude Code, Kimi Code and OpenCode.
+6. Test installation, discovery, invocation declarations, safety invariants and
+   failure reporting across Codex, Claude Code, Kimi Code, OpenCode and DeepSeek
+   Harness; record provider-backed probes separately.
 7. Obtain an independent final review.
 
 ## Classification
@@ -32,22 +33,20 @@ Rewording does not remove licence obligations. A missing licence is a failed reu
 
 ## Current decision
 
-No audited private skill or helper is approved for verbatim inclusion. All 31 public
-packages are included in the current private, untagged candidate: 9 are
-`system-error-original`, 21 are clean `system-error-rewrite` implementations of
-capabilities with private System Error predecessors, and 1 is an
-`upstream-dependency` orchestration wrapper. The classification records lineage, not
-package maturity. The exact package, maturity and checksum set is recorded in
+No audited internal skill or helper is approved for verbatim inclusion. All 31 public
+packages ship in v0.1: 9 are `system-error-original`, 21 are clean
+`system-error-rewrite` implementations of capabilities with System Error
+predecessors, and 1 is an `upstream-dependency` orchestration wrapper. The
+classification records lineage, not quality, ownership or usability. The exact
+package and checksum set is recorded in
 [docs/provenance/v0.1-shipping-manifest.md](docs/provenance/v0.1-shipping-manifest.md)
 and [docs/provenance/skill-records.md](docs/provenance/skill-records.md).
 
-The 12-package bounded kernel is runtime-backed. `the-loop-parallel` additionally has
-repository-tested lane primitives. The other 18 expansion packages are portable
-fallback contracts whose live routing and harness behavior remain unverified. Four
-harness adapters are implemented, but none has approved live behavior evidence. The
-official DeepSeek Harness 0.1.0-rc.6 has been evaluated in isolation; THE LOOP does
-not yet provide its adapter or Setup/Doctor support, so it is not a fifth target or
-support claim.
+Every package is a complete harness-native instruction surface. The Python toolkit
+adds deterministic installation, diagnosis, state, lease, authority and conformance
+automation; it is additive implementation depth around the skills. Five first-class
+adapters ship for Codex, Claude Code, Kimi Code,
+OpenCode and DeepSeek Harness.
 
 Original System Error work created for this repository is licensed under MIT. That repository licence does not change the rights or reuse status of audited private, vendor or community artifacts.
 

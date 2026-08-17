@@ -2,7 +2,7 @@
 name: strategize
 description: Turn a stated intent into the smallest bounded problem, outcome, scope and testable success gate before implementation begins. Use when an idea, request or detected issue needs a strategy packet before specifications or implementation.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: lifecycle.strategize
   the-loop-version: "0.1"

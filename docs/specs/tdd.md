@@ -70,7 +70,7 @@ It provides atomic file operations, process management, JSON parsing and cross-p
 - Node.js runtime: capable, but adds a package manager and dependency tree for a Markdown-first pack.
 - Shell-only implementation: too fragile for atomic JSON state, locking and portable error handling.
 - Hosted database: unnecessary for one local bounded mission and harmful to the no-account promise.
-- One universal harness command: the four harnesses do not expose identical invocation or permission APIs.
+- One universal harness command: the five harnesses do not expose identical invocation or permission APIs.
 - Vendored specialist library: conflicts with the provenance and upstream-dependency policy.
 
 ## Components
@@ -204,21 +204,18 @@ Every elevation requires typed confirmation. The grant is visibly warned at star
 
 ## Harness capability map
 
-The four-column map below describes implemented adapters and must be rechecked at
-release time. Their package paths are implemented, but approved live behavior remains
-unverified. Official DeepSeek Harness 0.1.0-rc.6 was evaluated separately: its
-`.agents/skills` discovery path is compatible, but THE LOOP has no DSH adapter,
-Setup/Doctor option or schema support, so DSH is not added to this normative map.
+The map below describes the five first-class adapters and is rechecked at release
+time.
 
-| Capability | Codex | Claude Code | Kimi Code | OpenCode |
-| --- | --- | --- | --- | --- |
-| Portable package | `<name>/SKILL.md` | `<name>/SKILL.md` | `<name>/SKILL.md` | `<name>/SKILL.md` |
-| Project portable root | `.agents/skills` | adapter to `.claude/skills` | `.agents/skills` | `.agents/skills` |
-| Native project root | `.agents/skills` | `.claude/skills` | `.kimi-code/skills` | `.opencode/skills` |
-| Required portable metadata | name, description | description; portable subset accepted | name and description recommended | name, description |
-| Explicit invocation | skill selector or `$name` | `/name` | `/skill:name` | native `skill` tool |
-| Permission concern | sandbox and tool approval | allowed tools and permission mode | approval mode and available tools | pattern-based `skill` and tool permissions |
-| Delegation | capability-gated, API varies by host | subagents and forked skills available | Agent or AgentSwarm when available | task/subagent support varies by agent config |
+| Capability | Codex | Claude Code | Kimi Code | OpenCode | DeepSeek Harness |
+| --- | --- | --- | --- | --- | --- |
+| Portable package | `<name>/SKILL.md` | `<name>/SKILL.md` | `<name>/SKILL.md` | `<name>/SKILL.md` | `<name>/SKILL.md` |
+| Project portable root | `.agents/skills` | adapter to `.claude/skills` | `.agents/skills` | `.agents/skills` | `.agents/skills` |
+| Native project root | `.agents/skills` | `.claude/skills` | `.kimi-code/skills` | `.opencode/skills` | `.dsh/skills` |
+| Required portable metadata | name, description | description; portable subset accepted | name and description recommended | name, description | name, description |
+| Explicit invocation | skill selector or `$name` | `/name` | `/skill:name` | native `skill` tool | `/name` |
+| Permission concern | sandbox and tool approval | allowed tools and permission mode | approval mode and available tools | pattern-based `skill` and tool permissions | permission mode and workspace policy |
+| Delegation | capability-gated, API varies by host | subagents and forked skills available | Agent or AgentSwarm when available | task/subagent support varies by agent config | capability-gated host tools |
 
 Primary sources:
 
@@ -226,6 +223,7 @@ Primary sources:
 - [Claude Code skills](https://code.claude.com/docs/en/skills)
 - [Kimi Code skills](https://github.com/MoonshotAI/kimi-code/blob/main/docs/en/customization/skills.md)
 - [OpenCode skills](https://opencode.ai/docs/skills)
+- [DeepSeek Harness skills](https://github.com/deepseek-ai/deepseek-harness)
 
 Adapters must treat optional delegation as a capability, not a requirement. Sequential execution is always a valid fallback.
 
@@ -238,7 +236,7 @@ Core files use only the common subset:
 name: test
 description: Prove an approved asset against its declared done gate and record surviving issues.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: lifecycle.test
   the-loop-version: "0.1"
@@ -264,15 +262,10 @@ Metadata values remain strings for cross-harness compatibility. Harness-only fie
 
 The landing page is an external launch asset, not part of the skill runtime or this repository's delivery ownership. Phase 1 stores its public-data contract and release gate. A separate dedicated session owns any website branch, implementation, tests, preview and deployment.
 
-Live-state check on 2026-08-16 established:
-
-- `/` returns 200 from Vercel.
-- The site is static HTML and CSS.
-- The title is “System Error Software — Products & digital systems”.
-- The CSP includes `script-src 'none'`.
-- `/the-loop` returns 404.
-
-The external asset contract therefore requires a static v1 that preserves the existing CSP unless a separate security review and explicit approval authorise a change. The skill pack supplies a versioned launch manifest with approved facts and evidence links. It does not prescribe page code.
+The external asset contract requires a static v1 that preserves the site's strict CSP
+unless a separate security review and explicit approval authorise a change. The skill
+pack supplies a versioned launch manifest with approved facts and evidence links. It
+does not prescribe page code.
 
 ## Testing strategy
 

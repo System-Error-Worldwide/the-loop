@@ -2,7 +2,7 @@
 name: the-loop-doctor
 description: Inspect THE LOOP harness installation, skill discovery, collisions, permissions, configuration, and optional behavior evidence without changing local state. Use when a user asks whether the pack is installed, discoverable, compatible, shadowed, safe to run, or why a harness cannot find it.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: setup.doctor
   the-loop-version: "0.1"

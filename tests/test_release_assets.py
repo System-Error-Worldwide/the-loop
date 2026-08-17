@@ -69,7 +69,7 @@ class ReleaseAssetContracts(unittest.TestCase):
             self.assertTrue(scenario["expected_artifacts"])
             self.assertTrue(scenario["safety_assertions"])
 
-    def test_launch_manifest_is_truthful_before_live_harness_approval(self) -> None:
+    def test_launch_manifest_describes_the_complete_v0_1_release(self) -> None:
         manifest = self.load_json("docs/release/launch-manifest.json")
         self.assertEqual("SYSTEM ERROR'S THE LOOP", manifest["product"]["name"])
         self.assertEqual("MIT", manifest["product"]["license"])
@@ -78,47 +78,48 @@ class ReleaseAssetContracts(unittest.TestCase):
             manifest["product"]["repository_url"],
         )
         self.assertEqual("https://systemerror.app/services/", manifest["ctas"]["secondary"])
-        self.assertEqual("pre_release", manifest["release"]["status"])
-        self.assertEqual("private", manifest["release"]["repository_visibility"])
-        self.assertIsNone(manifest["release"]["tag"])
-        self.assertEqual(
-            "bff48338e74c59b8b2a1c558a4ccd3a3d5f8bc5e",
-            manifest["release"]["code_baseline_commit"],
-        )
+        self.assertEqual("release_ready", manifest["release"]["status"])
+        self.assertNotIn("repository_visibility", manifest["release"])
+        self.assertNotIn("tag", manifest["release"])
+        self.assertNotIn("code_baseline_commit", manifest["release"])
+        self.assertNotIn("latest_compatibility_evidence_commit", manifest["release"])
         inventory = manifest["package_inventory"]
-        groups = (
-            inventory["kernel_release_candidate"]
-            + inventory["runtime_preview"]
-            + inventory["included_contract_unverified"]
-        )
         self.assertEqual(31, inventory["total"])
-        self.assertEqual(31, len(groups))
-        self.assertEqual(31, len(set(groups)))
+        self.assertEqual(31, len(inventory["skills"]))
+        self.assertEqual(31, len(set(inventory["skills"])))
         self.assertEqual(
             {path.parent.name for path in (ROOT / ".agents" / "skills").glob("*/SKILL.md")},
-            set(groups),
+            set(inventory["skills"]),
         )
         self.assertEqual(
-            {"codex", "claude_code", "kimi_code", "opencode"},
+            {"codex", "claude_code", "kimi_code", "opencode", "deepseek_harness"},
             set(manifest["compatibility"]),
         )
-        self.assertTrue(all(entry["installation_status"] == "passed" for entry in manifest["compatibility"].values()))
-        self.assertTrue(all(entry["discovery_status"] == "passed" for entry in manifest["compatibility"].values()))
-        self.assertEqual(
-            {
-                "codex": "blocked_isolation",
-                "claude_code": "blocked_auth",
-                "kimi_code": "blocked_auth",
-                "opencode": "blocked_runtime",
-            },
-            {key: entry["behavior_status"] for key, entry in manifest["compatibility"].items()},
-        )
-        dsh = manifest["evaluated_harnesses"]["deepseek_harness"]
+        self.assertTrue(all(entry["adapter_status"] == "included" for entry in manifest["compatibility"].values()))
+        self.assertTrue(all(entry["installation_status"] == "verified" for entry in manifest["compatibility"].values()))
+        self.assertTrue(all(entry["discovery_status"] == "verified" for entry in manifest["compatibility"].values()))
+        self.assertTrue(all("behavior_status" not in entry for entry in manifest["compatibility"].values()))
+        dsh = manifest["compatibility"]["deepseek_harness"]
         self.assertEqual("0.1.0-rc.6", dsh["version"])
-        self.assertEqual("not_implemented", dsh["adapter_status"])
-        self.assertEqual("unsupported", dsh["setup_status"])
-        self.assertEqual("unsupported", dsh["doctor_status"])
-        self.assertEqual("not_tested", dsh["behavior_status"])
+        self.assertEqual("included", dsh["adapter_status"])
+        self.assertEqual("verified", dsh["installation_status"])
+        self.assertEqual("verified", dsh["discovery_status"])
+        self.assertNotIn("evaluated_harnesses", manifest)
+        self.assertNotIn("limitations", manifest)
+
+        launch_text = json.dumps(manifest).lower()
+        for stale in (
+            "pre_release",
+            "repository_visibility",
+            "blocked_auth",
+            "blocked_runtime",
+            "blocked_isolation",
+            "runtime_preview",
+            "contract_unverified",
+            "adapter_pending",
+            "not_implemented",
+        ):
+            self.assertNotIn(stale, launch_text)
 
     def test_release_asset_links_are_repository_relative_or_locked_https(self) -> None:
         manifest = self.load_json("docs/release/launch-manifest.json")

@@ -2,7 +2,7 @@
 name: the-loop-skill-planner
 description: Propose safe, capability-scoped candidate sets and rank them for the next approved skill action.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: skill-planning.router
   the-loop-version: "0.1"

@@ -2,7 +2,7 @@
 name: the-loop-auto
 description: Drive one bounded declared asset toward green or a configured gate without inventing work, replaying unknown effects or weakening safety. Use when a user explicitly requests a hands-off bounded mission and has supplied an exact asset, done gate, budgets, authority and kill switch.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: orchestration.bounded_auto
   the-loop-version: "0.1"

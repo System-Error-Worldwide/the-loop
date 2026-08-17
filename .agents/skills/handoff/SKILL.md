@@ -2,7 +2,7 @@
 name: handoff
 description: Produce a safe session boundary with current state, evidence, and next actions.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: quality.handoff
   the-loop-version: "0.1"

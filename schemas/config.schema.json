@@ -24,7 +24,7 @@
     "telemetry": {"const": false},
     "harnesses": {
       "type": "object",
-      "propertyNames": {"enum": ["codex", "claude_code", "kimi_code", "opencode"]},
+      "propertyNames": {"enum": ["codex", "claude_code", "kimi_code", "opencode", "deepseek_harness"]},
       "additionalProperties": {"$ref": "common.schema.json#/$defs/harnessStatus"}
     }
   },

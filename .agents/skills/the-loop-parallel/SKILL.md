@@ -2,7 +2,7 @@
 name: the-loop-parallel
 description: Plan and run bounded parallel-lane work only when lanes are independent, integration ownership is explicit and every merged result is independently verified before parent mutation.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: orchestration.parallel
   the-loop-version: "0.1"

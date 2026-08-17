@@ -78,13 +78,12 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 
 ## Autonomous modes
 
-The Auto, Parallel, Cloud and Endless packages may be installed while their runtime
-eligibility differs. Package presence does not satisfy the verification requirements
-below.
+Auto, Parallel, Cloud and Endless all ship as portable skills. Their execution still
+obeys the verification requirements below.
 
 - **[AUT-120]** Bounded Auto MUST run one declared asset toward one done gate and MUST halt on any authority, budget, scope, evidence, retry, or human-decision gate.
 - **[AUT-121]** Auto MUST NOT select unrelated work, extend its own lifetime, or turn an empty queue into invented work.
-- **[AUT-122]** Parallel, remote, and continuous modes MUST remain unavailable until their additional ownership, isolation, heartbeat, budget, and kill-switch contracts are verified.
+- **[AUT-122]** Before dispatching parallel, remote, or continuous work, the active environment MUST verify the mode's additional ownership, isolation, heartbeat, budget, and kill-switch requirements; a missing capability MUST use the skill's safe sequential, handoff, or monitor fallback.
 - **[AUT-123]** A continuous supervisor MAY propose a skill or workflow improvement for repeated gaps, but it MUST NOT install or apply the proposal without a separate grant.
 
 ## Failure and halt behavior

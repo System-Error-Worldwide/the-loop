@@ -2,7 +2,7 @@
 name: the-loop-endless
 description: Supervisor mode that can pick safe bounded missions continuously without inventing new authority.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: runtime.endless
   the-loop-version: "0.1"

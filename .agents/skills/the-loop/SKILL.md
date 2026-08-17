@@ -2,7 +2,7 @@
 name: the-loop
 description: Run one attended evidence-led lifecycle with visible stage gates, qualified routing, bundled fallbacks and truthful close. Use when a user asks to take one code or non-code asset through strategy, specification, build, independent test, resolution and close with confirmation at meaningful gates.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: orchestration.attended
   the-loop-version: "0.1"

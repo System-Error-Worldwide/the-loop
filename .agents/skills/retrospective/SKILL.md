@@ -2,7 +2,7 @@
 name: retrospective
 description: Review what worked, what blocked progress, and what must change next.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: quality.retrospective
   the-loop-version: "0.1"

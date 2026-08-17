@@ -18,12 +18,13 @@ from .validation import ContractError, validate_record, validate_relative_path
 
 
 SCHEMA_VERSION = "1.0"
-SUPPORTED_HARNESSES = ("codex", "claude_code", "kimi_code", "opencode")
+SUPPORTED_HARNESSES = ("codex", "claude_code", "kimi_code", "opencode", "deepseek_harness")
 ADAPTER_DIRECTORIES = {
     "codex": "codex",
     "claude_code": "claude_code",
     "kimi_code": "kimi_code",
     "opencode": "opencode",
+    "deepseek_harness": "deepseek_harness",
 }
 REQUIRED_ADAPTER_KEYS = frozenset(
     {
@@ -307,6 +308,7 @@ def _toolkit_files(repository_root: Path) -> list[str]:
         "adapters/claude_code/adapter.json",
         "adapters/kimi_code/adapter.json",
         "adapters/opencode/adapter.json",
+        "adapters/deepseek_harness/adapter.json",
         "docs/provenance/release-integrity.json",
         "docs/specs/prd.md",
         "examples/code/README.md",
@@ -362,6 +364,8 @@ def _adapter_roots(manifest: Mapping[str, Any], scope: str) -> list[str]:
                 "$HOME/": "",
                 "$CODEX_HOME/": ".codex/",
                 "$KIMI_CODE_HOME/": ".kimi-code/",
+                "$DSH_HOME/": ".dsh/",
+                "$DSH_AGENTS_HOME/": ".agents/",
             }
             matched = next((prefix for prefix in prefixes if value.startswith(prefix)), None)
             if matched is None:

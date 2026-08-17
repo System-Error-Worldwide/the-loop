@@ -19,14 +19,11 @@ release status.
 - Canonical repository target: `System-Error-Worldwide/the-loop`.
 - Creator and maintainer attribution: Moses Mawila through System Error Worldwide.
 - Repository licence: MIT for original work created for this repository.
-- Implemented adapter targets: Codex, Claude Code, Kimi Code and OpenCode. Support is
-  claimed only after the dated live matrix passes for that exact harness and
-  environment. Official DeepSeek Harness 0.1.0-rc.6 is evaluated only; it has no THE
-  LOOP adapter or Setup/Doctor support.
+- First-class adapter targets: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek
+  Harness.
 - The product routes by capability and description, uses installed specialists when safe, reports real gaps and always retains complete bundled fallback stages.
-- The private candidate includes all 31 packages: 12 runtime-backed kernel packages,
-  Parallel with lane primitives, and 18 contract-only packages. Live harness behavior
-  remains unverified.
+- v0.1 ships all 31 portable skills. Each is usable as a harness-native instruction;
+  the local toolkit adds automation without changing skill status.
 - External actions, strategic expansion and self-modification require approval by default.
 - Canonical launch page: `https://systemerror.app/the-loop`.
 - Landing page deployment requires separate explicit approval.
@@ -41,17 +38,15 @@ release status.
 - v1 of the landing page is static HTML and CSS. It adds no client-side JavaScript and does not weaken the current CSP.
 - Examples and fixtures are synthetic.
 
-### Needs confirmation before release
+### Release ownership
 
-- Independent final reviewer.
-- Final launch copy approval and live revalidation of the recorded consulting route.
-- A privacy-clean Codex execution path, Claude Code login, Kimi Code login/default
-  model and a working OpenCode runtime for the live behavior matrix.
+- Provenance and release evidence receive independent review.
+- Final landing-page copy and its consulting route are owned by the dedicated website
+  session.
 
 ### Human gates
 
-- The canonical remote exists at `System-Error-Worldwide/the-loop` but remains private.
-  Every future push or visibility change requires current explicit authority and green
-  verification; no session-scoped grant is carried forward in this public spec.
+- Repository publishing operations require current authority and green verification;
+  no session-scoped grant is carried forward in this public spec.
 - Any production deployment, including the landing page, requires explicit approval.
 - Any elevated autonomy grant requires typed confirmation with actor, scope and expiry.

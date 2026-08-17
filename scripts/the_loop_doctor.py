@@ -49,6 +49,8 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--user-home", type=Path, default=Path.home())
     parser.add_argument("--codex-home", type=Path)
     parser.add_argument("--kimi-code-home", type=Path)
+    parser.add_argument("--dsh-home", type=Path)
+    parser.add_argument("--dsh-agents-home", type=Path)
     parser.add_argument("--json", action="store_true")
     return parser
 
@@ -70,6 +72,12 @@ def main(argv: list[str] | None = None) -> int:
         for key, value in {
             "CODEX_HOME": str(args.codex_home) if args.codex_home else os.environ.get("CODEX_HOME"),
             "KIMI_CODE_HOME": str(args.kimi_code_home) if args.kimi_code_home else os.environ.get("KIMI_CODE_HOME"),
+            "DSH_HOME": str(args.dsh_home) if args.dsh_home else os.environ.get("DSH_HOME"),
+            "DSH_AGENTS_HOME": (
+                str(args.dsh_agents_home)
+                if args.dsh_agents_home
+                else os.environ.get("DSH_AGENTS_HOME")
+            ),
         }.items()
         if value
     }

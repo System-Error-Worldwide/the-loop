@@ -2,7 +2,7 @@
 name: pre-commit-review
 description: Static check gate before risky write operations.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: quality.pre-commit-review
   the-loop-version: "0.1"

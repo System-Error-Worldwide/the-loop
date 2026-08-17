@@ -2,7 +2,7 @@
 name: audit
 description: Compare declared contracts with observed artifacts or behavior, preserve coverage limits and feed evidence-backed drift into the lifecycle. Use for proactive drift, compliance, provenance, release-readiness or contract audits where findings must survive refutation.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: feeder.audit
   the-loop-version: "0.1"

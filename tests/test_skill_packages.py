@@ -138,7 +138,7 @@ class BundledFallbackPackageTests(unittest.TestCase):
                 self.assertEqual(name, top["name"])
                 self.assertTrue(top["description"])
                 self.assertEqual("MIT", top["license"])
-                self.assertEqual("Codex, Claude Code, Kimi Code and OpenCode", top["compatibility"])
+                self.assertEqual("Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness", top["compatibility"])
                 self.assertTrue(metadata.get("the-loop-capability"))
                 self.assertEqual("0.1", metadata.get("the-loop-version"))
 
@@ -154,7 +154,7 @@ class BundledFallbackPackageTests(unittest.TestCase):
                 self.assertEqual(name, top["name"])
                 self.assertTrue(top["description"])
                 self.assertEqual("MIT", top["license"])
-                self.assertEqual("Codex, Claude Code, Kimi Code and OpenCode", top["compatibility"])
+                self.assertEqual("Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness", top["compatibility"])
                 self.assertEqual(
                     {"the-loop-capability": capability, "the-loop-version": "0.1"},
                     metadata,

@@ -37,7 +37,7 @@ class RepositoryValidationTests(unittest.TestCase):
 name: test-skill
 description: Synthetic test skill.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 ---
 
 # Test skill
@@ -89,7 +89,7 @@ compatibility: Codex, Claude Code, Kimi Code and OpenCode
             """---
 name: test-skill
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 ---
 """
         )
@@ -105,7 +105,7 @@ compatibility: Codex, Claude Code, Kimi Code and OpenCode
 name: test-skill
 description: Synthetic test skill.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 permissions: unrestricted
 ---
 """

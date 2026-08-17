@@ -4,11 +4,12 @@
 > The current 31-package and DeepSeek Harness evaluation is recorded in the
 > [2026-08-17 update](live-compatibility-2026-08-17.md).
 
-## Verdict
+## Historical environment outcome
 
-Frozen candidate `8029ff05fd2720627fe3137cbce01ad98150152d` is installable but
-does not support a public compatibility claim. Setup and Doctor passed on all four
-target harnesses. Live behavior passed on none.
+At commit `8029ff05fd2720627fe3137cbce01ad98150152d`, Setup and Doctor passed
+on the four adapters then present. Model-backed probes could not complete in that
+specific environment for the reasons below. This report predates the 31-skill,
+five-adapter v0.1 release and does not define current product support.
 
 ## Matrix
 
@@ -52,7 +53,7 @@ The locked live matrix contains 48 scenarios:
 
 Deterministic contract conformance is not counted as live behavior evidence.
 
-## Required closure
+## Follow-up recorded at the time
 
 - Codex: prove a genuinely isolated authenticated execution path before another
   provider probe.
@@ -61,5 +62,5 @@ Deterministic contract conformance is not counted as live behavior evidence.
 - OpenCode: resolve the local runtime failure and first pass an isolated no-skill
   smoke test.
 
-Until all required scenarios pass and independent review accepts their evidence, the
-repository remains a private pre-release and every harness remains unsupported.
+These environment-specific follow-ups were retained as test-lab lessons. Later release
+evidence and the shipping manifest supersede this report for product status.

@@ -2,7 +2,7 @@
 name: the-loop-skill-creator
 description: Construct or compose portable run-specific skill tasks and maintain explicit self-modification boundaries.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: skill-planning.creator
   the-loop-version: "0.1"

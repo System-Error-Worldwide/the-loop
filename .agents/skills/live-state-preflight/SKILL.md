@@ -2,7 +2,7 @@
 name: live-state-preflight
 description: Validate run-ready namespace, namespace ownership, and namespace-safe defaults before execution.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: state.preflight
   the-loop-version: "0.1"

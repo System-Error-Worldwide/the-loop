@@ -6,7 +6,7 @@ The repository may contain:
 
 - Harness-neutral workflow contracts and schemas.
 - Clean System Error skill implementations.
-- Thin installation and invocation adapters for the four named harnesses.
+- Thin installation and invocation adapters for the five named harnesses.
 - Synthetic examples that do not identify a person, customer, private project or incident.
 - Local run state, lease, issue, evidence and audit formats.
 - Tests, fixtures and release documentation.

@@ -1,67 +1,70 @@
 # SYSTEM ERROR'S THE LOOP
 
-An autonomous agentic skill pack for Codex, Claude Code, Kimi Code, and OpenCode.
-The official DeepSeek Harness is under isolated compatibility evaluation.
+An autonomous agentic skill pack for Codex, Claude Code, Kimi Code, OpenCode and
+DeepSeek Harness.
 
 Created and maintained by Moses Mawila through System Error Worldwide.
 
-> **The full 31-skill pack is included and installable.** Setup installs the skills
-> with their offline toolkit, Doctor verifies the resulting pack, and bundled
-> fallbacks keep every capability available when no qualified specialist is detected.
-> Harness support remains evidence-gated: installation compatibility alone is not
-> presented as proof of live behavior.
+THE LOOP gives an agent a complete path from a rough objective to tested work and a
+clean handoff. It installs 31 portable skills, detects qualified specialists already
+available in the host harness, and keeps a bundled System Error fallback for every
+capability in the pack.
 
-## What THE LOOP is
+## What ships in v0.1
 
-THE LOOP is designed to run one evidence-led lifecycle:
+- All 31 portable `SKILL.md` packages.
+- Attended, Auto, Parallel, Cloud and Endless operating modes.
+- Setup, Doctor, Watch, Control, Autonomy, skill planning and skill creation.
+- Strategize, Spec-pack, Build, Test and Resolve lifecycle stages.
+- Health-check, Audit and Portfolio Review feeders.
+- Grounding, quality, memory, handoff and Close utilities.
+- Five thin harness adapters that preserve the host's permission decisions.
+- An offline toolkit with the protocols, schemas and Python runtime used by the pack.
+- Synthetic code and non-code examples plus a deterministic five-harness contract suite.
+
+The exact package list and provenance class for every skill are recorded in the
+[v0.1 shipping manifest](docs/provenance/v0.1-shipping-manifest.md).
+
+## How it works
+
+The attended lifecycle is:
 
 `Strategize -> Spec-pack -> Build -> Test <-> Resolve -> Close`
 
-It detects installed skills by capability and behavior evidence, selects a qualified
-specialist when one is available, and retains a bundled fallback for every packaged
-capability. The bounded Auto mode drives one declared asset to green or to a visible
-gate. Parallel, Cloud, Endless, Watch, Control, Autonomy, skill planning and creation,
-portfolio review, grounding, quality and handoff utilities are included in this
-candidate. Expansion packages must reuse, not bypass, the kernel's state, lease,
-authority, evidence, budget and kill-switch contracts.
+THE LOOP routes each stage by capability and recorded evidence. If a compatible,
+verified specialist is installed, the harness can use it. Otherwise the bundled
+fallback executes the same stage contract. Code and non-code work use the same issue,
+evidence, authority and close rules.
 
-## Current repository contents
+The modes change how work is supervised:
 
-- A completed [provenance and public-boundary review](PROVENANCE.md).
-- The six-document [product specification pack](docs/specs/README.md).
-- Ten normative [shared protocol contracts](protocols/README.md).
-- Versioned JSON Schemas for config, run state, leases, grants, routing, evidence,
-  issues, install receipts, and audit events.
-- A Python standard-library runtime kernel for validated state, bounded missions,
-  leases, authority, budgets, recovery, and append-only audit history.
-- Thirty-one portable `SKILL.md` packages with bundled fallback contracts.
-- Safe Setup and read-only Doctor commands with receipts and rollback.
-- Four thin harness adapters that preserve host permission denial.
-- Synthetic code and non-code examples plus a 4-by-12 contract matrix.
-- Adversarial unit and contract tests for the current release candidate.
+| Mode | Use it for |
+| --- | --- |
+| `the-loop` | One attended lifecycle with visible stage gates. |
+| `the-loop-auto` | One declared asset driven to green or to a configured gate. |
+| `the-loop-parallel` | Independent lanes with explicit ownership and one integration join. |
+| `the-loop-cloud` | Planning, drafting and handoff in a restricted or remote environment. |
+| `the-loop-endless` | Repeated bounded Auto missions selected from an approved queue. |
 
-The exact 31-package candidate and its maturity classes are listed in the
-[shipping manifest](docs/provenance/v0.1-shipping-manifest.md).
+Endless never invents work when its queue is empty. Auto and Endless do not weaken
+approval, budget, lease, evidence or kill-switch requirements.
 
 ## Quickstart
 
-Prerequisites: Python 3.9 or newer and at least one target harness executable.
-The default installation is repository-local and uses copies. It installs all 31
-skills plus a namespaced offline toolkit at `.the-loop/toolkit`, so the target does
-not depend on the checkout or a network connection after installation.
+Prerequisites: Python 3.9 or newer and at least one supported harness executable.
 
 ```sh
 git clone https://github.com/System-Error-Worldwide/the-loop.git
 cd the-loop
 mkdir -p /path/to/project
 
-# 1. Read-only plan. Choose codex, claude_code, kimi_code, or opencode.
+# 1. Inspect the installation plan. This does not write to the target.
 python3 scripts/the_loop_setup.py \
   --target-root /path/to/project \
   --harness codex \
   --json
 
-# 2. Apply exactly that collision-free plan and write a private receipt.
+# 2. Apply the plan and write a private installation receipt.
 python3 scripts/the_loop_setup.py \
   --target-root /path/to/project \
   --harness codex \
@@ -70,22 +73,35 @@ python3 scripts/the_loop_setup.py \
   --source-version 0.1.0 \
   --json
 
-# 3. Read-only diagnosis from the installed offline toolkit.
+# 3. Verify the installed pack from its offline toolkit.
 python3 /path/to/project/.the-loop/toolkit/scripts/the_loop_doctor.py \
   --project-root /path/to/project \
   --json
 ```
 
-The canonical remote is private during pre-release. The clone command becomes the
-public quickstart only after an approved visibility change; until then it requires
-authorised repository access.
+Choose `codex`, `claude_code`, `kimi_code`, `opencode` or `deepseek_harness` for
+`--harness`. Setup refuses a different file already present at a destination unless
+that exact destination is approved with `--approve-destination`. It does not collect
+prompts or send telemetry.
 
-Setup refuses a differing pre-existing skill unless its exact destination is repeated
-with `--approve-destination`. Doctor can exit `1` while discovery is valid but live
-behavior is still unverified; its JSON report distinguishes that warning from a
-blocked installation. Setup and Doctor do not send telemetry or capture prompts.
+The applied installation contains the skills and a namespaced offline toolkit at
+`.the-loop/toolkit`. The project does not need the source checkout or a network
+connection for core operation after installation.
 
-To remove only unchanged files owned by one receipt:
+### Invoke THE LOOP
+
+| Harness | Explicit invocation |
+| --- | --- |
+| Codex | Select or mention `$the-loop` |
+| Claude Code | Run `/the-loop` |
+| Kimi Code | Run `/skill:the-loop` |
+| OpenCode | Ask the agent to load `skill(the-loop)` |
+| DeepSeek Harness | Run `/the-loop` |
+
+Start with the attended mode. Move to Auto after defining the asset, done gate,
+budgets, authority and kill switch.
+
+### Roll back an installation
 
 ```sh
 python3 /path/to/project/.the-loop/toolkit/scripts/the_loop_setup.py \
@@ -94,44 +110,47 @@ python3 /path/to/project/.the-loop/toolkit/scripts/the_loop_setup.py \
   --json
 ```
 
-Changed installed files are preserved and reported as a partial rollback.
+Rollback removes only unchanged files owned by that receipt. Modified files are kept
+and reported instead of being overwritten or deleted.
 
 For a user-level install, use the same dry-run and apply sequence with
-`--scope user --target-root "$HOME"`. Setup chooses one preferred documented root
-per harness: the shared `.agents/skills` root where supported, otherwise the
-harness-specific root. It does not copy the same package into every search root.
+`--scope user --target-root "$HOME"`. Setup chooses one documented skill root for the
+selected harness and avoids duplicate copies across its search paths.
 
-### Invoke the installed skill
+## Supported harnesses
 
-| Harness | Explicit v0.1 invocation |
-| --- | --- |
-| Codex | Select or mention `$the-loop` |
-| Claude Code | Run `/the-loop` |
-| Kimi Code | Run `/skill:the-loop` |
-| OpenCode | Ask the agent to load `skill(the-loop)` |
+The repository includes adapters for:
 
-Start with attended `the-loop`. Use `the-loop-auto` only for one declared asset with
-an exact done gate, frozen budgets, visible authority and a working kill switch.
+- Codex
+- Claude Code
+- Kimi Code
+- OpenCode
+- DeepSeek Harness
 
-| Package class | Current maturity |
-| --- | --- |
-| Setup, Doctor, Loop, Auto, lifecycle, feeders and Close | Runtime-backed bounded kernel and full fallback contracts |
-| Parallel | Portable package plus tested lane primitives; live harness behavior remains unverified |
-| Cloud, Endless, Watch, Control and Autonomy | Packaged fallback contracts; supervisor/control integrations remain pre-release |
-| Skill Planner, Skill Creator, Portfolio Review, grounding, quality and handoff utilities | Packaged portable fallback contracts; live routing evidence remains unverified |
+Setup detection, installation layout, skill discovery and portable contract behavior
+are covered by the repository test and conformance suites for all five adapters.
+Provider authentication, model availability and the host's own runtime remain host
+concerns; THE LOOP never bypasses their denial or permission settings. Dated probe
+reports live under [docs/release](docs/release/README.md).
 
-Shipping a package means the public skill is installed, integrity-pinned and covered
-by repository contracts. It does not upgrade an untested runtime mode or harness path
-to supported status. The dependency order remains documented in the
-[engineering plan](docs/specs/engineering-plan.md#phase-4-full-product-extensions).
+## Safety model
 
-### Contract conformance
+- Outward actions, strategic expansion and self-modification require approval by
+  default.
+- Elevated authority names its actor, scope, confirmation time, expiry and reversal
+  path.
+- Run ownership, leases, evidence, audit history and faithful failure reporting remain
+  mandatory.
+- A kill switch can halt work without granting a replacement worker authority.
+- Repeated missions stay individually bounded by configured duration, token, action,
+  attempt and cost gates.
 
-The deterministic runner installs and diagnoses all 31 packages in four synthetic
-projects, validates the 12 locked scenario contracts per implemented adapter, and
-fails on any altered artifact, fallback body, support component, or safety assertion. Its report names
-expected artifacts separately from the checks it actually performed. It never invokes
-a model and therefore does not claim that those scenarios passed live behavior:
+These invariants apply at every autonomy level, including full autonomy.
+
+## Contract conformance
+
+The deterministic conformance runner installs and diagnoses the complete pack in five
+synthetic harness projects and validates 12 locked scenarios per adapter:
 
 ```sh
 mkdir -p /tmp/the-loop-contract-check
@@ -139,55 +158,21 @@ python3 scripts/run_conformance.py \
   --project-root /tmp/the-loop-contract-check
 ```
 
-See the [synthetic code example](examples/code/README.md) and
-[synthetic non-code example](examples/noncode/README.md).
+That is a 60-scenario portable contract check. It verifies installation, discovery,
+fallback structure, lifecycle artifacts and safety assertions without spending model
+tokens or changing harness configuration.
 
-## Current compatibility evidence
-
-The frozen 2026-08-16 candidate passed Setup and Doctor on all four target harnesses.
-Live behavior passed on none, so all four remain unsupported for release purposes.
-
-| Harness | Setup and Doctor | Live behavior | Blocking evidence |
-| --- | --- | --- | --- |
-| Codex 0.144.1 | passed | blocked | The host loaded private global context during an implicit probe, so the result is not privacy-clean evidence. |
-| Claude Code 2.1.221 | passed | blocked | Authentication is required before model execution. |
-| Kimi Code 0.36.1 | passed | blocked | Authentication and a configured model are required before model execution. |
-| OpenCode 1.15.1 | passed | blocked | An isolated no-skill smoke test fails with `InstanceRef not provided`, so the failure is not THE LOOP-specific. |
-
-Compatibility is a release target, not a current support claim. A harness is marked
-supported only after installation, discovery, invocation, denial, fallback, and close
-behavior pass the release matrix. See the
-[dated compatibility report](docs/release/live-compatibility-2026-08-16.md).
-
-The official DeepSeek Harness `0.1.0-rc.6` was also installed in a disposable home.
-Its keyless headless profile and documented `.agents/skills` search path were verified,
-and the 31-package pack was copied into an isolated project through that shared root.
-THE LOOP does not yet ship a DSH adapter, so Setup and Doctor reject `dsh` as an
-unsupported harness. Authenticated behavior through a DeepSeek model on OpenRouter is
-still pending. This is evaluation evidence, not a fifth support claim. See the
-[2026-08-17 compatibility update](docs/release/live-compatibility-2026-08-17.md).
-
-## Safety model
-
-- Outward actions, strategic expansion, and self-modification require approval by
-  default.
-- Any elevated authority must identify its actor, scope, confirmation time, expiry,
-  and reversal path.
-- Audit logging, evidence requirements, run ownership, leases, visible authority,
-  truthful failure reporting, and the external kill switch remain mandatory at every
-  autonomy level.
-- Auto is one bounded mission. The Endless package is included, but its supervisor
-  runtime remains ineligible until bounded Auto, state, leases, heartbeat,
-  permissions, budgets, kill-switch recovery and empty-queue behavior are proven in
-  live harnesses.
+See the [code example](examples/code/README.md) and
+[non-code example](examples/noncode/README.md).
 
 ## Repository map
 
-- [Provenance policy](PROVENANCE.md)
+- [Provenance and licensing](PROVENANCE.md)
 - [v0.1 shipping manifest](docs/provenance/v0.1-shipping-manifest.md)
-- [Phase 1 specification pack](docs/specs/README.md)
-- [Shared protocol contracts](protocols/README.md)
+- [Product specification](docs/specs/README.md)
+- [Shared protocols](protocols/README.md)
 - [Schemas](schemas/README.md)
+- [Release data](docs/release/README.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)
 
@@ -200,23 +185,15 @@ python3 -m unittest discover -s tests -p 'test_*.py'
 python3 scripts/run_conformance.py --project-root /tmp/the-loop-contract-check
 ```
 
-The repository validator scans the public tree, Git index, reachable history, commit
-metadata, and symlink targets for blocked private material and credential patterns.
-
-## Release gates
-
-A tagged release requires the installable 31-package manifest, passing behavior
-evidence on all four implemented adapters, zero blocking issues, a clean provenance scan, and an independent
-final review. The separate `systemerror.app/the-loop` landing page is a launch asset,
-not part of this repository's implementation scope. It currently returns `404` and
-therefore remains a public-launch blocker.
+The repository validator scans public files, the Git index, reachable history, commit
+metadata and symlink targets for blocked private material and credential patterns.
 
 ## Licence and security
 
-All clean-room work authored for this repository, including both
-`system-error-original` and `system-error-rewrite` files, is released under the
-[MIT License](LICENSE). The classification records lineage, not different ownership.
-Third-party dependencies remain subject to their own licences and are not copied into
-this repository without an approved provenance record. Report vulnerabilities through
-the process in [SECURITY.md](SECURITY.md); do not publish credentials or private
-infrastructure details in an issue.
+System Error original and clean-room rewrite work in this repository is released under
+the [MIT License](LICENSE). Provenance classes describe lineage, not different usage
+rights. Third-party dependencies remain under their own licences and are not copied
+into this repository without an approved record.
+
+Report vulnerabilities through [SECURITY.md](SECURITY.md). Do not publish credentials,
+private infrastructure details or exploit material in a public issue.

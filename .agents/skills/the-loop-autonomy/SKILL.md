@@ -2,7 +2,7 @@
 name: the-loop-autonomy
 description: Bounded authority lifecycle for grants, expiries, kill switch, and permission boundaries.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: autonomy.control
   the-loop-version: "0.1"

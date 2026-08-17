@@ -14,7 +14,7 @@
       "type": "array",
       "minItems": 1,
       "uniqueItems": true,
-      "items": {"enum": ["codex", "claude_code", "kimi_code", "opencode"]}
+      "items": {"enum": ["codex", "claude_code", "kimi_code", "opencode", "deepseek_harness"]}
     },
     "operations": {
       "type": "array",

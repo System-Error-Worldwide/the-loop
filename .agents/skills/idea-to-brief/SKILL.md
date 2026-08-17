@@ -2,7 +2,7 @@
 name: idea-to-brief
 description: Convert raw requirement snippets into a compact, testable planning brief with falsifiable gates.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: planning.brief
   the-loop-version: "0.1"

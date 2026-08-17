@@ -12,7 +12,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
-from the_loop.setup import SetupError, apply_install, plan_install, rollback_install  # noqa: E402
+from the_loop.setup import (  # noqa: E402
+    SUPPORTED_HARNESSES,
+    SetupError,
+    apply_install,
+    plan_install,
+    rollback_install,
+)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -20,7 +26,11 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--source-root", type=Path, default=ROOT)
     parser.add_argument("--target-root", type=Path)
     parser.add_argument("--repository-root", type=Path, default=ROOT)
-    parser.add_argument("--harness", action="append", choices=("codex", "claude_code", "kimi_code", "opencode"))
+    parser.add_argument(
+        "--harness",
+        action="append",
+        choices=SUPPORTED_HARNESSES,
+    )
     parser.add_argument("--scope", choices=("project", "user"), default="project")
     parser.add_argument("--mode", choices=("copy", "link"), default="copy")
     parser.add_argument("--prove-link-support", action="store_true")

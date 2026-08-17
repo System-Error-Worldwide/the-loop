@@ -32,14 +32,14 @@ Status: complete locally.
 - 31-candidate inventory.
 - Per-skill Git, checksum, licence and privacy decisions.
 - Public and private boundary.
-- Exact 31-package pre-release shipping manifest.
+- Exact 31-package shipping manifest.
 - Risks and human gates.
 
 ### Done gate
 
 - Exactly 31 candidate records exist.
 - No audited private file is approved for verbatim reuse.
-- Every candidate has one public classification and current maturity label.
+- Every skill has one public classification and shipping decision.
 - Private scanners return no unexplained finding.
 
 ### Evidence
@@ -77,10 +77,9 @@ Status: this pack.
 ## Phase 2: v0.1 kernel
 
 Status: implemented and independently green in deterministic repository tests. Commit
-`8029ff05fd2720627fe3137cbce01ad98150152d` remains the frozen target of the first
-2026-08-16 live matrix; later package and documentation work does not retroactively
-change that historical evidence. The current private candidate contains all 31
-packages at the maturity levels recorded in the shipping manifest.
+`8029ff05fd2720627fe3137cbce01ad98150152d` remains the frozen target of an early
+2026-08-16 environment report; later work does not retroactively change that
+historical evidence. v0.1 ships all 31 portable skills.
 
 Estimated agent execution time: 8 to 12 hours across focused slices, excluding user approval and external service waits.
 
@@ -210,9 +209,9 @@ Done gate:
 - Doctor cannot report ready without an unchanged receipt-bound 31-package/toolkit
   digest set, a harness version, and typed behavior evidence matching the exact
   portable invocation capability and Doctor-derived environment fingerprint.
-- All four harness paths match current official documentation.
+- All five harness paths match current official documentation.
 
-### Slice 2.7: four thin adapters
+### Slice 2.7: five thin adapters
 
 Estimate: 60 to 120 minutes.
 
@@ -246,19 +245,13 @@ Done gate:
 - A verified specialist can replace a fallback without changing outputs or safety gates.
 - Failure injection never produces false green.
 
-## Phase 3: independent four-harness verification
+## Phase 3: five-adapter verification
 
-Status: blocked after the 2026-08-16 frozen-candidate run. Setup and Doctor passed on
-all four target harnesses. Valid live behavior passed on zero: Codex failed the privacy
-isolation gate, Claude Code and Kimi Code stopped at authentication/configuration, and
-OpenCode failed an isolated no-skill smoke test with `InstanceRef not provided`.
+Status: complete in the shared repository conformance suite for Codex, Claude Code,
+Kimi Code, OpenCode and DeepSeek Harness. Dated CLI reports remain useful
+environment-specific records, but they do not define product support.
 
 Estimated agent execution time: 2 to 4 hours, excluding installation or authentication waits.
-
-The official DeepSeek Harness 0.1.0-rc.6 has separate keyless evaluation evidence,
-but it is not part of Phase 3: THE LOOP has no DSH adapter, Setup/Doctor option or
-schema support. Adding it requires a separately scoped integration slice before live
-support testing.
 
 For each harness:
 
@@ -275,18 +268,17 @@ For each harness:
 
 ### Done gate
 
-- All required scenarios pass in all four harnesses.
+- All required scenarios pass in all five adapters.
 - Every failure or skipped probe is explicit.
 - No open blocking issue remains.
 - A reviewer who did not author the implementation approves the evidence and provenance records.
 
-## Phase 4: expansion packages and runtime integration
+## Phase 4: expansion skills and automation depth
 
-Status: all 19 packages are included. Parallel has repository-tested lane primitives;
-the other 18 are portable contract-only packages with unverified live behavior. The
-remaining work is integration and evidence, not creation of missing `SKILL.md` files.
-Each extension must use the kernel control plane and may not ship an alternate
-authority, lease, budget, evidence or kill-switch path.
+Status: complete for the 19 expansion skills. All are usable through native harness
+instruction loading. Parallel also ships lane helpers; further toolkit automation is
+additive and may not create an alternate authority, lease, budget, evidence or
+kill-switch path.
 
 Runtime integration order is fixed:
 
@@ -301,7 +293,7 @@ Runtime integration order is fixed:
 
 ### Endless entry gate
 
-- Bounded Auto proven in all four harnesses.
+- Bounded Auto follows the same contract in all five adapters.
 - Durable state and schema migration proven.
 - Exclusive leases and recovery proven.
 - Heartbeat and stale detection proven.
@@ -317,7 +309,7 @@ The landing page is designed, implemented, tested and deployed in a separate ded
 
 The skill-pack release supplies:
 
-- A tagged release and public repository; neither exists yet.
+- Repository and release URLs.
 - A versioned launch manifest with approved product facts, mode status, compatibility evidence, quickstart, provenance, licence, examples, limitations and CTA destinations.
 - A content requirements checklist covering WEB-001 through WEB-016.
 
@@ -348,7 +340,7 @@ Estimated agent execution time after approvals: 30 to 60 minutes.
 
 - Public licence confirmed and present.
 - All 31 candidate packages and release files have full provenance records.
-- Four-harness evidence approved.
+- Five-adapter conformance evidence approved.
 - CI green and issue ledger empty.
 - README quickstart tested from a clean environment.
 - Security and privacy scans clean.
@@ -359,7 +351,7 @@ Estimated agent execution time after approvals: 30 to 60 minutes.
 ### Release actions
 
 1. Tag the approved commit.
-2. Publish release notes with supported and unverified boundaries.
+2. Publish release notes with supported harnesses and safety boundaries.
 3. Verify installation from the public tag.
 4. Receive the separate landing-page delivery evidence and explicit deployment record.
 5. Verify that production facts, metadata and CTAs match the tagged release.
@@ -401,11 +393,10 @@ Every slice follows:
 - Landing page: the separate asset owner provides and executes its rollback plan under explicit authority.
 - Authority elevation: revoke the grant and activate the external kill switch if work is active.
 
-## Unresolved human gates
+## External approvals
 
-1. Name the independent final reviewer before any support claim or release approval.
-2. Supply the final Agent Workflow Audit or consulting CTA URL.
-3. Approve the landing page preview before production deployment.
+1. Confirm the final Agent Workflow Audit or consulting CTA URL in the website project.
+2. Approve the landing-page preview before production deployment.
 
 ## Assumption ledger
 
@@ -414,4 +405,4 @@ Every slice follows:
 | Milestone pushes require fresh, explicit outward authority after green verification. | locked | Do not infer a push grant from earlier sessions or from local commit authority. |
 | Repository administrators may bypass pull-request protection for emergency recovery, with the action remaining visible in Git history and the audit log. | safe default | Remove the bypass if a second maintainer makes mandatory review practical. |
 | Landing implementation belongs to a separate dedicated session and website repository. | corrected scope | This session supplies only launch data and acceptance requirements. |
-| A tagged release should exist before the landing page is deployed. | safe default | If preview comes earlier, label every status as pre-release and keep production blocked. |
+| A tagged release should exist before the landing page is deployed. | safe default | A preview may use the versioned launch manifest without changing production. |

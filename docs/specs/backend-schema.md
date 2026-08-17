@@ -89,10 +89,8 @@ Each operation records action (`copy`, `link`, `mkdir`, `skip`), source digest, 
 
 ## Harness status
 
-The current enum surface covers the four implemented adapters: `codex`,
-`claude_code`, `kimi_code` and `opencode`. Official DSH 0.1.0-rc.6 evaluation does
-not add a schema identifier; DSH remains adapter-pending until a separately tested
-schema and Setup/Doctor change is made.
+The harness enum covers the five first-class adapters: `codex`, `claude_code`,
+`kimi_code`, `opencode` and `deepseek_harness`.
 
 | Field | Type | Meaning |
 | --- | --- | --- |

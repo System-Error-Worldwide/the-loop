@@ -20,7 +20,7 @@ def synthetic_finder(name: str) -> str:
 
 
 class ConformanceRunnerContracts(unittest.TestCase):
-    def test_four_harnesses_each_cover_twelve_contract_scenarios(self) -> None:
+    def test_five_harnesses_each_cover_twelve_contract_scenarios(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             started = time.monotonic()
             report = run_contract_conformance(
@@ -34,10 +34,10 @@ class ConformanceRunnerContracts(unittest.TestCase):
         self.assertEqual("contract_conformance", report["kind"])
         self.assertFalse(report["live_behavior_claim"])
         self.assertEqual(
-            {"codex", "claude_code", "kimi_code", "opencode"},
+            {"codex", "claude_code", "kimi_code", "opencode", "deepseek_harness"},
             set(report["harnesses"]),
         )
-        self.assertEqual({"validated": 48, "failed": 0, "total": 48}, report["summary"])
+        self.assertEqual({"validated": 60, "failed": 0, "total": 60}, report["summary"])
         for harness, evidence in report["harnesses"].items():
             with self.subTest(harness=harness):
                 self.assertEqual(12, len(evidence["scenarios"]))

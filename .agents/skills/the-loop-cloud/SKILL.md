@@ -2,7 +2,7 @@
 name: the-loop-cloud
 description: Provider-neutral remote planning envelope for restricted non-local execution context.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: orchestration.cloud
   the-loop-version: "0.1"

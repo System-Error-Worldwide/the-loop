@@ -31,7 +31,7 @@
       "type": "object",
       "required": ["harness", "actor", "session_id"],
       "properties": {
-        "harness": {"enum": ["codex", "claude_code", "kimi_code", "opencode", "manual"]},
+        "harness": {"enum": ["codex", "claude_code", "kimi_code", "opencode", "deepseek_harness", "manual"]},
         "actor": {"type": "string", "minLength": 1},
         "session_id": {"type": "string", "minLength": 1}
       },

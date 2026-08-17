@@ -2,7 +2,7 @@
 name: bootstrap-agent-context
 description: Initialize a bounded context for a run with evidence, scope, and recovery anchors.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: context.bootstrap
   the-loop-version: "0.1"

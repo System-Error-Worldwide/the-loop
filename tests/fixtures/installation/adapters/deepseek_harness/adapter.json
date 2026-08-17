@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0",
+  "harness": "deepseek_harness",
+  "display_name": "DeepSeek Harness",
+  "executables": ["dsh"],
+  "project_skill_roots": [".dsh/skills", ".agents/skills"],
+  "user_skill_roots": ["$DSH_HOME/skills", "$DSH_AGENTS_HOME/skills"],
+  "explicit_invocation": {"kind": "slash_command"},
+  "implicit_invocation": {"kind": "description_match"},
+  "permission_model": {"kind": "host_managed"},
+  "delegation": {"kind": "optional"},
+  "fallback": {"kind": "sequential"}
+}

@@ -2,7 +2,7 @@
 name: the-loop-setup
 description: Detect supported agent harnesses, preview an exact portable-skill installation, and apply or roll back only approved filesystem operations. Use when a user asks to install, update, inspect an install plan for, or uninstall SYSTEM ERROR'S THE LOOP.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: setup.install
   the-loop-version: "0.1"

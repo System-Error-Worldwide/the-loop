@@ -2,7 +2,7 @@
 name: portfolio-review
 description: Run generic portfolio snapshot checks without private portfolio intelligence or external sources.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: memory.review
   the-loop-version: "0.1"

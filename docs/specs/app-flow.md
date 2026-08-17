@@ -135,11 +135,9 @@ No elevation can disable permanent invariants.
 
 ## Expansion-package journeys
 
-These packages are included in the current candidate, but their journeys remain
-runtime-support targets rather than verified behavior claims. Parallel has
-repository-tested lane primitives; the other expansion packages are portable
-contracts only. All must reuse the kernel's authority, state, evidence and recovery
-contracts.
+All expansion packages ship as harness-native skills. Parallel also uses lane helpers;
+the others run through their portable instructions and the shared authority, state,
+evidence and recovery contracts.
 
 ### Parallel
 
@@ -158,16 +156,14 @@ Endless reads an approved queue, selects one eligible item, creates a bounded Au
 This journey defines the product information contract for the separate landing-page session. It is not an implementation flow owned by the skill pack.
 
 1. Visitor arrives at `systemerror.app/the-loop` from search, GitHub, a shared link or System Error Software navigation.
-2. Hero states what THE LOOP does, who made it and the four implemented target
-   adapters with evidence-backed status. DSH may appear only as evaluated and
-   adapter-pending.
+2. Hero states what THE LOOP does, who made it and the five supported harnesses.
 3. Primary CTA opens the public repository or installation section.
 4. A compact “how it works” section explains Setup, Loop and Auto first, then labels Parallel, Cloud and Endless by release status.
 5. Capability section shows installed-specialist routing plus bundled fallbacks.
 6. Safety section shows autonomy levels, visible warnings and permanent invariants.
 7. Trust section explains provenance, licence status and upstream dependency handling.
-8. Compatibility matrix distinguishes installed package, runtime-backed, contract
-   only, evaluated, adapter-pending and live-unverified states.
+8. Compatibility matrix lists Codex, Claude Code, Kimi Code, OpenCode and DeepSeek
+   Harness and explains their native invocation paths.
 9. Examples show one code mission and one non-code mission.
 10. Quickstart links to the matching tagged repository documentation.
 11. Primary CTA repeats at the close. Secondary CTA links to the Agent Workflow Audit or consulting offer.
@@ -176,8 +172,8 @@ This journey defines the product information contract for the separate landing-p
 
 | State | Required behavior |
 | --- | --- |
-| Repository not public | Do not deploy the page with a dead or private CTA. |
-| Release not published | Label status honestly and link to the current public branch only if intentionally public. |
+| Repository link unavailable | Fail link verification and retain the last good page. |
+| Release link unavailable | Fail link verification and retain the last good page. |
 | JavaScript disabled | No loss of content or navigation; v1 uses no client-side script. |
 | Narrow viewport | Single-column reading order, no horizontal overflow, minimum touch target 44 by 44 CSS pixels. |
 | Reduced motion | No required animation; any CSS transition is non-essential and removed or reduced. |

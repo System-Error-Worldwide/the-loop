@@ -2,7 +2,7 @@
 name: stack-summary
 description: Produce a compact digest of active run, architecture, and support stack state.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: memory.summary
   the-loop-version: "0.1"

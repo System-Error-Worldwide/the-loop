@@ -6,7 +6,7 @@
   "properties": {
     "schema_version": {"$ref": "common.schema.json#/$defs/schemaVersion"},
     "capability": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z][a-z0-9_-]*)+$"},
-    "harness": {"enum": ["codex", "claude_code", "kimi_code", "opencode"]},
+    "harness": {"enum": ["codex", "claude_code", "kimi_code", "opencode", "deepseek_harness"]},
     "track": {"enum": ["code", "noncode"]},
     "environment_digest": {"$ref": "common.schema.json#/$defs/digest"},
     "decided_at": {"$ref": "common.schema.json#/$defs/timestamp"},
@@ -21,7 +21,7 @@
         "properties": {
           "provider": {"type": "string", "minLength": 1},
           "source": {"enum": ["installed", "bundled"]},
-          "compatibility": {"type": "array", "items": {"enum": ["codex", "claude_code", "kimi_code", "opencode"]}, "uniqueItems": true},
+          "compatibility": {"type": "array", "items": {"enum": ["codex", "claude_code", "kimi_code", "opencode", "deepseek_harness"]}, "uniqueItems": true},
           "capability_evidence": {"type": "array", "items": {"type": "string", "minLength": 1}},
           "description_score": {"type": "number", "minimum": 0, "maximum": 1},
           "behavior_status": {"enum": ["verified", "failed", "denied", "unverified"]},
@@ -32,7 +32,7 @@
               "required": ["capability", "harness", "track", "environment_digest", "outcome", "observed_at", "evidence_id"],
               "properties": {
                 "capability": {"type": "string", "pattern": "^[a-z][a-z0-9_-]*(?:\\.[a-z][a-z0-9_-]*)+$"},
-                "harness": {"enum": ["codex", "claude_code", "kimi_code", "opencode"]},
+                "harness": {"enum": ["codex", "claude_code", "kimi_code", "opencode", "deepseek_harness"]},
                 "track": {"enum": ["code", "noncode"]},
                 "environment_digest": {"$ref": "common.schema.json#/$defs/digest"},
                 "outcome": {"enum": ["passed", "failed", "denied", "unverified"]},

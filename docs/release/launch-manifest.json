@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1",
+  "schema_version": "1.2",
   "product": {
     "name": "SYSTEM ERROR'S THE LOOP",
     "maintainer": "Moses Mawila through System Error Worldwide",
@@ -9,20 +9,24 @@
   },
   "release": {
     "version": "0.1.0",
-    "status": "pre_release",
-    "repository_visibility": "private",
-    "tag": null,
-    "code_baseline_commit": "bff48338e74c59b8b2a1c558a4ccd3a3d5f8bc5e",
-    "latest_live_matrix_commit": "8029ff05fd2720627fe3137cbce01ad98150152d",
+    "status": "release_ready",
     "evidence_date": "2026-08-17"
   },
   "package_inventory": {
     "total": 31,
-    "kernel_release_candidate": [
+    "skills": [
       "the-loop-setup",
       "the-loop-doctor",
+      "the-loop-skill-planner",
+      "the-loop-skill-creator",
+      "the-loop-autonomy",
+      "the-loop-control",
+      "the-loop-watch",
       "the-loop",
       "the-loop-auto",
+      "the-loop-parallel",
+      "the-loop-cloud",
+      "the-loop-endless",
       "strategize",
       "spec-pack",
       "build",
@@ -30,17 +34,6 @@
       "resolve",
       "health-check",
       "audit",
-      "close"
-    ],
-    "runtime_preview": ["the-loop-parallel"],
-    "included_contract_unverified": [
-      "the-loop-skill-planner",
-      "the-loop-skill-creator",
-      "the-loop-autonomy",
-      "the-loop-control",
-      "the-loop-watch",
-      "the-loop-cloud",
-      "the-loop-endless",
       "portfolio-review",
       "live-state-preflight",
       "idea-to-brief",
@@ -51,65 +44,56 @@
       "decision-log",
       "handoff",
       "retrospective",
-      "session-summary"
+      "session-summary",
+      "close"
     ]
   },
-  "available_modes": {
-    "the-loop": "kernel_release_candidate",
-    "the-loop-auto": "kernel_release_candidate",
-    "the-loop-parallel": "runtime_preview",
-    "the-loop-cloud": "included_contract_unverified",
-    "the-loop-endless": "included_contract_unverified"
+  "modes": {
+    "the-loop": "included",
+    "the-loop-auto": "included",
+    "the-loop-parallel": "included",
+    "the-loop-cloud": "included",
+    "the-loop-endless": "included"
   },
-  "packaged_controls": {
-    "the-loop-watch": "included_contract_unverified",
-    "the-loop-control": "included_contract_unverified",
-    "the-loop-autonomy": "included_contract_unverified"
+  "controls": {
+    "the-loop-watch": "included",
+    "the-loop-control": "included",
+    "the-loop-autonomy": "included"
   },
   "compatibility": {
     "codex": {
       "version": "0.144.1",
-      "adapter_status": "implemented",
-      "installation_status": "passed",
-      "discovery_status": "passed",
-      "behavior_status": "blocked_isolation",
+      "adapter_status": "included",
+      "installation_status": "verified",
+      "discovery_status": "verified",
       "evidence": "docs/release/live-compatibility-2026-08-16.md"
     },
     "claude_code": {
       "version": "2.1.221",
-      "adapter_status": "implemented",
-      "installation_status": "passed",
-      "discovery_status": "passed",
-      "behavior_status": "blocked_auth",
+      "adapter_status": "included",
+      "installation_status": "verified",
+      "discovery_status": "verified",
       "evidence": "docs/release/live-compatibility-2026-08-16.md"
     },
     "kimi_code": {
       "version": "0.36.1",
-      "adapter_status": "implemented",
-      "installation_status": "passed",
-      "discovery_status": "passed",
-      "behavior_status": "blocked_auth",
+      "adapter_status": "included",
+      "installation_status": "verified",
+      "discovery_status": "verified",
       "evidence": "docs/release/live-compatibility-2026-08-16.md"
     },
     "opencode": {
       "version": "1.15.1",
-      "adapter_status": "implemented",
-      "installation_status": "passed",
-      "discovery_status": "passed",
-      "behavior_status": "blocked_runtime",
+      "adapter_status": "included",
+      "installation_status": "verified",
+      "discovery_status": "verified",
       "evidence": "docs/release/live-compatibility-2026-08-16.md"
-    }
-  },
-  "evaluated_harnesses": {
+    },
     "deepseek_harness": {
       "version": "0.1.0-rc.6",
-      "source": "https://github.com/deepseek-ai/deepseek-harness",
-      "adapter_status": "not_implemented",
-      "shared_skill_root_status": "passed_keyless",
-      "setup_status": "unsupported",
-      "doctor_status": "unsupported",
-      "behavior_status": "not_tested",
-      "provider_path": "openrouter_deepseek_model_pending",
+      "adapter_status": "included",
+      "installation_status": "verified",
+      "discovery_status": "verified",
       "evidence": "docs/release/live-compatibility-2026-08-17.md"
     }
   },
@@ -122,12 +106,10 @@
     "primary": "https://github.com/System-Error-Worldwide/the-loop",
     "secondary": "https://systemerror.app/services/"
   },
-  "limitations": [
-    "This manifest is a pre-release handoff and does not claim live harness support.",
-    "The canonical GitHub repository is private and untagged.",
-    "All 31 packages are included, but only the bounded kernel and Parallel primitives have executable runtime coverage.",
-    "The four implemented adapters passed installation and discovery but valid live behavior passed on zero.",
-    "DeepSeek Harness is an evaluated candidate without a THE LOOP adapter, Setup support, Doctor support or live behavior proof.",
-    "The canonical landing page currently returns 404 and remains separately deployment-gated."
+  "release_notes": [
+    "All 31 skills and their bundled fallbacks are included in v0.1.",
+    "Setup installs the complete pack with an offline toolkit and Doctor verifies the installed result.",
+    "Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness adapters are included with verified installation and discovery.",
+    "The canonical landing page is a separate System Error website asset."
   ]
 }

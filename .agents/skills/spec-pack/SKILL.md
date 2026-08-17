@@ -2,7 +2,7 @@
 name: spec-pack
 description: Produce mutually consistent implementation-ready specifications and map every requirement to a build slice and verification gate. Use for a new app, website or major feature that needs PRD, technical design, flow, design brief, backend schema and engineering plan before code.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: lifecycle.spec_pack
   the-loop-version: "0.1"

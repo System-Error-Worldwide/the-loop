@@ -251,7 +251,7 @@ def run_contract_conformance(
     executable_finder: Callable[[str], str | None] = shutil.which,
     checked_at: str | None = None,
 ) -> dict[str, Any]:
-    """Run the shared 4-by-12 contract matrix without invoking a provider."""
+    """Run the shared 5-by-12 contract matrix without invoking a provider."""
 
     repository = Path(repository_root).resolve(strict=True)
     projects = Path(project_root).resolve(strict=False)

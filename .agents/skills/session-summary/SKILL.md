@@ -2,7 +2,7 @@
 name: session-summary
 description: Capture concise outcomes from an execution window for the next continuation.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: quality.session-summary
   the-loop-version: "0.1"

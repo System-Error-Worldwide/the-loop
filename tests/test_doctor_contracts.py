@@ -82,7 +82,7 @@ def _install_pack(project: Path, harnesses: list[str] | None = None) -> None:
         project,
         ROOT,
         harnesses=harnesses or ["codex"],
-        executable_finder=_finder("codex", "claude", "kimi", "opencode"),
+        executable_finder=_finder("codex", "claude", "kimi", "opencode", "dsh"),
     )
     apply_install(plan, actor="doctor-test", source_version="0.1.0")
 
@@ -109,7 +109,7 @@ class DoctorContractTests(unittest.TestCase):
             executable.chmod(0o700)
             self.assertEqual("fake-harness 1.2.3", DOCTOR_CLI._version(str(executable)))
 
-    def test_reports_all_four_harnesses_and_keeps_absence_separate(self) -> None:
+    def test_reports_all_five_harnesses_and_keeps_absence_separate(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
             _skill(project / ".agents" / "skills", "example")
@@ -120,7 +120,10 @@ class DoctorContractTests(unittest.TestCase):
                 version_reader=lambda path: "1.2.3",
                 checked_at="2026-08-16T12:00:00Z",
             )
-            self.assertEqual(set(report["harnesses"]), {"codex", "claude_code", "kimi_code", "opencode"})
+            self.assertEqual(
+                set(report["harnesses"]),
+                {"codex", "claude_code", "kimi_code", "opencode", "deepseek_harness"},
+            )
             self.assertTrue(report["harnesses"]["codex"]["installed"])
             self.assertEqual(report["harnesses"]["codex"]["version"], "1.2.3")
             self.assertFalse(report["harnesses"]["claude_code"]["installed"])
@@ -181,14 +184,15 @@ class DoctorContractTests(unittest.TestCase):
             "claude_code": "denied",
             "kimi_code": "failed",
             "opencode": "unverified",
+            "deepseek_harness": "unverified",
         }
         with tempfile.TemporaryDirectory() as directory:
             project = Path(directory)
-            _install_pack(project, ["codex", "claude_code", "kimi_code", "opencode"])
+            _install_pack(project, ["codex", "claude_code", "kimi_code", "opencode", "deepseek_harness"])
             report = run_doctor(
                 ROOT,
                 project,
-                executable_finder=_finder("codex", "claude", "kimi", "opencode"),
+                executable_finder=_finder("codex", "claude", "kimi", "opencode", "dsh"),
                 version_reader=lambda _path: "1.2.3",
                 behavior_probe=lambda harness, manifest: expected[harness],
                 checked_at="2026-08-16T12:00:00Z",
@@ -217,6 +221,26 @@ class DoctorContractTests(unittest.TestCase):
             self.assertEqual(report["harnesses"]["codex"]["evidence_id"], evidence_id)
             self.assertEqual(report["harnesses"]["codex"]["outcome"], "ready")
             self.assertEqual(report["harnesses"]["codex"]["pack_status"], "complete")
+
+    def test_missing_non_kernel_skill_prevents_complete_pack_status(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            project = Path(directory)
+            _install_pack(project)
+            shutil.rmtree(project / ".agents" / "skills" / "the-loop-endless")
+
+            report = run_doctor(
+                ROOT,
+                project,
+                executable_finder=_finder("codex"),
+                version_reader=lambda _path: "1.2.3",
+                checked_at="2026-08-17T12:00:00Z",
+            )
+
+        codex = report["harnesses"]["codex"]
+        self.assertEqual("incomplete", codex["pack_status"])
+        self.assertEqual(["the-loop-endless"], codex["missing_skills"])
+        self.assertEqual("pack_incomplete", codex["outcome"])
+        self.assertNotEqual("ready", report["overall_status"])
 
     def test_probe_and_pack_integrity_must_match_the_current_doctor_context(self) -> None:
         evidence_id = str(uuid.uuid4())
@@ -356,6 +380,33 @@ class DoctorContractTests(unittest.TestCase):
             )
         sources = [item["source"] for item in report["harnesses"]["codex"]["skills"]]
         self.assertIn("$CODEX_HOME/skills/the-loop", sources)
+
+    def test_custom_dsh_homes_are_resolved_from_explicit_environment(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            project = root / "project"
+            project.mkdir()
+            ordinary_home = root / "ordinary-home"
+            ordinary_home.mkdir()
+            dsh_home = root / "custom-dsh"
+            agents_home = root / "custom-agents"
+            _skill(dsh_home / "skills", "the-loop")
+            _skill(agents_home / "skills", "the-loop-auto")
+            report = run_doctor(
+                FIXTURE_ROOT,
+                project,
+                user_home=ordinary_home,
+                environment={"DSH_HOME": str(dsh_home), "DSH_AGENTS_HOME": str(agents_home)},
+                executable_finder=_finder("dsh"),
+                version_reader=lambda _path: "dsh 0.1.0-rc.6",
+                checked_at="2026-08-16T12:00:00Z",
+            )
+        dsh = report["harnesses"]["deepseek_harness"]
+        self.assertTrue(dsh["installed"])
+        self.assertEqual("dsh 0.1.0-rc.6", dsh["version"])
+        sources = [item["source"] for item in dsh["skills"]]
+        self.assertIn("$DSH_HOME/skills/the-loop", sources)
+        self.assertIn("$DSH_AGENTS_HOME/skills/the-loop-auto", sources)
 
     def test_missing_and_malformed_manifests_are_precise(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

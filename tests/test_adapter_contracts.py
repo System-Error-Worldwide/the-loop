@@ -52,6 +52,14 @@ EXPECTED = {
         "explicit_invocation": ("tool", "skill(<skill-name>)"),
         "forbidden_flags": [],
     },
+    "deepseek_harness": {
+        "display_name": "DeepSeek Harness",
+        "executables": ["dsh"],
+        "project_skill_roots": [".dsh/skills", ".agents/skills"],
+        "user_skill_roots": ["$DSH_HOME/skills", "$DSH_AGENTS_HOME/skills"],
+        "explicit_invocation": ("slash_command", "/<skill-name>"),
+        "forbidden_flags": [],
+    },
 }
 
 REQUIRED_KEYS = {
@@ -210,7 +218,7 @@ class AdapterContractTests(unittest.TestCase):
         directories = {path.name for path in ADAPTERS_ROOT.iterdir() if path.is_dir()}
         self.assertEqual(set(EXPECTED), found)
         self.assertEqual(set(EXPECTED), directories)
-        self.assertEqual(4, len(paths))
+        self.assertEqual(5, len(paths))
 
     def test_live_manifests_satisfy_shared_contract(self) -> None:
         manifests = self.manifests()

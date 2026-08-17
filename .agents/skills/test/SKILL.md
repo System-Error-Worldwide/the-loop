@@ -2,7 +2,7 @@
 name: test
 description: Independently attempt to falsify the done gate, persist reproducible evidence and open every defect that survives refutation. Use when an approved implementation or non-code asset must be verified independently before it can be called green.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: lifecycle.test
   the-loop-version: "0.1"

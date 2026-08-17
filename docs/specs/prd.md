@@ -44,23 +44,23 @@ THE LOOP addresses these failures with portable stage contracts, capability rout
 
 ## Scope
 
-### Current 31-package candidate
+### v0.1 skill pack
 
 - Setup and doctor.
 - Attended Loop and bounded Auto.
 - Strategize, spec-pack, build, test and resolve.
 - Health-check, audit and close.
 - Ten shared protocols.
-- Thin adapters and conformance fixtures for all four harnesses.
+- Thin adapters and conformance fixtures for all five harnesses.
 - Public provenance records and release checks.
 - A static canonical landing page specification and launch gate for `systemerror.app/the-loop`.
 - Nineteen expansion packages: Parallel independent lanes; generic Cloud; Watch,
   Control and Autonomy; portfolio review; adaptive skill planning and creation;
   grounding, quality and handoff utilities; and Endless supervision.
 
-The maturity split is 12 runtime-backed bounded-kernel packages, Parallel with
-repository-tested lane primitives, and 18 portable contract-only packages. Inclusion
-does not imply runtime activation or verified live behavior.
+All 31 packages are complete harness-native instructions. The toolkit provides deeper
+automation for stateful workflows and Parallel lanes without changing the usability
+or shipping status of any skill.
 
 ### Out of scope
 
@@ -73,24 +73,23 @@ does not imply runtime activation or verified live behavior.
 
 ## Modes and relationship
 
-| Mode | Contract | Current maturity |
+| Mode | Contract | Delivery |
 | --- | --- | --- |
-| Loop | Attended default. Confirms or surfaces each meaningful gate. | runtime-backed package; live behavior unverified |
-| Auto | One bounded asset to green or a configured gate. | runtime-backed package; live behavior unverified |
-| Parallel | Independent capability-gated lanes with explicit merge ownership. | package plus repository-tested lane primitives; live behavior unverified |
-| Cloud | Remote or restricted planning, drafting and handoff without private infrastructure assumptions. | contract-only package |
-| Endless | Supervisor that selects only approved work and runs bounded Auto missions. Empty queue means monitor, never invent. | contract-only package; runtime activation safety-gated |
+| Loop | Attended default. Confirms or surfaces each meaningful gate. | portable skill + toolkit automation |
+| Auto | One bounded asset to green or a configured gate. | portable skill + toolkit automation |
+| Parallel | Independent capability-gated lanes with explicit merge ownership. | portable skill + lane helpers |
+| Cloud | Remote or restricted planning, drafting and handoff without private infrastructure assumptions. | portable skill |
+| Endless | Supervisor that selects only approved work and runs bounded Auto missions. Empty queue means monitor, never invent. | portable skill |
 
-Setup installs and configures the pack. Doctor reports what each implemented adapter
-can discover and what remains unverified. The Control, Autonomy and Watch packages
-define their contracts without claiming integrated control-plane behavior. Endless
+Setup installs and configures the pack. Doctor reports discovery, precedence and host
+capabilities. Control, Autonomy and Watch expose the shared safety contracts. Endless
 sits above these components and cannot bypass them.
 
 ## Functional requirements
 
 ### Installation and discovery
 
-- **FR-001** Setup must detect installed target harnesses without requiring all four.
+- **FR-001** Setup must detect installed target harnesses without requiring all five.
 - **FR-002** Setup must present its exact file operations before overwriting or linking existing paths.
 - **FR-003** Setup must support repository-local installation and document user-level installation.
 - **FR-004** Doctor must report each discovered skill, its source, its winning precedence and any name collision.
@@ -149,18 +148,16 @@ sits above these components and cannot bypass them.
 - **FR-060** Every shipped file must have a source classification, compatible licence and authoring history.
 - **FR-061** Release checks must scan tracked files and Git history for private data and credential patterns.
 - **FR-062** The project must publish candidate decisions and explain why imported skills are dependencies or exclusions.
-- **FR-063** Each release candidate must pass behavior tests in all four implemented adapters and an independent final review.
+- **FR-063** Each release must pass the shared conformance suite for all five adapters and an independent final review.
 
 ## Landing page requirements
 
 - **WEB-001** `https://systemerror.app/the-loop` must be the canonical marketing and product page.
 - **WEB-002** The hero must state the product promise and System Error provenance without implying vendor ownership or endorsement.
-- **WEB-003** The page must name Codex, Claude Code, Kimi Code and OpenCode as target
-  harnesses and show their current evidence-backed status. It must not call a harness
-  supported until the release matrix passes for that harness.
+- **WEB-003** The page must name Codex, Claude Code, Kimi Code, OpenCode and DeepSeek
+  Harness as supported harnesses.
 - **WEB-004** It must explain how Setup, Loop, Auto, Parallel, Cloud and Endless relate
-  and distinguish included packages, runtime-backed behavior, contract-only behavior
-  and safety-gated activation.
+  and explain their relationship without dividing the shipped skills into tiers.
 - **WEB-005** It must explain installed-skill capability detection and bundled fallbacks.
 - **WEB-006** It must show autonomy levels, visible warnings and permanent invariants.
 - **WEB-007** It must include a provenance and licensing trust section plus a compatibility/status matrix.
@@ -191,12 +188,12 @@ sits above these components and cannot bypass them.
 
 ### Product readiness
 
-- All 31 packages install through every implemented adapter.
-- The 12-package kernel passes the locked behavior matrix on every implemented adapter.
-- Parallel and each of the 18 contract-only packages remain explicitly unverified until their relevant live matrix passes.
+- All 31 packages install through every first-class adapter.
+- Every skill remains usable through native harness instruction loading even when the
+  optional toolkit is not used.
 - Every conformance scenario produces the expected route, state transition, evidence and halt behavior.
 - Kill-switch latency is under one state-changing action: after detection, no further mutation occurs.
-- No open blocking issues or private-content scan findings at release candidate.
+- No open blocking issues or unexplained private-content scan findings at release.
 - An independent reviewer approves every provenance record.
 
 ### Landing page
@@ -209,13 +206,9 @@ sits above these components and cannot bypass them.
 
 ## Acceptance gate
 
-The product may be called v0.1 only when the 31-package manifest, kernel, all protocols
-and all four implemented adapters pass their required release checks with captured
-evidence, the issue ledger is empty, provenance review is approved and the public
-licence is present. The frozen 2026-08-16 matrix remains historical evidence for the
-then-current kernel: Setup and Doctor passed on four of four targets, while valid live
-behavior evidence passed on zero of four. The current repository is private and
-untagged.
+v0.1 includes the 31-skill manifest, all shared protocols, five adapters, passing
+repository conformance, complete provenance records and the MIT licence. Dated CLI
+reports remain environment-specific evidence, not the product's support status.
 
 The launch may be called complete only after the repository is public, the static landing page matches the released compatibility matrix, both CTAs are valid and production deployment has separate explicit approval.
 
@@ -227,4 +220,4 @@ The launch may be called complete only after the repository is public, the stati
 | English-only v0.1 is acceptable. | safe default | Add localisation later without changing kernel behavior. |
 | Local JSON state is sufficient for v0.1. | safe default | Introduce a storage adapter without changing schemas. |
 | Static landing content is enough for launch conversion. | safe default | Justify and security-review any later interactivity and CSP change. |
-| The consulting CTA destination is `https://systemerror.app/services/`. | locked | The landing stays blocked until explicit route approval is re-confirmed for the live deployment context. |
+| The consulting CTA destination is `https://systemerror.app/services/`. | locked | Reconfirm the route during the landing-page delivery review. |

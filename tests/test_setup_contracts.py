@@ -85,18 +85,22 @@ def _broken_local_markdown_links(root: Path) -> list[str]:
 
 
 class SetupContractTests(unittest.TestCase):
-    def test_loads_exact_four_generic_adapter_manifests(self) -> None:
+    def test_loads_exact_five_generic_adapter_manifests(self) -> None:
         manifests = load_adapter_manifests(FIXTURE_ROOT)
-        self.assertEqual(set(manifests), {"codex", "claude_code", "kimi_code", "opencode"})
+        self.assertEqual(
+            set(manifests),
+            {"codex", "claude_code", "kimi_code", "opencode", "deepseek_harness"},
+        )
         self.assertTrue(all(item["status"] == "verified" for item in manifests.values()))
 
     def test_detects_installed_harnesses_independently(self) -> None:
         manifests = load_adapter_manifests(FIXTURE_ROOT)
-        detected = detect_harnesses(manifests, executable_finder=_finder("codex", "opencode"))
+        detected = detect_harnesses(manifests, executable_finder=_finder("codex", "opencode", "dsh"))
         self.assertTrue(detected["codex"]["installed"])
         self.assertFalse(detected["claude_code"]["installed"])
         self.assertFalse(detected["kimi_code"]["installed"])
         self.assertTrue(detected["opencode"]["installed"])
+        self.assertTrue(detected["deepseek_harness"]["installed"])
 
     def test_detection_checks_each_declared_executable_once(self) -> None:
         manifests = load_adapter_manifests(FIXTURE_ROOT)
@@ -107,7 +111,7 @@ class SetupContractTests(unittest.TestCase):
             return f"/synthetic/bin/{name}"
 
         detect_harnesses(manifests, executable_finder=finder)
-        self.assertEqual(calls, ["codex", "claude", "kimi", "opencode"])
+        self.assertEqual(calls, ["codex", "claude", "kimi", "opencode", "dsh"])
 
     def test_dry_run_is_read_only_and_deduplicates_shared_roots(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -133,8 +137,9 @@ class SetupContractTests(unittest.TestCase):
             "claude_code": ".claude/skills/example",
             "kimi_code": ".agents/skills/example",
             "opencode": ".agents/skills/example",
+            "deepseek_harness": ".agents/skills/example",
         }
-        executables = ("codex", "claude", "kimi", "opencode")
+        executables = ("codex", "claude", "kimi", "opencode", "dsh")
         for harness, destination in expected.items():
             with self.subTest(harness=harness), tempfile.TemporaryDirectory() as directory:
                 target = Path(directory) / "project"
@@ -159,8 +164,9 @@ class SetupContractTests(unittest.TestCase):
             "claude_code": ".claude/skills/example",
             "kimi_code": ".agents/skills/example",
             "opencode": ".agents/skills/example",
+            "deepseek_harness": ".agents/skills/example",
         }
-        executables = ("codex", "claude", "kimi", "opencode")
+        executables = ("codex", "claude", "kimi", "opencode", "dsh")
         for harness, destination in expected.items():
             with self.subTest(harness=harness), tempfile.TemporaryDirectory() as directory:
                 target = Path(directory) / "home"

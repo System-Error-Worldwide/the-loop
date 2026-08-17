@@ -59,8 +59,6 @@ The same words must mean the same thing in every harness:
 | `BLOCKED` | A known gate prevents the check or next action. |
 | `DENIED` | Required authority or tool permission was refused. |
 | `UNVERIFIED` | The check did not run or its evidence is stale. |
-| `UNSUPPORTED` | The current version deliberately does not support the capability. |
-| `PLANNED` | The capability is in product architecture but not shipped. |
 | `COMPLETE` | All done-gate evidence passed and no blocking issue remains. |
 
 Color, emoji or iconography may reinforce status but cannot replace the text label.
@@ -155,8 +153,8 @@ The separate landing-page asset must receive only release-approved public facts.
 - Tagged version and release date.
 - Public repository and versioned quickstart URLs.
 - Target-harness compatibility matrix and dated evidence results.
-- Package inclusion plus runtime-backed, lane-primitives, contract-only, gated and
-  live-unverified mode status.
+- All 31 shipped skills, the five supported harnesses and the relationship between
+  portable instructions and optional toolkit automation.
 - Relationship between Setup, Loop, Auto, Parallel, Cloud and Endless.
 - Installed-skill capability detection and bundled fallback explanation.
 - Autonomy levels, visible warnings and permanent invariants.
@@ -177,7 +175,7 @@ The separate landing-page asset must receive only release-approved public facts.
 
 ### Handoff artifact
 
-The release candidate should generate or maintain a public launch manifest containing:
+The release should generate or maintain a public launch manifest containing:
 
 - `product_version`.
 - `repository_url`.
@@ -192,9 +190,8 @@ The release candidate should generate or maintain a public launch manifest conta
 - Known limitations.
 
 The separate landing session may transform this data into page content but may not
-upgrade `CONTRACT_ONLY`, `ADAPTER_PENDING`, `UNVERIFIED` or `UNSUPPORTED` to a stronger
-claim. DSH may be described only as evaluated until an adapter and Setup/Doctor
-support exist.
+weaken safety limitations or invent evidence. It presents all five first-class
+harnesses and all 31 shipped skills.
 
 ### Acceptance evidence returned by the separate session
 
@@ -206,7 +203,7 @@ Before the product launch can close, the landing-page owner supplies:
 - Canonical, SEO, Open Graph and structured-data validation.
 - CSP and security-header comparison.
 - Responsive, keyboard, 200% zoom, long-content, code-overflow and accessibility evidence.
-- Broken-link, install-error and unsupported-harness state evidence.
+- Broken-link, install-error and incompatible-harness-version state evidence.
 - A delivery verdict that marks unexecuted checks `not tested` and treats any stop-ship defect as Red.
 - Deployment approval record and rollback plan when production publication is requested.
 

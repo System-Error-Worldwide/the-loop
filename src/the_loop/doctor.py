@@ -23,18 +23,37 @@ FRONTMATTER_FIELDS = frozenset({"name", "description", "license", "compatibility
 BEHAVIOR_STATES = frozenset({"verified", "failed", "denied", "unverified"})
 REQUIRED_PACK_SKILLS = frozenset(
     {
-        "the-loop-setup",
-        "the-loop-doctor",
+        "audit",
+        "bootstrap-agent-context",
+        "build",
+        "close",
+        "decision-log",
+        "feature-tracker",
+        "handoff",
+        "health-check",
+        "idea-to-brief",
+        "live-state-preflight",
+        "portfolio-review",
+        "pre-commit-review",
+        "resolve",
+        "retrospective",
+        "session-summary",
+        "spec-pack",
+        "stack-summary",
+        "strategize",
+        "test",
         "the-loop",
         "the-loop-auto",
-        "strategize",
-        "spec-pack",
-        "build",
-        "test",
-        "resolve",
-        "health-check",
-        "audit",
-        "close",
+        "the-loop-autonomy",
+        "the-loop-cloud",
+        "the-loop-control",
+        "the-loop-doctor",
+        "the-loop-endless",
+        "the-loop-parallel",
+        "the-loop-setup",
+        "the-loop-skill-creator",
+        "the-loop-skill-planner",
+        "the-loop-watch",
     }
 )
 PROBE_FIELDS = frozenset(
@@ -71,11 +90,19 @@ def _portable_root(
         "KIMI_CODE_HOME": Path(environment["KIMI_CODE_HOME"]).resolve(strict=False)
         if environment.get("KIMI_CODE_HOME")
         else (user_home / ".kimi-code" if user_home is not None else None),
+        "DSH_HOME": Path(environment["DSH_HOME"]).resolve(strict=False)
+        if environment.get("DSH_HOME")
+        else (user_home / ".dsh" if user_home is not None else None),
+        "DSH_AGENTS_HOME": Path(environment["DSH_AGENTS_HOME"]).resolve(strict=False)
+        if environment.get("DSH_AGENTS_HOME")
+        else (user_home / ".agents" if user_home is not None else None),
     }
     variables = {
         "$HOME/": user_home,
         "$CODEX_HOME/": configured_homes["CODEX_HOME"],
         "$KIMI_CODE_HOME/": configured_homes["KIMI_CODE_HOME"],
+        "$DSH_HOME/": configured_homes["DSH_HOME"],
+        "$DSH_AGENTS_HOME/": configured_homes["DSH_AGENTS_HOME"],
     }
     for prefix, base in variables.items():
         if value.startswith(prefix):
@@ -208,7 +235,7 @@ def _receipt_candidates(project: Path, user_home: Path | None, environment: Mapp
     bases = [project]
     if user_home is not None:
         bases.append(user_home)
-    for variable in ("CODEX_HOME", "KIMI_CODE_HOME"):
+    for variable in ("CODEX_HOME", "KIMI_CODE_HOME", "DSH_HOME", "DSH_AGENTS_HOME"):
         value = environment.get(variable)
         if value:
             bases.append(Path(value).resolve(strict=False))

@@ -38,17 +38,14 @@ class ProvenanceReleaseContracts(unittest.TestCase):
                 self.assertEqual(row["skill"], path.parent.name)
                 self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), row["digest"])
 
-    def test_nonpassing_live_evidence_keeps_launch_manifest_pre_release(self) -> None:
-        nonpassing = [
-            row
-            for row in self.records()
-            if not row["evidence"].strip().startswith("passed:")
-        ]
+    def test_shipping_provenance_and_launch_status_are_independent_of_runtime_depth(self) -> None:
+        rows = self.records()
         manifest = json.loads((ROOT / "docs" / "release" / "launch-manifest.json").read_text(encoding="utf-8"))
-        if nonpassing:
-            self.assertEqual("pre_release", manifest["release"]["status"])
-            self.assertEqual("private", manifest["release"]["repository_visibility"])
-            self.assertIsNone(manifest["release"]["tag"])
+        self.assertEqual(31, len(rows))
+        self.assertTrue(all(row["evidence"].strip() for row in rows))
+        self.assertEqual("release_ready", manifest["release"]["status"])
+        self.assertNotIn("repository_visibility", manifest["release"])
+        self.assertNotIn("tag", manifest["release"])
 
     def test_installed_skills_name_their_offline_execution_surface(self) -> None:
         statement = "Core execution does not require network access or the source checkout."

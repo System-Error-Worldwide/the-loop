@@ -2,7 +2,7 @@
 name: health-check
 description: Diagnose an observed symptom with reproducible evidence and return a bounded lifecycle entry packet without silently fixing it. Use when something appears broken, missing, stale or unhealthy and the cause must be established before any repair.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: feeder.health_check
   the-loop-version: "0.1"

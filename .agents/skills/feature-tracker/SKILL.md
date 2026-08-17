@@ -2,7 +2,7 @@
 name: feature-tracker
 description: Track feature ownership, blockers, and done criteria as discrete records.
 license: MIT
-compatibility: Codex, Claude Code, Kimi Code and OpenCode
+compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
 metadata:
   the-loop-capability: quality.feature-tracker
   the-loop-version: "0.1"
