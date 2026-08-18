@@ -527,7 +527,12 @@ def _release_object_text(
     object_type: str,
     data: bytes,
 ) -> tuple[str | None, str | None]:
-    if object_type in {"blob", "commit", "tag"}:
+    if object_type in {"commit", "tag"}:
+        _, separator, message = data.partition(b"\n\n")
+        if not separator:
+            return None, f"git history {object_type} {object_id[:12]}: missing message separator"
+        return message.decode("utf-8", errors="replace"), None
+    if object_type == "blob":
         return data.decode("utf-8", errors="replace"), None
     if object_type != "tree":
         return None, f"git history: unsupported reachable object type {object_type!r}"

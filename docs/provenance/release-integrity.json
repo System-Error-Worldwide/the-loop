@@ -86,7 +86,7 @@
     "scripts/the_loop_doctor.py": "f0e7bfeda4c0c57b136564b2686ed67588ae366b8002b1138da44132753b6441",
     "scripts/the_loop_setup.py": "6b748cd9b884c830c76feaeb8473e1bf012a63e28f95f9d4803cef749d427e3f",
     "scripts/validate_protocols.py": "c22060cdd3641b24749a2d38ab2921ab2e6fba74a47a03c296c871694d2ac3fb",
-    "scripts/validate_repository.py": "50210e785248a974841ab456bd2d0b737785034dcb47083a6072cba17a05a993",
+    "scripts/validate_repository.py": "3f5b8767a7c064f2abf52133f9d8b4d8b382f86c4ff04986fa4c6fa0b1d5aef9",
     "src/the_loop/__init__.py": "0b79a4868f84ca8fc46a66234faef7627011fa264b3f5782b8ad6f2ce85c3e0d",
     "src/the_loop/conformance.py": "0a0c938efae4ca6e41e3be2142ecdc7656fa7dedb2dd610bca08d922199c50a1",
     "src/the_loop/doctor.py": "472b9914aef3e37de2f7466333479c1d8a475a28a9fc2571c8957f287be6b98d",
