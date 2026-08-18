@@ -71,12 +71,18 @@ compatibility: Codex, Claude Code, Kimi Code, OpenCode and DeepSeek Harness
         )
         return result.stdout.decode("utf-8").strip()
 
-    def commit(self, message: str = "fixture") -> None:
+    def commit(
+        self,
+        message: str = "fixture",
+        *,
+        user_name: str = "Validator Test",
+        user_email: str = "validator@example.invalid",
+    ) -> None:
         self.track()
         self.git("add", "-A")
         self.git(
-            "-c", "user.name=Validator Test",
-            "-c", "user.email=validator@example.invalid",
+            "-c", f"user.name={user_name}",
+            "-c", f"user.email={user_email}",
             "commit", "-q", "-m", message,
         )
 
@@ -382,6 +388,27 @@ permissions: unrestricted
         self.commit("clean fixture")
 
         self.assertEqual([], self.errors(release_history=True))
+
+    def test_private_identifier_in_commit_identity_metadata_is_ignored(self) -> None:
+        self.write_skill()
+        self.commit(
+            "clean fixture",
+            user_email="123+" + "Frozilla" + "mania" + "@users.noreply.github.com",
+        )
+
+        self.assertEqual([], self.errors(release_history=True))
+
+    def test_private_identifier_in_commit_message_remains_blocked(self) -> None:
+        self.write_skill()
+        self.commit("private reference: " + "Frozilla" + "mania")
+
+        self.assertTrue(
+            any(
+                "git history commit" in error
+                and "private implementation or portfolio reference" in error
+                for error in self.errors(release_history=True)
+            )
+        )
 
     def test_deleted_secret_remains_blocked_by_release_history(self) -> None:
         secret = self.root / "deleted.txt"
