@@ -1,6 +1,23 @@
 # Shared protocols
 
-These ten Markdown contracts define the harness-neutral behavior of THE LOOP. Harness adapters translate local discovery and invocation details into these contracts; they do not change the contracts themselves.
+These ten Markdown contracts define the harness-neutral behavior of THE LOOP. Harness adapters translate local discovery and invocation into these contracts; they do not change the contracts themselves.
+
+## Shared execution contract
+
+Every stage and mode that mutates or accepts work follows the same envelope:
+
+| Element | Requirement |
+| --- | --- |
+| Goal | One declared asset, immutable track, objective and testable done gate bound to a run. |
+| Observed start | Validated run state, owner, lease, authority, budgets, stop controls and, when the host provides it, the active injected capability catalog for this harness profile; missing required fields halt with a named gap. Absence of catalog injection alone MUST NOT halt portable core execution. |
+| Scoped execution | Mutations stay inside the approved slice and write boundary; unrelated user work is preserved. |
+| Done gate | Advance only when required outputs, evidence and issue state satisfy the stage contract or record a truthful halt. |
+| Evidence | Persisted records conforming to the schemas; observations alone do not pass a gate. |
+| Refutation | Each stage states a self-refutation question; Test and Resolve attempt to falsify claims before green. |
+
+Routing decides provider and execution shape before topology. Observed capabilities choose optional native collaboration, guarded process delegation or serial execution. Neither native topology nor a small mechanical smoke sample changes external-first provider defaults, ranking order, pins or guard caps.
+
+Explicit user-requested skills and domain prerequisites MUST remain mandatory inputs and MUST pass qualification and current authority before use. When qualification or authority is missing or denied, execution MUST halt with a named gap and MUST NOT use an unqualified pin or silent substitute. Prerequisites MUST NOT override permission or route denial.
 
 ## Contract index
 

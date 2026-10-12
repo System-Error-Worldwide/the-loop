@@ -33,7 +33,7 @@ Reject a slice that is unapproved, internally contradictory or missing its verif
 1. Revalidate state, namespace, ownership, lease, authority, budget and stop controls.
 2. Inspect only the context needed for one approved slice and identify unrelated changes before mutation.
 3. For unattended code, establish branch or equivalent isolation before editing.
-4. Route the requested capability; use this bundled fallback when no installed provider qualifies and record why.
+4. Use the active injected catalog first; route the requested capability and use this bundled fallback when no installed provider qualifies, recording why before topology selection.
 5. Make the minimum necessary change. Do not refactor adjacent code or broaden a non-code deliverable for convenience.
 6. Before every side-effecting callback, use the runtime durable-intent boundary. Never replay an unknown outcome.
 7. Run the smallest relevant checks that catch malformed output before independent Test.
@@ -60,7 +60,7 @@ For the code track, preserve worktree state, isolation, executable commands, exi
 
 ## Safety and authority
 
-Mutate only declared paths under the current lease. Do not stage, reset, delete, send, push, merge, deploy, publish, purchase, change remote configuration or install providers without exact authority. An installed provider cannot widen the parent grant.
+Mutate only declared paths under the current lease. Do not stage, reset, delete, send, push, merge, deploy, publish, purchase, change remote configuration or install providers without exact authority. Commit or authorized branch push does not imply merge, release or deploy permission. An installed provider cannot widen the parent grant.
 
 ## Self-refutation
 

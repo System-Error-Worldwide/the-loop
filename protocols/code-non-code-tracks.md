@@ -34,6 +34,7 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 - **[TRK-104]** A code pass MUST include reproducible commands, exit status, relevant environment facts, and artifact or output references.
 - **[TRK-105]** A code failure MUST include a minimal reproduction, expected and observed behavior, affected requirement IDs, severity, and regression procedure.
 - **[TRK-106]** Merge, push, release, deployment, dependency publication, and external configuration mutation MUST remain behind explicit outward authority.
+- **[TRK-109]** Git checkpoint custody is separate from deployment or publication: commit and authorized branch push MUST NOT imply merge, release or deploy authority; outward Git or hosting actions require scoped outward authority under [AUT-031](autonomy-policy.md#action-boundary).
 - **[TRK-107]** Destructive repository operations MUST halt unless the exact target and recovery path are confirmed by authority.
 - **[TRK-108]** Code-track fallback MUST be able to inspect, edit, test, resolve, and hand off locally without an optional third-party provider.
 

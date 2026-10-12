@@ -35,7 +35,7 @@ Do not infer missing scope, owner, authority, success criteria or track.
 1. Create or load one run and display asset, track, authority, budgets and current gate.
 2. Acquire or validate the matching lease before any writing action.
 3. For each stage, validate authoritative state, stop controls, clock, ownership, lease, authority and budget.
-4. Submit the smallest capability request and persist the route before execution.
+4. Use the active injected capability catalog first; supplement discovery only for missing capabilities. Submit the smallest capability request, persist the route, then choose serial, guarded process or native collaboration from observed capabilities.
 5. Use a qualified installed provider when proven; otherwise run the complete bundled fallback and show the fallback reason.
 6. Execute Strategize, then surface its meaningful decision gate.
 7. Execute Spec pack when required and surface the implementation gate.

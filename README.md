@@ -31,10 +31,14 @@ The attended lifecycle is:
 
 `Strategize -> Spec-pack -> Build -> Test <-> Resolve -> Close`
 
-THE LOOP routes each stage by capability and recorded evidence. If a compatible,
-verified specialist is installed, the harness can use it. Otherwise the bundled
-fallback executes the same stage contract. Code and non-code work use the same issue,
-evidence, authority and close rules.
+Every stage follows the compact shared execution contract in
+[protocols/README.md](protocols/README.md): goal, observed start, scoped execution,
+done gate, evidence and refutation. THE LOOP routes each stage by capability and
+recorded evidence. If a compatible, verified specialist is installed, the harness can
+use it. Otherwise the bundled fallback executes the same stage contract offline without
+the source checkout. Code and non-code work use the same issue, evidence, authority and
+close rules. Explicit skills and domain prerequisites require qualification and
+authority; unqualified use halts and cannot override permission or route denial.
 
 The modes change how work is supervised:
 
@@ -43,7 +47,7 @@ The modes change how work is supervised:
 | `the-loop` | One attended lifecycle with visible stage gates. |
 | `the-loop-auto` | One declared asset driven to green or to a configured gate. |
 | `the-loop-parallel` | Independent lanes with explicit ownership and one integration join. |
-| `the-loop-cloud` | Planning, drafting and handoff in a restricted or remote environment. |
+| `the-loop-cloud` | Restricted or remote work: run real Build and Test commands when authorized shell and filesystem capabilities are observed; otherwise planning, drafting and explicit handoff. See [modernization notes](docs/modernization.md). |
 | `the-loop-endless` | Repeated bounded Auto missions selected from an approved queue. |
 
 Endless never invents work when its queue is empty. Auto and Endless do not weaken
@@ -171,6 +175,8 @@ See the [code example](examples/code/README.md) and
 - [v0.1 shipping manifest](docs/provenance/v0.1-shipping-manifest.md)
 - [Product specification](docs/specs/README.md)
 - [Shared protocols](protocols/README.md)
+- [Harness capabilities (Codex and Claude Code)](docs/harness-capabilities.md)
+- [Instruction modernization scope](docs/modernization.md)
 - [Schemas](schemas/README.md)
 - [Release data](docs/release/README.md)
 - [Contributing](CONTRIBUTING.md)

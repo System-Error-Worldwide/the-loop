@@ -37,7 +37,7 @@ Do not start when write boundaries are unclear or when the run state is stale, s
 
 1. Build or load the parent run context and verify lease, owner, authority and kill-switch status.
 2. Validate every lane packet for track-specific authority, budgets, namespace, and output obligations.
-3. Rank required capability requests and route each lane with the same safety checks used by single-worker execution.
+3. Route and qualify each lane capability first; only then choose native collaboration, guarded process or serial execution per lane from observed capabilities.
 4. Start lanes only when each lane has a provable isolation claim and disjoint write map.
 5. Require a worker to emit route, status, usage and artifact evidence in a normal result envelope.
 6. Reject unknown outcomes; do not replay unknown callbacks.
