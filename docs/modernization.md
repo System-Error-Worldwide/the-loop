@@ -7,6 +7,7 @@ This note describes the public documentation and skill-instruction layer in this
 - Updates apply to README, shared protocols under `protocols/`, bundled `SKILL.md` packages and selected product specs.
 - The public Python runtime, JSON schemas, adapters and locked conformance scenarios remain authoritative for machine behavior.
 - Private harness configuration, host paths and non-public measurements are out of scope.
+- Per-skill licence, classification, predecessor lineage and evidence rows in [skill-records](provenance/skill-records.md) are unchanged unless a separate provenance review says otherwise; this pass only refreshes the exact-byte shipping digest table and the release-integrity toolkit inventory for the modernized instruction and documentation files.
 
 ## What changed
 
