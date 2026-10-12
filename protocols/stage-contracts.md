@@ -47,7 +47,19 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 ### Spec pack
 
 - **[STG-110]** Spec pack MUST determine the required document set from asset type and change scope and MUST output mutually consistent, implementation-ready specifications before gated implementation.
-- **[STG-111]** For a new application, website, or major feature, Spec pack MUST produce the six documents named by [PRD FR-021](../docs/specs/prd.md#lifecycle) and the [engineering plan spec gate](../docs/specs/engineering-plan.md#phase-1-specification-and-architecture).
+- **[STG-111]** For scope that qualifies as S2 under [STG-115](#spec-depth), Spec pack MUST produce the six documents named by [PRD FR-021](../docs/specs/prd.md#lifecycle) and the [engineering plan spec gate](../docs/specs/engineering-plan.md#phase-1-specification-and-architecture).
+
+### Spec depth
+
+| Tier | Scope and required artifacts |
+| --- | --- |
+| S0 | Bug, copy/config, single-file, mechanical, disposable POC or non-code deliverable within existing boundaries: persisted exemption and reason; no pack. |
+| S1 | Contained feature within existing data/access/subsystem boundaries: one brief with requirements, touched surfaces, checks, risks, rollback, assumptions, slices and a capability disposition table. UI on existing APIs also needs concrete visual direction and a rendered acceptance check. |
+| S2 | New app/site, data-model, access or security boundary change, new surface plus backend, or multi-subsystem feature: capability ledger first, then PRD, TDD, app flow, design brief, backend schema and engineering plan. Every capability has an in/out/later/blocked disposition; blocked rows name owner and gate; no silent omissions. |
+
+- **[STG-115]** Spec depth MUST be classified before implementation using the scope and artifacts above. S2 risk MUST override an S0/S1 size exemption; a single-file change to a security or data boundary MUST NOT evade S2. UI alone MUST NOT force S2. S0 MUST allow gated Build after its recorded exemption; unresolved material decisions MUST halt under [STG-116](#spec-depth).
+- **[STG-117]** When depth is S0, Spec-pack evidence MUST persist the recorded exemption only; no pack documents are required and global pack demand MUST NOT apply to S0 work.
+- **[STG-116]** Strategic or material unknowns MUST halt Spec pack until resolved; safe reversible defaults MAY be recorded. A user waiver MUST be explicit and recorded as debt.
 - **[STG-112]** Spec-pack evidence MUST map every functional and non-functional requirement to an implementation slice and verification method.
 - **[STG-113]** Spec pack MUST halt on an unresolved decision that would materially change architecture, data, public behavior, authority, or release risk.
 - **[STG-114]** Spec-pack self-refutation MUST ask whether an implementer could build a conflicting but specification-compliant product.
@@ -67,6 +79,10 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 - **[STG-132]** Test MUST attempt the normal path, relevant boundary and failure paths, permission denial, interruption or recovery path, and truthful unsupported state when applicable.
 - **[STG-133]** Test MUST mark any unexecuted required check as unverified and MUST halt green promotion.
 - **[STG-134]** Test self-refutation MUST attempt to reproduce each claimed defect and to break each claimed pass before reporting it.
+- **[STG-135]** Test MUST freeze the exact candidate before evaluation: code-track candidates MUST use a clean committed SHA and relevant artifact digests; non-code artifacts outside Git MUST use immutable content digest or version references and a read-only frozen copy, and assets stored in Git MUST use a clean committed SHA. Test MUST re-check the frozen digests before green promotion; material changes invalidate prior acceptance and require fresh evaluation.
+- **[STG-136]** Test MUST record distinct builder and fresh evaluator invocation identifiers; evaluator context MUST be independent of builder conclusions. A different provider alone does not establish evaluator identity.
+- **[STG-137]** Lack of fresh independent evaluation MUST halt green promotion. Meaningful normal, boundary, failure, black-box and white-box checks MUST be proportional to scope; builders MAY run targeted checks but one final full acceptance per candidate belongs to Test.
+- **[STG-138]** Findings MUST include evidence and refutation attempts; zero findings is allowed and finding quotas are forbidden.
 
 ### Resolve
 

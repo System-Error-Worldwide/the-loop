@@ -7,6 +7,8 @@ invocation, permission and delegation APIs. The canonical target harness identif
 are `codex`, `claude_code`, `kimi_code`, `opencode` and `deepseek_harness`.
 Capability evidence is environment-scoped and revalidated for each release.
 
+Codex and Claude Code capability adapter rules are summarized in [harness capabilities](../docs/harness-capabilities.md). Lookup stays host-scoped; do not preload every adapter.
+
 ## Baseline map
 
 | Capability | Codex | Claude Code | Kimi Code | OpenCode | DeepSeek Harness |
@@ -44,6 +46,8 @@ The baseline is a release input, not proof. A current compatibility record and h
 
 ### Discovery and routing
 
+- **[CAP-044]** When an active injected capability catalog is present, routing MUST use it first; when absent, routing MUST NOT halt the portable core solely for missing injection and MUST use scoped discovery in documented active harness roots and the qualified bundled fallback. Supplemental discovery MUST inspect documented active harness roots only for missing capabilities and MUST cache results per profile and environment until installation, profile or environment changes. Discovery MUST NOT perform full-tree inventory outside explicit audit or doctor scope. Qualified behavior proof, permission handling and collision reporting remain mandatory.
+- **[CAP-045]** Explicit user-requested skills and domain prerequisites MUST remain mandatory route inputs and MUST still pass qualification and current authority before selection; when qualification or authority is missing or denied, routing MUST halt with a named gap and MUST NOT select an unqualified user pin or silently substitute another provider. Full-tree inventory is audit or doctor scope only.
 - **[CAP-020]** Discovery MUST inspect the documented project roots for the active harness and MAY inspect configured user roots only within current authority.
 - **[CAP-021]** Doctor output MUST distinguish not installed, not discoverable, collision, permission denied, behavior failed and behavior unverified.
 - **[CAP-022]** A stage capability MUST use a namespaced identifier such as `lifecycle.test` and MUST declare requirements before provider selection.
@@ -87,3 +91,4 @@ Conformance includes conflicting skill names, multiple roots, missing harnesses,
 | CAP-010–016 | [TDD harness capability map](../docs/specs/tdd.md#harness-capability-map), [Workflow dispatch](workflow-dispatch.md) |
 | CAP-020–029 | [`route.schema.json`](../schemas/route.schema.json), [Skill routing](skill-routing.md) |
 | CAP-030–043 | [TDD harness conformance](../docs/specs/tdd.md#harness-tests), [PRD NFR-001 and NFR-010](../docs/specs/prd.md#non-functional-requirements) |
+| CAP (adapters) | [Harness capabilities](../docs/harness-capabilities.md) |

@@ -30,14 +30,15 @@ Reject a test request whose acceptance conditions or observable environment cann
 
 ## Procedure
 
-1. Derive checks from the done gate, requirements, changed behavior, failure paths and track contract.
-2. Attempt to falsify every acceptance claim before accepting it.
-3. Exercise the normal path plus relevant boundaries, invalid inputs, permission denial, interruption, recovery and truthful unsupported behavior.
-4. Capture reproducible evidence with procedure, actor, time, environment, outcome and result artifact.
-5. Reproduce each candidate defect and try to refute it. Drop candidates that do not survive.
-6. For every surviving defect, open or update one issue with severity, blocking state, minimal reproduction, expected and observed behavior and regression procedure.
-7. Close an issue only when new passing regression evidence exists; preserve the original failure evidence.
-8. Report green only when all required evidence passes and no blocking issue remains open.
+1. Freeze the exact candidate: code-track candidates require a clean committed SHA and relevant artifact digests; non-code artifacts outside Git require immutable content digest or version references and a read-only frozen copy, and assets in Git require a clean committed SHA. Re-check frozen digests before green promotion; material changes invalidate prior acceptance and require fresh evaluation. Record builder invocation identity separately from this evaluator invocation.
+2. Derive checks from the done gate, requirements, changed behavior, failure paths and track contract without relying on builder conclusions.
+3. Attempt to falsify every acceptance claim before accepting it.
+4. Exercise the normal path plus relevant boundaries, invalid inputs, permission denial, interruption, recovery and truthful unsupported behavior proportional to scope.
+5. Capture reproducible evidence with procedure, actor, time, environment, outcome and result artifact.
+6. Reproduce each candidate defect and try to refute it. Drop candidates that do not survive; zero findings is valid.
+7. For every surviving defect, open or update one issue with severity, blocking state, minimal reproduction, expected and observed behavior and regression procedure.
+8. Close an issue only when new passing regression evidence exists; preserve the original failure evidence.
+9. Report green only after fresh independent evaluation when all required evidence passes and no blocking issue remains open.
 
 ## Output contract
 

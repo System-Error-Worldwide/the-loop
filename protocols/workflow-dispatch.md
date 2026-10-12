@@ -21,6 +21,7 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 
 ## Execution selection
 
+- **[DSP-009]** The dispatcher MUST resolve routing and qualified provider selection under [skill routing](skill-routing.md#route-decision) before choosing native collaboration, guarded process delegation or serial execution; observed capabilities decide the topology, not the reverse.
 - **[DSP-010]** The dispatcher MUST select serial execution when independence, isolation, ownership, or harness concurrency cannot be proven.
 - **[DSP-011]** Independent dispatch MAY be used only when work units have disjoint write boundaries, separately testable outputs, explicit integration ownership, and supported worker isolation.
 - **[DSP-012]** Two workers MUST NOT mutate the same file, state projection, issue record, or undeclared shared resource concurrently.
@@ -35,8 +36,12 @@ RFC 2119 terms are normative only in numbered requirements. Each normative requi
 - **[DSP-022]** Long-running work MUST emit observable heartbeat state at configured intervals and stage boundaries.
 - **[DSP-023]** A dispatcher MUST define a stale threshold and recovery action before background execution begins.
 - **[DSP-024]** Stale heartbeat status MUST trigger observation, notification, or escalation but MUST NOT by itself revoke an unexpired matching lease. On lost, expired, replaced, or conflicting ownership, the worker MUST stop mutation and return or persist a truthful halt.
-- **[DSP-025]** A replacement worker MUST use explicit recovery and a fresh lease generation; it MUST NOT inherit an unverified in-memory claim from the prior worker.
+- **[DSP-025]** A replacement worker MUST use explicit recovery and a fresh lease generation; it MUST NOT inherit an unverified in-memory claim from the prior worker; recovery MUST NOT replay operations with unknown effects and MUST NOT reset frozen budgets.
 - **[DSP-026]** A kill-switch signal MUST take precedence over dispatch completion and MUST prevent the next state-changing action under [AUT-034](autonomy-policy.md#action-boundary).
+- **[DSP-027]** Optional native completion signals MAY be used only when observed harness capabilities support them; the dispatcher MUST still validate the result envelope and durable state after any notification.
+- **[DSP-028]** Detached or background work MUST have an independent supervisor or recovery path when the parent fails; a read-only watcher MUST NOT recover or mutate on behalf of a worker.
+- **[DSP-029]** When completion signals are absent or untrusted, bounded polling MAY be used as fallback; signals MUST NOT be treated as proof of correctness, ownership or lease validity.
+- **[DSP-064]** Context rotation MUST occur only at a safe boundary with no active mutations or unresolved operations; the successor epoch MUST resume from the authoritative event chain and frozen source with a fresh lease. Arbitrary context-size thresholds MUST NOT halt work; only reliably observed degradation MAY trigger rotation with a compact goal, state, next action and evidence references checkpoint.
 
 ## Side-effect boundary
 

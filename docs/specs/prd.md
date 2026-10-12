@@ -109,6 +109,7 @@ sits above these components and cannot bypass them.
 
 - **FR-020** Strategize must declare the problem, desired outcome, scope, success gate and known constraints.
 - **FR-021** Spec-pack must require the relevant specification set before implementation of a new product or major feature.
+- **FR-027** Spec depth must be classified as S0 (no pack when Strategize records reason), S1 (one implementation brief for contained in-boundary features) or S2 (capability ledger plus six documents for new app or site, data, access or security change, or multi-subsystem feature); UI alone must not automatically force S2.
 - **FR-022** Build must operate on one approved slice and preserve unrelated changes.
 - **FR-023** Test must record reproducible evidence and open every surviving defect in the issue ledger.
 - **FR-024** Resolve must link each change to an issue and regression check.

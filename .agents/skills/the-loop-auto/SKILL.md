@@ -33,7 +33,7 @@ Reject an open-ended objective, undeclared queue, missing kill switch, missing b
 1. Create or load one bounded run; display asset, outcome, track, authority, expiry, budgets and stop controls.
 2. Validate the event chain, reconcile an unmatched pending operation without replay, repair projections and acquire the required lease.
 3. Before every stage and action, run the ordered safety preflight and halt on any failed gate.
-4. Route to a qualified installed provider or the complete bundled fallback, persisting the decision first.
+4. Use the active injected catalog first; route to a qualified installed provider or the complete bundled fallback, persisting the decision before topology selection.
 5. Execute Strategize, required Spec pack, one Build slice, Test and bounded Resolve cycles.
 6. Use durable pre-callback intent for every side effect. On an unknown local outcome fail; on an unknown outward outcome wait for human verification. Never replay it.
 7. Emit stage-boundary heartbeats and account for time, attempts, mutations, outward actions and cost.
