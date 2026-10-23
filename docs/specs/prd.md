@@ -212,6 +212,11 @@ reports remain environment-specific evidence, not the product's support status.
 
 The launch may be called complete only after the repository is public, the static landing page matches the released compatibility matrix, both CTAs are valid and production deployment has separate explicit approval.
 
+
+## Journey inventory and readiness (maintenance baseline)
+
+The [maintenance contract](maintenance-contract.md#journey-inventory-and-readiness) maps bounded J901/A901 to source/spec evidence, effect and proposed checks. Its required gate sets remain pending wider inventory; this does not expand this pack or turn historical scope/disposition into verified readiness. See [exact migration gaps](migration-gaps.md).
+
 ## Assumption ledger
 
 | Assumption | Class | Consequence if wrong |
@@ -222,6 +227,10 @@ The launch may be called complete only after the repository is public, the stati
 | Static landing content is enough for launch conversion. | safe default | Justify and security-review any later interactivity and CSP change. |
 | The consulting CTA destination is `https://systemerror.app/services/`. | locked | Reconfirm the route during the landing-page delivery review. |
 
-## Journey inventory and readiness (maintenance baseline)
+## Decisions
 
-The [maintenance contract](maintenance-contract.md#journey-inventory-and-readiness) maps bounded J901/A901 to source/spec evidence, effect and proposed checks. Its required gate sets remain pending wider inventory; this does not expand this pack or turn historical scope/disposition into verified readiness. See [exact migration gaps](migration-gaps.md).
+This documentation refresh adds no product, stack or authority decision; historical decisions above retain their provenance.
+
+## Assumptions & open questions
+
+The maintenance trace is bounded and unexecuted; wider field and evidence gaps remain in the linked migration audit. No product readiness is inferred.
