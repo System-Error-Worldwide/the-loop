@@ -389,3 +389,7 @@ Cloud or Endless may later need a shared state adapter. Any adapter must preserv
 | UUIDv4 is acceptable for local IDs. | safe default | Change ID generation only in a major schema migration. |
 | Owner-only filesystem permissions are available on required platforms. | safe default | Doctor warns and the user decides whether the environment is acceptable. |
 | Cost cannot be measured reliably across every harness. | safe default | Treat missing cost as unverified and never as zero. |
+
+## API and state-effect linkage (maintenance baseline)
+
+The [maintenance contract](maintenance-contract.md#action-contract) maps bounded J901/A901 to source/spec evidence, effect and proposed checks. Its required gate sets remain pending wider inventory; this does not expand this pack or turn historical scope/disposition into verified readiness. See [exact migration gaps](migration-gaps.md).

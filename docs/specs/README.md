@@ -50,3 +50,7 @@ release status.
   no session-scoped grant is carried forward in this public spec.
 - Any production deployment, including the landing page, requires explicit approval.
 - Any elevated autonomy grant requires typed confirmation with actor, scope and expiry.
+
+## Documentation maintenance (2026-10-23)
+
+Use the [maintenance contract](maintenance-contract.md) for canonical documentation locations, evidence limits, future S0/S1/S2 triggers and change checks. [Migration gaps](migration-gaps.md) name remaining pack files/headings and traceability work. This documentation update does not certify product readiness or supersede historical release evidence.

@@ -406,3 +406,7 @@ Every slice follows:
 | Repository administrators may bypass pull-request protection for emergency recovery, with the action remaining visible in Git history and the audit log. | safe default | Remove the bypass if a second maintainer makes mandatory review practical. |
 | Landing implementation belongs to a separate dedicated session and website repository. | corrected scope | This session supplies only launch data and acceptance requirements. |
 | A tagged release should exist before the landing page is deployed. | safe default | A preview may use the versioned launch manifest without changing production. |
+
+## Journey verification and documentation refresh
+
+The [maintenance contract](maintenance-contract.md#future-change-checklist) maps bounded J901/A901 to source/spec evidence, effect and proposed checks. Its required gate sets remain pending wider inventory; this does not expand this pack or turn historical scope/disposition into verified readiness. See [exact migration gaps](migration-gaps.md).

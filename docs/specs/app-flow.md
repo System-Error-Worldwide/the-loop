@@ -203,3 +203,7 @@ This journey defines the product information contract for the separate landing-p
 | Explicit resume is preferable to automatic restart. | safe default | Keep safety invariant; add configurable prompts, never silent resume. |
 | The landing page needs no interactive demo in v1. | safe default | Add only after conversion evidence and CSP review. |
 | The Agent Workflow Audit URL is `https://systemerror.app/services/`. | locked | Any production change must keep the route visible and functional before approval. |
+
+## Action contract (maintenance baseline)
+
+The [maintenance contract](maintenance-contract.md#action-contract) maps bounded J901/A901 to source/spec evidence, effect and proposed checks. Its required gate sets remain pending wider inventory; this does not expand this pack or turn historical scope/disposition into verified readiness. See [exact migration gaps](migration-gaps.md).

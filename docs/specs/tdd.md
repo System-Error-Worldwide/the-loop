@@ -339,3 +339,7 @@ No product telemetry is sent. Landing-page analytics remain absent unless separa
 | JSON is acceptable for human-edited config. | safe default | Add a parser adapter without changing normative schemas. |
 | Claude-specific plugin packaging is optional in v0.1. | safe default | Add it as an adapter without changing portable skills. |
 | The existing website repository can accept a static route without framework migration. | needs live verification | Re-plan only the landing implementation slice after inspecting its repository. |
+
+## State, API, and journey linkage (maintenance baseline)
+
+The [maintenance contract](maintenance-contract.md#action-contract) maps bounded J901/A901 to source/spec evidence, effect and proposed checks. Its required gate sets remain pending wider inventory; this does not expand this pack or turn historical scope/disposition into verified readiness. See [exact migration gaps](migration-gaps.md).
