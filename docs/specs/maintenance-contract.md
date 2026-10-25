@@ -55,9 +55,9 @@ No new application capability or authorization is introduced. Navigation/read-on
 **Next relevant behavior check (proposed, not executed):** Synthetic setup/Doctor fixtures and existing repository validator: non-mutating plan, collision refusal and unsupported capability state. Product runtime behavior is unchanged.
 
 - [README.md](../../README.md) — inspected source/path; test execution and runtime behavior are **not** asserted by file presence.
-- [tests/test_setup_contracts.py](../../tests/test_setup_contracts.py) — inspected source/path; test execution and runtime behavior are **not** asserted by file presence.
-- [tests/test_doctor_contracts.py](../../tests/test_doctor_contracts.py) — inspected source/path; test execution and runtime behavior are **not** asserted by file presence.
-- [tests/test_validate_repository.py](../../tests/test_validate_repository.py) — inspected source/path; test execution and runtime behavior are **not** asserted by file presence.
+- [tests/test_setup_contracts.py](https://github.com/System-Error-Worldwide/the-loop/blob/e53bda761fc0f2467e5f686b0e1d9e2b773ab870/tests/test_setup_contracts.py) — inspected source/path; test execution and runtime behavior are **not** asserted by file presence.
+- [tests/test_doctor_contracts.py](https://github.com/System-Error-Worldwide/the-loop/blob/e53bda761fc0f2467e5f686b0e1d9e2b773ab870/tests/test_doctor_contracts.py) — inspected source/path; test execution and runtime behavior are **not** asserted by file presence.
+- [tests/test_validate_repository.py](https://github.com/System-Error-Worldwide/the-loop/blob/e53bda761fc0f2467e5f686b0e1d9e2b773ab870/tests/test_validate_repository.py) — inspected source/path; test execution and runtime behavior are **not** asserted by file presence.
 - [scripts/the_loop_setup.py](../../scripts/the_loop_setup.py) — inspected source/path; test execution and runtime behavior are **not** asserted by file presence.
 - [scripts/the_loop_doctor.py](../../scripts/the_loop_doctor.py) — inspected source/path; test execution and runtime behavior are **not** asserted by file presence.
 
