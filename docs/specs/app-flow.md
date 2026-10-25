@@ -195,6 +195,11 @@ This journey defines the product information contract for the separate landing-p
 | `complete` | Done gate passed and blocking issue count is zero. | no |
 | `cancelled` | User ended the mission. | no |
 
+
+## Action contract (maintenance baseline)
+
+The [maintenance contract](maintenance-contract.md#action-contract) maps bounded J901/A901 to source/spec evidence, effect and proposed checks. Its required gate sets remain pending wider inventory; this does not expand this pack or turn historical scope/disposition into verified readiness. See [exact migration gaps](migration-gaps.md).
+
 ## Assumption ledger
 
 | Assumption | Class | Consequence if wrong |
@@ -203,3 +208,11 @@ This journey defines the product information contract for the separate landing-p
 | Explicit resume is preferable to automatic restart. | safe default | Keep safety invariant; add configurable prompts, never silent resume. |
 | The landing page needs no interactive demo in v1. | safe default | Add only after conversion evidence and CSP review. |
 | The Agent Workflow Audit URL is `https://systemerror.app/services/`. | locked | Any production change must keep the route visible and functional before approval. |
+
+## Decisions
+
+This documentation refresh adds no product, stack or authority decision; historical decisions above retain their provenance.
+
+## Assumptions & open questions
+
+The maintenance trace is bounded and unexecuted; wider field and evidence gaps remain in the linked migration audit. No product readiness is inferred.

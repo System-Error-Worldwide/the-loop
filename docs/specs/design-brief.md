@@ -211,6 +211,11 @@ Static screenshots are visual evidence only. They do not prove task completion, 
 
 The skill-pack session verifies that the returned facts match the release. It does not perform or own the page tests.
 
+
+## Functional acceptance (maintenance baseline)
+
+The [maintenance contract](maintenance-contract.md#checks-and-evidence) maps bounded J901/A901 to source/spec evidence, effect and proposed checks. Its required gate sets remain pending wider inventory; this does not expand this pack or turn historical scope/disposition into verified readiness. See [exact migration gaps](migration-gaps.md).
+
 ## Assumption ledger
 
 | Assumption | Class | Consequence if wrong |
@@ -219,3 +224,11 @@ The skill-pack session verifies that the returned facts match the release. It do
 | A public launch manifest is the cleanest interface to the separate landing asset. | safe default | Provide an equivalent versioned handoff document if machine-readable data is deferred. |
 | Original public source uses the MIT licence. | locked | Change only through an explicit maintainer decision and update all public launch data. |
 | The consulting CTA URL is `https://systemerror.app/services/`. | locked | Change only through a maintainer release decision. |
+
+## Decisions
+
+This documentation refresh adds no product, stack or authority decision; historical decisions above retain their provenance.
+
+## Assumptions & open questions
+
+The maintenance trace is bounded and unexecuted; wider field and evidence gaps remain in the linked migration audit. No product readiness is inferred.

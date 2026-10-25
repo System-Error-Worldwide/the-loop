@@ -398,6 +398,11 @@ Every slice follows:
 1. Confirm the final Agent Workflow Audit or consulting CTA URL in the website project.
 2. Approve the landing-page preview before production deployment.
 
+
+## Journey verification and documentation refresh
+
+The [maintenance contract](maintenance-contract.md#future-change-checklist) maps bounded J901/A901 to source/spec evidence, effect and proposed checks. Its required gate sets remain pending wider inventory; this does not expand this pack or turn historical scope/disposition into verified readiness. See [exact migration gaps](migration-gaps.md).
+
 ## Assumption ledger
 
 | Assumption | Class | Consequence if wrong |
@@ -406,3 +411,11 @@ Every slice follows:
 | Repository administrators may bypass pull-request protection for emergency recovery, with the action remaining visible in Git history and the audit log. | safe default | Remove the bypass if a second maintainer makes mandatory review practical. |
 | Landing implementation belongs to a separate dedicated session and website repository. | corrected scope | This session supplies only launch data and acceptance requirements. |
 | A tagged release should exist before the landing page is deployed. | safe default | A preview may use the versioned launch manifest without changing production. |
+
+## Decisions
+
+This documentation refresh adds no product, stack or authority decision; historical decisions above retain their provenance.
+
+## Assumptions & open questions
+
+The maintenance trace is bounded and unexecuted; wider field and evidence gaps remain in the linked migration audit. No product readiness is inferred.

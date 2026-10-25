@@ -330,6 +330,11 @@ No product telemetry is sent. Landing-page analytics remain absent unless separa
 - External state inaccessible: report the coverage gap and prevent claims that depend on it.
 - Landing deployment failure: retain the previous production state and report the failed preview or deployment; never retry by weakening security headers.
 
+
+## State, API, and journey linkage (maintenance baseline)
+
+The [maintenance contract](maintenance-contract.md#action-contract) maps bounded J901/A901 to source/spec evidence, effect and proposed checks. Its required gate sets remain pending wider inventory; this does not expand this pack or turn historical scope/disposition into verified readiness. See [exact migration gaps](migration-gaps.md).
+
 ## Assumption ledger
 
 | Assumption | Class | Consequence if wrong |
@@ -339,3 +344,11 @@ No product telemetry is sent. Landing-page analytics remain absent unless separa
 | JSON is acceptable for human-edited config. | safe default | Add a parser adapter without changing normative schemas. |
 | Claude-specific plugin packaging is optional in v0.1. | safe default | Add it as an adapter without changing portable skills. |
 | The existing website repository can accept a static route without framework migration. | needs live verification | Re-plan only the landing implementation slice after inspecting its repository. |
+
+## Decisions
+
+This documentation refresh adds no product, stack or authority decision; historical decisions above retain their provenance.
+
+## Assumptions & open questions
+
+The maintenance trace is bounded and unexecuted; wider field and evidence gaps remain in the linked migration audit. No product readiness is inferred.

@@ -381,6 +381,11 @@ The implementation exposes these logical operations. A harness may wrap them in 
 
 Cloud or Endless may later need a shared state adapter. Any adapter must preserve the same records, atomic ownership semantics and kill-switch behavior. A remote database cannot become a reason to remove local export, visible authority or faithful failure states.
 
+
+## API and state-effect linkage (maintenance baseline)
+
+The [maintenance contract](maintenance-contract.md#action-contract) maps bounded J901/A901 to source/spec evidence, effect and proposed checks. Its required gate sets remain pending wider inventory; this does not expand this pack or turn historical scope/disposition into verified readiness. See [exact migration gaps](migration-gaps.md).
+
 ## Assumption ledger
 
 | Assumption | Class | Consequence if wrong |
@@ -389,3 +394,11 @@ Cloud or Endless may later need a shared state adapter. Any adapter must preserv
 | UUIDv4 is acceptable for local IDs. | safe default | Change ID generation only in a major schema migration. |
 | Owner-only filesystem permissions are available on required platforms. | safe default | Doctor warns and the user decides whether the environment is acceptable. |
 | Cost cannot be measured reliably across every harness. | safe default | Treat missing cost as unverified and never as zero. |
+
+## Decisions
+
+This documentation refresh adds no product, stack or authority decision; historical decisions above retain their provenance.
+
+## Assumptions & open questions
+
+The maintenance trace is bounded and unexecuted; wider field and evidence gaps remain in the linked migration audit. No product readiness is inferred.
